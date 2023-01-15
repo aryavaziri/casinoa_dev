@@ -1,0 +1,13 @@
+WINDOWS:
+    Backend:
+        pip install virtualenv ; virtualenv myenv ; Set-ExecutionPolicy Unrestricted -Scope Process;.\myenv\Scripts\activate
+
+        pip install --upgrade pip -r backend\requirements.txt
+
+        python backend\manage.py runserver 0.0.0.0:8000
+
+    Frontend:
+        cd Frontend;npm i;npm start
+
+
+
