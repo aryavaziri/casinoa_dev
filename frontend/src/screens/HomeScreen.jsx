@@ -5,6 +5,7 @@ import { listTables } from '../actions/tableActions'
 import Table from '../components/Table'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
+import Test from '../components/Test'
 
 function HomeScreen() {
     const dispatch = useDispatch()
@@ -18,6 +19,7 @@ function HomeScreen() {
     return (
         <div>
             <h1>Available tables</h1>
+            <Test />
             {loading ? <Loader />
                 : error ? <Message variant='danger'>{error}</Message>
                     :
