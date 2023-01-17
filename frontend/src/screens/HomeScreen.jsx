@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+// import React, { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
 import { listTables } from '../actions/tableActions'
@@ -6,16 +7,20 @@ import Table from '../components/Table'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import Test from '../components/Test'
+import store from '../store'
 
 function HomeScreen() {
     const dispatch = useDispatch()
+
+    //selecting which reducer's state you want
     const tableList = useSelector(state => state.tableList)
     const { error, loading, tables } = tableList
 
     useEffect(() => {
         dispatch(listTables())
-    }, [])
-
+    },[])
+    
+    console.log(store.red)
     return (
         <div>
             <h1>Available tables</h1>

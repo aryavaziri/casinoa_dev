@@ -9,15 +9,14 @@ import {
 
 } from '../constants/tableConstants'
 
-export const listTables = () => async (dispatch) => {
+//  () => async (a) => a({ type: TABLE_LIST_REQUEST })
+export const listTables = () => async (dispatch3) => {
     try {
-        dispatch({ type: TABLE_LIST_REQUEST })
-
+        dispatch3({ type: TABLE_LIST_REQUEST })
         const { data } = await axios.get(window.location.protocol + '//' + window.location.hostname + ':8000/api/tables/')
-
-        dispatch({ type: TABLE_LIST_SUCCESS, payload: data })
+        dispatch3({ type: TABLE_LIST_SUCCESS, payload: data })
     } catch (error) {
-        dispatch({ type: TABLE_LIST_FAIL, payload: error.response && error.response.data.message ? error.response.data.message : error.message, })
+        dispatch3({ type: TABLE_LIST_FAIL, payload: error.response && error.response.data.message ? error.response.data.message : error.message, })
     }
 }
 

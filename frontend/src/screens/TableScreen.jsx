@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
@@ -6,16 +6,19 @@ import { listTableDetails } from '../actions/tableActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 
-function TableScreen({ }) {
+function TableScreen() {
     let { id } = useParams();
     const dispatch = useDispatch()
-    const tableDetails = useSelector(state => state.tableDetails)
-    const { loading, error, table } = tableDetails
+
+    //selecting which reducer's state you want
+    const { table, loading, error } = useSelector(state => state.tableDetails)
+    // const tableDetails = useSelector(state => state.tableDetails)
+    // const { loading, error, table } = tableDetails
 
 
     useEffect(() => {
         dispatch(listTableDetails(id))
-    }, [dispatch, id])
+    }, [dispatch,id])
 
     return (
         <div>
@@ -26,7 +29,8 @@ function TableScreen({ }) {
                         ? <Message variant='danger'>{error}</Message>
                         : (
                             <Row>
-                                {table.name}
+                                <h3>{table.name}</h3>
+                                <h4>{table.type}</h4>
                             </Row>
                         )
             }
