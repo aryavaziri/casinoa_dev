@@ -2,6 +2,7 @@ import { legacy_createStore as createStore, combineReducers, applyMiddleware } f
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from '@redux-devtools/extension'
 import { tableListReducers, tableDetailsReducers } from './reducers/tableReducers'
+import { UserLoginReducers } from './reducers/userReducers'
 
 
 
@@ -10,9 +11,14 @@ import { tableListReducers, tableDetailsReducers } from './reducers/tableReducer
 const reducer = combineReducers({
     tableList: tableListReducers,
     tableDetails: tableDetailsReducers,
+    userLogin: UserLoginReducers,
 })
 
-const intialState = {}
+const userInfoFromStorage = localStorage.getItem('userInfo')?JSON.parse(localStorage.getItem('userInfo')):null
+
+const intialState = {
+    userLogin:{userInfo:userInfoFromStorage}
+}
 
 const middleware = [thunk]
 
