@@ -7,7 +7,6 @@ import Table from '../components/Table'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import Test from '../components/Test'
-import store from '../store'
 
 function HomeScreen() {
     const dispatch = useDispatch()
