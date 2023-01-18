@@ -19,9 +19,7 @@ function HomeScreen() {
     useEffect(() => {
         dispatch(listTables())
     },[])
-    
-    console.log(store.red)
-    return (
+        return (
         <div>
             <h1>Available tables</h1>
             <Test />

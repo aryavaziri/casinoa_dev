@@ -18,24 +18,18 @@ function LoginScreen() {
     const location = useLocation()
     const navigate = useNavigate()
     const redir = location.search ? location.search.split('=')[1] : '/'
-    // const history = useNavigate()
 
     const dispatch = useDispatch()
     const userLogin = useSelector(state => state.userLogin)
     const {error, loading, userInfo} = userLogin
     useEffect(()=> {
-        console.log("userInfo from use effect")
-        console.log(userInfo)
         if(userInfo){
-            console.log("redir to: "+redir)
-            navigate("/")
-            console.log("after redirect IT SHOULDN'T RUN")
+            navigate(redir)
         }
     },[redir, userInfo])
     // console.log(redirect)
     
     const submitHandler = (e) => {
-        console.log("submited")
         e.preventDefault()
         dispatch(login(email, password))
     }
