@@ -7,7 +7,6 @@ import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
   USER_REGISTER_FAIL,
-
 } from "../constants/userConstants";
 
 export const login = (email, password) => async (dispatch) => {
@@ -19,10 +18,7 @@ export const login = (email, password) => async (dispatch) => {
       },
     };
     const { data } = await axios.post(
-      window.location.protocol +
-        "//" +
-        window.location.hostname +
-        ":8000/api/users/login/",
+      window.location.protocol + "//" +  window.location.hostname + ":8000/api/users/login/",
       { username: email, password: password },
       config
     );
@@ -41,7 +37,7 @@ export const login = (email, password) => async (dispatch) => {
 
 export const logout = () => (dispatch) => {
   localStorage.removeItem("userInfo");
-  console.log("LOGOUT")
+  console.log("LOGOUT");
   dispatch({ type: USER_LOGOUT });
 };
 
@@ -58,7 +54,7 @@ export const register = (name, email, password) => async (dispatch) => {
         "//" +
         window.location.hostname +
         ":8000/api/users/register/",
-      { "name": name, "email": email, "password": password },
+      { name: name, email: email, password: password },
       config
     );
     dispatch({ type: USER_REGISTER_SUCCESS, payload: data });

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Table, User
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['id', '_id', 'username', 'email', 'name', 'isAdmin']
+        fields = ['_id', 'username', 'email', 'name', 'isAdmin']
 
     def get_name(self, obj):
         name = obj.first_name
@@ -27,14 +27,18 @@ class UserSerializer(serializers.ModelSerializer):
         return obj.is_staff
 
 class UserSerializerWithToken(UserSerializer):
-    token = serializers.SerializerMethodField(read_only=True)
+    refresh_token = serializers.SerializerMethodField(read_only=True)
+    access_token = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = User
-        fields = ['id', '_id', 'username', 'email', 'name', 'isAdmin', 'token']
+        fields = ['_id', 'username', 'email', 'name', 'isAdmin', 'access_token', 'refresh_token']
+    def get_refresh_token(self, obj):
+        refresh_token = RefreshToken.for_user(obj)
+        return str(refresh_token)
 
-    def get_token(self, obj):
-        token = RefreshToken.for_user(obj)
-        return str(token)
+    def get_access_token(self, obj):
+        access_token = AccessToken.for_user(obj)
+        return str(access_token)
 
 class TableSerializer(serializers.ModelSerializer):
     class Meta:
