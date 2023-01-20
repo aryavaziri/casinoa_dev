@@ -22,13 +22,14 @@ function Header() {
   const userLogin = useSelector(state => state.userLogin)
   const { userInfo } = userLogin
 
+  const location = useLocation()
   const dispatch = useDispatch()
   const logoutHandler = ()=>{dispatch(logout())}
 
-
   return (
     < header >
-      <Navbar bg="dark" variant="dark">
+      <Navbar className={(location.pathname == "/login")?"d-none":"d-block"} bg="dark" variant="dark">
+      {/* <Navbar bg="dark" variant="dark"> */}
         <Container>
           <LinkContainer to="/">
             <Navbar.Brand>POKER - ONLINE</Navbar.Brand>
