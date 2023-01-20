@@ -16,6 +16,7 @@ function ProfileScreen() {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [message, setMessage] = useState('')
+    const [flag, setFlag] = useState(false)
 
     const navigate = useNavigate()
 
@@ -43,11 +44,15 @@ function ProfileScreen() {
                 setEmail(user.email)
             }
         }
+        if (success) { setFlag(true) }
     }, [userInfo, dispatch, user, navigate, success])
-
-    setTimeout(() => {
-        console.log("SALAM")
-    }, 3000);
+    useEffect(() => {
+        if (!success) {
+            setTimeout(() => {
+                setFlag(false)
+            }, 3000);
+        }
+    }, [success])
 
     const submitHandler = (e) => {
         e.preventDefault()
@@ -64,10 +69,10 @@ function ProfileScreen() {
             <Row className='container mx-auto'>
                 <Col md={4}>
                     <FormContainer>
-                        <h1>Profile</h1>
+                        <h1 className='my-3' >Profile</h1>
                         {error && <Message variant='danger'>{error}</Message>}
                         {message && <Message variant='danger'>{message}</Message>}
-                        {success && <Message variant='success'>Your profile has been updated successfully.</Message>}
+                        {flag && <Message variant='success'>Your profile has been updated successfully.</Message>}
                         {loading && <Loader />}
 
                         <Form onSubmit={submitHandler}>
@@ -109,7 +114,7 @@ function ProfileScreen() {
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                 />
                             </Form.Group>
-                            <Button variant="outline-light" type="submit" className='w-100 py-2 rounded-3 h2 sign-in'>
+                            <Button variant="outline-light" type="submit" className='w-100 py-2 rounded-3 my-3 h2 sign-in'>
                                 Update
                             </Button>
                         </Form>
