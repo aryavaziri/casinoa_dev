@@ -35,9 +35,9 @@ function Header() {
             <Navbar.Brand>POKER - ONLINE</Navbar.Brand>
           </LinkContainer>
 
-          <Nav className="justify-content-end basic-navbar-nav" bg="dark" variant="dark">
+          <Nav className="justify-content-end basic-navbar-nav " bg="dark" variant="dark">
             {userInfo ? (
-              <NavDropdown title={userInfo.name} id='username'>
+              <NavDropdown align="end" title={userInfo.name} id='username'>
                 <LinkContainer to='/profile'>
                   <NavDropdown.Item>
                     Profile
