@@ -8,6 +8,7 @@ import { getUserDetails, updateUserProfile } from '../actions/userActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants'
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 function ProfileScreen() {
 
@@ -30,6 +31,11 @@ function ProfileScreen() {
 
     const userUpdateProfile = useSelector(state => state.userUpdateProfile)
     const { success } = userUpdateProfile
+
+    
+
+
+
 
 
     useEffect(() => {
@@ -67,7 +73,7 @@ function ProfileScreen() {
     return (
         <>
             <Row className='container mx-auto'>
-                <Col md={4}>
+                <Col md={"auto"}>
                     <FormContainer>
                         <h1 className='my-3' >Profile</h1>
                         {error && <Message variant='danger'>{error}</Message>}
@@ -76,8 +82,7 @@ function ProfileScreen() {
                         {loading && <Loader />}
 
                         <Form onSubmit={submitHandler}>
-                            <Form.Group className="mb-3" controlId="email">
-                                <Form.Label>Email address</Form.Label>
+                            <FloatingLabel controlId="email" label="Email" className="mb-3" >
                                 <Form.Control
                                     type="email"
                                     placeholder="Enter your Email"
@@ -85,40 +90,65 @@ function ProfileScreen() {
                                     onChange={(e) => setEmail(e.target.value)}
                                     autoFocus
                                 />
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="name">
-                                <Form.Label>Name</Form.Label>
+                            </FloatingLabel>
+
+
+                            <FloatingLabel controlId="name" label="Name" className="mb-3" >
                                 <Form.Control
                                     type="text"
                                     placeholder="Enter your name"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                 />
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="password">
-                                <Form.Label>Password</Form.Label>
+
+                            </FloatingLabel>
+
+
+                            <FloatingLabel controlId="password" label="Password" className="mb-3" >
                                 <Form.Control
+                                    className=''
                                     type="password"
                                     autoComplete="new-password"
                                     placeholder="Enter your password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="ConfrimPassword">
-                                <Form.Label>Confirm password</Form.Label>
+
+                            </FloatingLabel>
+
+
+                            <FloatingLabel controlId="confirmPassword" label="Confirm Password" className="mb-3" >
                                 <Form.Control
                                     type="password"
                                     placeholder="Enter your password again"
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                 />
-                            </Form.Group>
-                            <Button variant="outline-light" type="submit" className='w-100 py-2 rounded-3 my-3 h2 sign-in'>
+
+                            </FloatingLabel>
+                            <Button variant="outline-light" type="submit" className='w-100 py-3 rounded-3 my-1 h2 sign-in'>
                                 Update
                             </Button>
                         </Form>
                     </FormContainer >
+                </Col>
+
+                <Col md={4} className='my-3 ms-auto border p-3'>
+                    <h1>Account</h1>
+                    <div className='row'>
+                        <div className='col'>Balance</div>
+                        <div className='col'>100$</div>
+                        <FloatingLabel controlId="name" label="Amount" className="mb-3" >
+                            <Form.Control
+                                type="number"
+                                placeholder="Amount"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
+                        </FloatingLabel>
+
+                    </div>
+
                 </Col>
             </Row>
         </>

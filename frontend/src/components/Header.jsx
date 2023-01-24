@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react'
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { NavDropdown } from 'react-bootstrap';
-import { logout  } from '../actions/userActions'
+import { logout } from '../actions/userActions';
 
 
 
@@ -24,31 +24,44 @@ function Header() {
 
   const location = useLocation()
   const dispatch = useDispatch()
-  const logoutHandler = ()=>{dispatch(logout())}
+  const logoutHandler = () => { dispatch(logout()) }
 
   return (
     < header >
-      <Navbar className={(location.pathname == "/login")?"d-none":"d-block"} bg="dark" variant="dark">
-      {/* <Navbar bg="dark" variant="dark"> */}
+      <Navbar className={((location.pathname == "/login")||(location.pathname == "/poker")) ? "d-none" : "d-block"} bg="dark" variant="dark">
+        {/* <Navbar bg="dark" variant="dark"> */}
         <Container>
-          <LinkContainer to="/">
-            <Navbar.Brand>POKER - ONLINE</Navbar.Brand>
+          <LinkContainer to="/" className=''>
+            <Navbar.Brand className=''>POKER - ONLINE</Navbar.Brand>
           </LinkContainer>
 
-          <Nav className="justify-content-end basic-navbar-nav " bg="dark" variant="dark">
+          <Nav className="basic-navbar-nav ms-auto" bg="dark" variant="dark">
             {userInfo ? (
-              <NavDropdown align="end" title={userInfo.name} id='username'>
+              <>
+                  <Nav.Link>
                 <LinkContainer to='/profile'>
-                  <NavDropdown.Item>
-                    Profile
-                  </NavDropdown.Item>
+                  <i className="fas fa-user"></i>
                 </LinkContainer>
+                  </Nav.Link>
+                <Nav.Link onClick={logoutHandler}>
+                    <i className="fa-solid fa-arrow-right-from-bracket"></i>
+                </Nav.Link>
+
+                <NavDropdown className='' align="end" title={userInfo.name} id='username'>
+                  <LinkContainer to='/profile'>
+                    <NavDropdown.Item>
+                      <i className='fas fa-user px-2'></i>
+                       Profile
+                    </NavDropdown.Item>
+                  </LinkContainer>
                   <NavDropdown.Item onClick={logoutHandler}>
-                    Log Out
+                    <i className="fa-solid fa-arrow-right-from-bracket px-2"></i>
+                     Log Out
                   </NavDropdown.Item>
-              </NavDropdown>
+                </NavDropdown>
+              </>
             ) :
-              <Nav.Link href="/login"><i className='fas fa-user'></i>Login</Nav.Link>
+              <Nav.Link href="/login">Login <i className="fa-solid fa-right-to-bracket"></i></Nav.Link>
             }
           </Nav>
         </Container>

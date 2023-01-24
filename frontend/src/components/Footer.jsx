@@ -7,7 +7,7 @@ function Footer() {
 
   return (
     <footer>
-      <Container className={(location.pathname == "/login")?"d-none":"d-block"} >
+      <Container className={((location.pathname == "/login")||(location.pathname == "/poker"))?"d-none":"d-block"} >
         <hr />
         <Row>
           <Col className='text-center py-3'>Copyright &copy; AryaCasino</Col>

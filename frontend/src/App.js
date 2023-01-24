@@ -7,8 +7,12 @@ import TableScreen from './screens/TableScreen'
 import LoginScreen from './screens/LoginScreen'
 import RegisterScreen from './screens/RegisterScreen'
 import ProfileScreen from './screens/ProfileScreen'
+import PokerScreen from './screens/PokerScreen'
+import Player from './components/Player'
 
 function App() {
+
+
   return (
     <Router>
       <Header />
@@ -18,6 +22,7 @@ function App() {
             <Route path="/login" element={<LoginScreen />} />
             <Route path="/register" element={<RegisterScreen />} />
             <Route path="/profile" element={<ProfileScreen />} />
+            <Route path="/poker" element={<PokerScreen />} />
             <Route path="/table/:id" element={<TableScreen />} />
           </Routes>
       </main>
