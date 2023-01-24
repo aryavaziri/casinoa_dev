@@ -18,6 +18,65 @@
   position: relative;
 }
 
+.poker-player .dealer{
+    height: 30%;
+    aspect-ratio: 1/1;
+    background: rgb(201, 201, 201);
+    color: rgb(0, 0, 0);
+    position: absolute;
+    top: 0;
+    z-index: 5;
+    border-radius: 50%;
+    border: 4px solid rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 5px 1px;
+    display: flex;
+    justify-content: center;
+  }
+  .poker-player .dealer>span{
+    align-self: center;
+    font-size: 20px;
+    vertical-align: middle ;
+    font-weight: bolder;
+  }
+.poker-player .blind{
+    height: 22%;
+    aspect-ratio: 1/1;
+    background: rgb(201, 201, 201);
+    color: rgb(0, 0, 0);
+    position: absolute;
+    top: 25%;
+    left: -5%;
+    z-index: 5;
+    border-radius: 50%;
+    border: 4px solid rgba(7, 141, 0, 0.5);
+    box-shadow: 0 0 5px 1px;
+    display: flex;
+    justify-content: center;
+  }
+  .poker-player .blind>span{
+    align-self: center;
+    font-size: 16px;
+    line-height: 16px;
+    vertical-align: middle ;
+    font-weight: bolder;
+  }
+
+.poker-player .turn{
+  /* box-shadow: 0 0 10px 3px var(--check); */
+  position: absolute;
+  z-index: 3;
+  border-radius: 50%;
+  left: 0;top: 0;height: 100%;aspect-ratio: 1/1;
+  animation-name: turn;
+  animation-direction:alternate-reverse;
+  animation-timing-function: ease-in-out;
+  animation-duration: 0.5s;
+  animation-iteration-count: infinite;
+}
+@keyframes turn {
+  from {  box-shadow: 0 0 20px 8px var(--check);}
+  to {  box-shadow: 0 0 0px 0px var(--check);}
+}
 .poker-player>div {
   overflow: hidden;
   position: relative;

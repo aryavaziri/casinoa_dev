@@ -7,7 +7,7 @@ import playerIMG1 from './../media/images/icon/avatar3.webp'
 import cardIMG from '../media/images/p.webp'
 import Card2 from './Card2'
 import './../player.css'
-function Player({options}) {
+function Player({ options }) {
     console.log(options.card[0])
 
     return (
@@ -17,23 +17,27 @@ function Player({options}) {
                 <div>
                     <div></div>
                     <div>
-                        <div><span><i className="fa-solid fa-coins"></i></span> <span>120$</span></div>
+                        <div><span><i className="fa-solid fa-coins"></i></span> <span>{options.balance}€</span></div>
                         <div>{options.name}</div>
-                        <div>{options.status}</div>
+                        <div>{(options.turn) ? "" : options.status}</div>
                     </div>
                 </div>
             </div>
-            <div className={ ((options.bet > 0) ? ' bet' : ' d-none')} >
+            <div className={((options.bet > 0) ? ' bet' : ' d-none')} >
                 <span>
                     {options.bet}€
                 </span>
             </div>
             <div className="game-card" >
                 <span>
-                    <span><Card2 num={options.card[0]}/></span>
-                    <span><Card2 num={options.card[1]}/></span>
+                    <span><Card2 num={options.card[0]} /></span>
+                    <span><Card2 num={options.card[1]} /></span>
                 </span>
             </div>
+            <div className={((options.turn) ? ' turn' : ' d-none')} ></div>
+            <div className={((options.dealer) ? ' dealer' : ' d-none')} ><span>D</span></div>
+            <div className={((options.blind) ? ' blind' : ' d-none')} ><span>S</span></div>
+            <div className={((options.blind_b) ? ' blind' : ' d-none')} ><span>B</span></div>
         </div>
 
     )

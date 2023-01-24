@@ -11,6 +11,7 @@ import { login } from '../actions/userActions'
 import Image from 'react-bootstrap/Image'
 import loginIMG from '../media/images/login.jpg'
 import Logo from '../media/images/logo.png'
+import Card2 from '../components/Card2'
 
 function PokerScreen() {
     const [email, setEmail] = useState('')
@@ -38,34 +39,63 @@ function PokerScreen() {
         e.preventDefault()
         dispatch(login(email, password))
     }
-    const player1={
-        status:"fold",
-        card:[24,10],
-        bet:24 ,
-        name:"Arya"
+    const player1 = {
+        status: "raise",
+        card: [2, 14],
+        bet: 50,
+        balance: 350,
+        name: "Soheil",
+        blind_b:true,
     }
-    const player2={
-        status:"fold",
-        card:[24,10],
-        bet:24 ,
-        name:"Arya"
+    const player2 = {
+        dealer:true,
+        balance: 240,
+        status: "fold",
+        card: [24, 10],
+        bet: 24,
+        name: "Arya"
+    }
+    const player3 = {
+        balance: 200,
+        turn: true,
+        status: "check",
+        card: [40, 42],
+        bet: 50,
+        name: "Lilibi"
+    }
+    const player4 = {
+        blind: true,
+        balance: 120,
+        status: "check",
+        card: [30, 33],
+        bet: 50,
+        name: "Nina"
     }
 
 
     return (
         <>
-            <div className='fluid d-flex flex-column m-0 bg-dark pt-4' style={{ height: "75vh" }}>
+            <div className='fluid  m-0 bg-success pt-4 position-relative ' style={{ height: "75vh" }}>
+                <div className='position-absolute w-100 ground row'>
+                    <div className='row mx-auto'>
+                        <div className='col m-0 p-1'><Card2 num={20}/></div>
+                        <div className='col m-0 p-1'><Card2 num={30}/></div>
+                        <div className='col m-0 p-1'><Card2 num={39}/></div>
+                        <div className='col m-0 p-1'><Card2 num={0}/></div>
+                        <div className='col m-0 p-1'><Card2 num={0}/></div>
+                    </div>
+                </div>
                 <div className='row m-1 justify-content-center align-content-center h-25'>
                     <div className='h-100 col-3 mx-3 t'><Player options={player1}></Player></div>
                     <div className='h-100 col-3 mx-3 t'><Player options={player1}></Player></div>
                 </div>
                 <div className='row m-1 justify-content-between align-content-center h-25'>
-                    <div className='h-100 col-3 ms-3 l'><Player options={player1}></Player></div>
+                    <div className='h-100 col-3 ms-3 l'><Player options={player4}></Player></div>
                     <div className='h-100 col-3 me-3 r'><Player options={player1}></Player></div>
                 </div>
                 <div className='row m-1 justify-content-between align-content-center h-25'>
                     <div className='h-100 col-3 ms-0 l'><Player options={player1}></Player></div>
-                    <div className='h-100 col-3 me-0 r'><Player options={player1}></Player></div>
+                    <div className='h-100 col-3 me-0 r'><Player options={player3}></Player></div>
                 </div>
                 <div className='row m-1 justify-content-between align-content-center h-25'>
                     <div className='h-100 col-3 ms-3 l'><Player options={player1}></Player></div>

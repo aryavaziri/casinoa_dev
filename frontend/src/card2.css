@@ -1,6 +1,17 @@
 .card2{
     background-color: rgb(195, 195, 195);
     position: relative;
+    border-radius: 4px;
+}
+
+.ground{
+    height: 18vh;
+    top: 50%;
+}
+.ground>div{
+    /* background-color: aqua; */
+    aspect-ratio: 10/2;
+    width: 40%;
 }
 .card2>*{
     width: 100%;
@@ -20,8 +31,11 @@
 }
 .card2 span>img{width: 100%; padding: 20%;}
 .own>div .card2>*>*{
-    text-align: center;
-    height: 36%;
     line-height: 28px;
     font-size: 35px;
 }
+
+.ground>div .card2>*>*{
+    line-height: 40px;
+    font-size: 40px;
+} 
