@@ -61,27 +61,58 @@
     font-weight: bolder;
   }
 
-.poker-player .turn{
-  /* box-shadow: 0 0 10px 3px var(--check); */
+/* .poker-player .turn .turn-blink{
+  width: 20% !important;
+  aspect-ratio: 1/1 !important;
+} */
+.poker-player .turn {
+  overflow: visible;
+  /* box-shadow: 0 0 10px 3px gray; */
   position: absolute;
-  z-index: 3;
-  border-radius: 50%;
   left: 0;top: 0;height: 100%;aspect-ratio: 1/1;
-  animation-name: turn;
-  animation-direction:alternate-reverse;
-  animation-timing-function: ease-in-out;
-  animation-duration: 0.5s;
-  animation-iteration-count: infinite;
+  border-radius: 50%;
+  /* width: 180%; */
+  z-index: 1;
+  animation: turn alternate-reverse ease-in-out 0.5s infinite;
 }
+.poker-player .turn>div{
+  /* background: red; */
+  border-bottom-right-radius: 200px ;
+  height: 25%;
+  bottom: 0;
+  position: absolute;
+  z-index: 1;
+  left: 50%;bottom: 0;height: 25%;width: 150%;
+  animation:  color_change forwards 12s ease-out;
+}
+/* .poker-player .turn-blink{
+  background: red;
+  position: absolute;
+  overflow: visible;
+  z-index: 5;
+  animation: turn alternate-reverse ease-in-out 0.5s infinite;
+} */
 @keyframes turn {
-  from {  box-shadow: 0 0 20px 8px var(--check);}
-  to {  box-shadow: 0 0 0px 0px var(--check);}
+  from {  box-shadow: 0 0 20px 8px white;}
+  to {  box-shadow: 0 0 0px 0px gray;}
+}
+@keyframes color_change {
+  0% {  background: rgba(255, 255, 255, 0.367);width:20%}
+  /* 50% { background: rgb(50, 0, 0);width: 220%;} */
+  50% { background: rgb(190, 190, 190)}
+  100% { background: rgba(255, 109, 109, 0.825);width: 135%;}
 }
 .poker-player>div {
   overflow: hidden;
   position: relative;
   height: 100%;
+  
 }
+.poker-player>div:nth-of-type(1){
+  
+  box-shadow: 0 0 15px 5px rgba(37, 37, 37, 0.403);
+}
+
 
 .poker-player>div>* {
   position: absolute;
@@ -167,7 +198,7 @@
 .poker-player .bet{
   height: 50%;
   aspect-ratio: 1/1;
-  background: tomato;
+  background: rgb(41, 121, 9);
   color: white;
   position: absolute;
   z-index: 5;
@@ -201,11 +232,11 @@
   left: 20%;
   height: 50%;
   aspect-ratio: 1/1;
-  border-width: 15px;
+  border-width: 12px;
 }
 
 .own>.poker-player{
-  transform: translateY(-25px);
+  transform: translateY(-10px);
 }
 .own>.poker-player>div>img{
   border-width: 15px;

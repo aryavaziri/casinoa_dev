@@ -1,6 +1,6 @@
 import React from "react";
 import './../card2.css';
-import Front from '../media/images/p.webp'
+import Front from '../media/images/p2.webp'
 import Hearts from '../media/images/hearts.svg'
 import Clubs from '../media/images/clubs.svg'
 import Diamonds from '../media/images/diamonds.svg'
@@ -52,9 +52,9 @@ export default function Card2({ num }) {
   // const [card, setFlag] = useState(num)
   // const classLISTARYA = (num > 0 ? "show" : "hide") + " card_game"
 
-  useEffect(() => {
-    console.log(num)
-  }, [])
+  // useEffect(() => {
+  //   console.log(num)
+  // }, [])
 
   return (
 
