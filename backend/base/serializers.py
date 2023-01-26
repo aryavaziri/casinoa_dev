@@ -53,7 +53,8 @@ class PlayerSerializer(serializers.ModelSerializer):
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
-        fields = ['round', 'player']
-    def get_player2(self):
-        return 
+        fields = '__all__'
+        # fields = ['round', 'player']
+    # def get_player(self):
+    #     return 
 
