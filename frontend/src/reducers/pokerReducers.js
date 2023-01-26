@@ -1,23 +1,23 @@
 import {
-    POKER_STAGE_PREFLAP,
-    POKER_STAGE_FLAP,
-    POKER_STAGE_TURN,
-    POKER_STAGE_RIVER
+  GAME_DETAILS_REQUEST,
+  GAME_DETAILS_SUCCESS,
+  GAME_DETAILS_FAIL,
+
+  GAME_NEXT_ROUND_REQUEST,
+  GAME_NEXT_ROUND_SUCCESS,
+  GAME_NEXT_ROUND_FAIL,
 } from "../constants/pokerConstants";
 
-export const pokerReducers = (state = { }, action) => {
+export const gameDetailsReducer = (state={} , action) => {
   switch (action.type) {
-    case POKER_STAGE_PREFLAP:
+    case GAME_DETAILS_REQUEST:
       return { ...state, loading: true };
 
-    case POKER_STAGE_PREFLAP:
-      return { loading: false, user: action.payload };
+    case GAME_DETAILS_SUCCESS:
+      return { loading: false, state: action.payload };
 
-    case POKER_STAGE_PREFLAP:
+    case GAME_DETAILS_FAIL:
       return { loading: false, error: action.payload };
-
-    case POKER_STAGE_PREFLAP:
-      return { user: {} };
 
     default:
       return state;

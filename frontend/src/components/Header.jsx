@@ -28,7 +28,7 @@ function Header() {
 
   return (
     < header >
-      <Navbar className={((location.pathname == "/login")||(location.pathname == "/poker")) ? "d-none" : "d-block"} bg="dark" variant="dark">
+      <Navbar className={((location.pathname == "/login")||(location.pathname.includes("/poker"))) ? "d-none" : "d-block"} bg="dark" variant="dark">
         {/* <Navbar bg="dark" variant="dark"> */}
         <Container>
           <LinkContainer to="/" className=''>

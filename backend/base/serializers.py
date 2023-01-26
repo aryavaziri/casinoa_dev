@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Table, User
+from .models import Table, Game, Player
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 
 
@@ -44,3 +44,16 @@ class TableSerializer(serializers.ModelSerializer):
     class Meta:
         model = Table
         fields = '__all__'
+
+class PlayerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Player
+        fields = '__all__'
+
+class GameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Game
+        fields = ['round', 'player']
+    def get_player2(self):
+        return 
+

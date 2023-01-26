@@ -22,7 +22,7 @@ function App() {
             <Route path="/login" element={<LoginScreen />} />
             <Route path="/register" element={<RegisterScreen />} />
             <Route path="/profile" element={<ProfileScreen />} />
-            <Route path="/poker" element={<PokerScreen />} />
+            <Route path="/poker/:id" element={<PokerScreen />} />
             <Route path="/table/:id" element={<TableScreen />} />
           </Routes>
       </main>

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useLocation, useNavigate } from 'react-router'
 import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col, Form, Button } from 'react-bootstrap'
 import Loader from '../components/Loader'
@@ -8,6 +9,7 @@ import Message from '../components/Message'
 import Player from '../components/Player'
 import FormContainer from '../components/FormContainer'
 import { login } from '../actions/userActions'
+import { gameDetails } from '../actions/pokerActions'
 import Image from 'react-bootstrap/Image'
 import loginIMG from '../media/images/login.jpg'
 import Logo from '../media/images/logo.png'
@@ -22,6 +24,7 @@ function PokerScreen() {
     const [password, setPassword] = useState('')
 
     // const [raise, setRaise] = useState(false)
+    let { id } = useParams();
 
     const location = useLocation()
     const navigate = useNavigate()
@@ -31,15 +34,17 @@ function PokerScreen() {
     const userLogin = useSelector(state => state.userLogin)
     const { error, loading, userInfo } = userLogin
 
-
-    const gameInfo = useSelector(state => state.poker)
-    const { info } = gameInfo
+    const gameInfo = useSelector(state => state.gameDetails)
+    const {  } = gameInfo
 
     useEffect(() => {
         if (!userInfo) {
             navigate('/login')
         }
     }, [navigate, userInfo])
+    useEffect(() => {
+        dispatch(gameDetails(id))
+    }, [navigate, id])
 
     const submitHandler = (e) => {
         e.preventDefault()

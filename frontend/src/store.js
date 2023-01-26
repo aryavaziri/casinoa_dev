@@ -15,7 +15,7 @@ import {
   UserDetailsReducers,
   UserUpdateProfileReducers,
 } from "./reducers/userReducers";
-import { pokerReducers } from "./reducers/pokerReducers";
+import { gameDetailsReducer } from "./reducers/pokerReducers";
 // import { orderPaymentReducers } from './reducers/paymentReducers'
 // import { usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
@@ -28,7 +28,7 @@ const reducer = combineReducers({
   userRegister: UserRegisterReducers,
   userDetails: UserDetailsReducers,
   userUpdateProfile: UserUpdateProfileReducers,
-  poker: pokerReducers,
+  gameDetails: gameDetailsReducer,
   // paypal: usePayPalScriptReducer
 });
 
@@ -38,10 +38,7 @@ const userInfoFromStorage = localStorage.getItem("userInfo")
 
 const intialState = {
   userLogin: { userInfo: userInfoFromStorage },
-  poker: {
-    info: {},
-    Players: {},
-  },
+  gameDetails: {  },
 };
 
 const middleware = [thunk];
