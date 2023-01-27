@@ -14,24 +14,50 @@ function Player({ options }) {
 
     // },[])
     // console.log(options.card[0])
-    const [raise, setRaise] = useState(false)
+    // const [raise, setRaise] = useState(false)
     // const [width, setWidth] = useState((options.turn)?(document.querySelectorAll(".width")[0].clientWidth):"100px")
-    
-
+    const [status, setStatus] = useState('')
+    useEffect(() => {
+        console.log(options.image)
+        switch (options.status) {
+            case 1:
+                setStatus('fold');
+                break
+            case 2:
+                setStatus('check');
+                break
+            case 3:
+                setStatus('call');
+                break
+            case 4:
+                setStatus('raise');
+                break
+            case 5:
+                setStatus('allin');
+                break
+            default:
+                setStatus('nothing');
+                break
+        }
+    }, [status])
 
 
     return (
         <>
-            <div className={' poker-player ' + (options.status)} >
+            <div className={' p-0 m-2 poker-player ' + status } >
                 <div className=' rounded-pill '>
-                    <img src={options.img} />
+                    {/* <img src={require("../media/images" + options.image)} /> */}
+                    <img src={ window.location.protocol +
+        "//" +
+        window.location.hostname +
+        `:8000/${options.image}`} />
                     <div>
                         <div></div>
                         <div>
                             <div><span><i className="fa-solid fa-coins"></i></span> <span>{options.balance}€</span></div>
-                            <div>{options.name}</div>
+                            <div>{options.id} - {options.name}</div>
                             <div>
-                                {(options.turn) ? "" : options.status}
+                                {(options.turn) ? "" : status}
                                 {/* <div className={((options.turn) ? ' turn' : ' d-none')} >
                                     <div></div>
                                 </div> */}
@@ -46,16 +72,16 @@ function Player({ options }) {
                 </div>
                 <div className="game-card" >
                     <span>
-                        <span><Card2 num={options.card[0]} /></span>
-                        <span><Card2 num={options.card[1]} /></span>
+                        <span><Card2 num={options.card1} /></span>
+                        <span><Card2 num={options.card2} /></span>
                     </span>
                 </div>
                 <div className={((options.turn) ? ' turn' : ' d-none')} >
                     <div></div>
                 </div>
                 <div className={((options.dealer) ? ' dealer' : ' d-none')} ><span>D</span></div>
-                <div className={((options.blind) ? ' blind' : ' d-none')} ><span>S</span></div>
-                <div className={((options.blind_b) ? ' blind' : ' d-none')} ><span>B</span></div>
+                <div className={((options.small) ? ' blind' : ' d-none')} ><span>S</span></div>
+                <div className={((options.big) ? ' blind' : ' d-none')} ><span>B</span></div>
             </div>
             {!options.turn &&
                 <section className='row poker-actions '>

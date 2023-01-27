@@ -46,11 +46,17 @@ class TableSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PlayerSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    name = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Player
         fields = '__all__'
+    def get_name(self, obj):
+        return obj.user.first_name
 
 class GameSerializer(serializers.ModelSerializer):
+    player = PlayerSerializer(many=True, read_only=True)
+    table = TableSerializer(many=False, read_only=True)
     class Meta:
         model = Game
         fields = '__all__'

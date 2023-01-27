@@ -8,13 +8,13 @@ import {
   GAME_NEXT_ROUND_FAIL,
 } from "../constants/pokerConstants";
 
-export const gameDetailsReducer = (state={} , action) => {
+export const gameDetailsReducer = (state={ } , action) => {
   switch (action.type) {
     case GAME_DETAILS_REQUEST:
       return { ...state, loading: true };
 
     case GAME_DETAILS_SUCCESS:
-      return { loading: false, state: action.payload };
+      return { loading: false, info: action.payload };
 
     case GAME_DETAILS_FAIL:
       return { loading: false, error: action.payload };

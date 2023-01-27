@@ -10,10 +10,10 @@ from base.serializers import GameSerializer, PlayerSerializer
 
 @api_view(['GET'])
 def getGame(request, pk):
-    # game = Game.objects.get(round=pk)
-    game = Game.objects.all()
+    game = Game.objects.get(round=pk)
     player = Player.objects.all()
     serializer1 = PlayerSerializer(player, many=True)
-    serializer2 = GameSerializer(game, many=True)
-    # print(User.player.game__set.all())
+    serializer2 = GameSerializer(game, many=False)
+    # print(User.player)
     return Response(serializer2.data)
+

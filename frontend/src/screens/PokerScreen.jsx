@@ -14,10 +14,6 @@ import Image from 'react-bootstrap/Image'
 import loginIMG from '../media/images/login.jpg'
 import Logo from '../media/images/logo.png'
 import Card2 from '../components/Card2'
-import playerIMG1 from './../media/images/icon/avatar1.webp'
-import playerIMG2 from './../media/images/icon/avatar2.webp'
-import playerIMG3 from './../media/images/icon/avatar3.webp'
-import playerIMG4 from './../media/images/icon/avatar4.webp'
 
 function PokerScreen() {
     const [email, setEmail] = useState('')
@@ -35,7 +31,7 @@ function PokerScreen() {
     const { error, loading, userInfo } = userLogin
 
     const gameInfo = useSelector(state => state.gameDetails)
-    const {  } = gameInfo
+    const { info } = gameInfo
 
     useEffect(() => {
         if (!userInfo) {
@@ -44,56 +40,50 @@ function PokerScreen() {
     }, [navigate, userInfo])
     useEffect(() => {
         dispatch(gameDetails(id))
-    }, [navigate, id])
+    }, [id])
 
     const submitHandler = (e) => {
         e.preventDefault()
         dispatch(login(email, password))
     }
-    const player1 = {
-        status: "raise",
-        card: [2, 14],
-        bet: 0,
-        balance: 350,
-        name: "Soheil",
-        blind_b: true,
-        img: playerIMG2,
-    }
-    const player2 = {
-        dealer: true,
-        turn: true,
-        balance: 240,
-        status: "",
-        card: [24, 10],
-        bet: 0,
-        name: "Arya",
-        img: playerIMG1,
-    }
-    const player3 = {
-        balance: 200,
-        status: "call",
-        card: [40, 42],
-        bet: 50,
-        name: "Lilibi",
-        blind: true,
-        img: playerIMG3,
-    }
-    const player4 = {
-        balance: 120,
-        status: "",
-        card: [30, 33],
-        bet: 50,
-        name: "Nina",
-        img: playerIMG4,
-    }
-    const player5 = {
-        balance: 0,
-        status: "check",
-        card: [34, 3],
-        bet: 250,
-        name: "Sara",
-        img: playerIMG1,
-    }
+
+    // const player2 = {
+    //     dealer: true,
+    //     turn: true,
+    //     balance: 240,
+    //     status: "",
+    //     card1: 24,
+    //     card2: 25,
+    //     bet: 0,
+    //     name: "Arya",
+    //     img: playerIMG1,
+    // }
+    // const player3 = {
+    //     balance: 200,
+    //     status: "call",
+    //     card: [40, 42],
+    //     bet: 50,
+    //     name: "Lilibi",
+    //     blind: true,
+    //     img: playerIMG3,
+    // }
+    // const player4 = {
+    //     balance: 120,
+    //     status: "",
+    //     card1: 33,
+    //     card2: 30,
+    //     bet: 50,
+    //     name: "Nina",
+    //     img: playerIMG4,
+    // }
+    // const player5 = {
+    //     balance: 0,
+    //     status: "check",
+    //     card: [34, 3],
+    //     bet: 250,
+    //     name: "Sara",
+    //     img: playerIMG1,
+    // }
 
 
     return (
@@ -108,7 +98,23 @@ function PokerScreen() {
                         <div className='col m-0'><Card2 num={0} /></div>
                     </div>
                 </div>
-                <div className='row m-1 justify-content-center align-content-center h-25'>
+                <div className='row m-1 justify-content-center align-content-start h-25'>
+                    {gameInfo.info && info.player.map(i => {
+                        return (
+                            <Player key={i.id} options={i}></Player>
+                        )
+                        // console.log(i)
+                    })}
+                    {/* {gameInfo && <Player options={player1}></Player>}
+                {gameInfo && <Player options={player1}></Player>}
+                {gameInfo && <Player options={player1}></Player>}
+                {gameInfo && <Player options={player1}></Player>}
+                {gameInfo && <Player options={player1}></Player>}
+                {gameInfo && <Player options={player1}></Player>}
+                {gameInfo && <Player options={player1}></Player>} */}
+
+                </div>
+                {/* <div className='row m-1 justify-content-center align-content-center h-25'>
                     <div className='h-100 d-flex justify-content-center col-3 mx-3 t'><Player options={player1}></Player></div>
                     <div className='h-100 d-flex justify-content-center col-3 mx-3 t'><Player options={player1}></Player></div>
                 </div>
@@ -123,10 +129,26 @@ function PokerScreen() {
                 <div className='row m-1 justify-content-between align-content-center h-25'>
                     <div className='h-100 col-3 ms-3 l'><Player options={player2}></Player></div>
                     <div className='h-100 d-flex justify-content-center col-3 me-3 r'><Player options={player5}></Player></div>
-                </div>
+                </div> */}
             </div>
-            <div className='row m-0 bg-dark justify-content-center align-content-center' style={{ height: "25vh" }}>
-                <div className='col-4 d-flex justify-content-center h-100 py-0 own'><Player options={player2}></Player></div>
+            <div className='row m-0 bg-dark ' style={{ height: "25vh" }}>
+
+                <div className='col-6 d-flex justify-content-evenly h-25 py-0'>
+                    <Button>Leave</Button>
+                    <Button>Fold</Button>
+                    <Button>Check</Button>
+                    <Button>Call</Button>
+                    <Button>Raise</Button>
+                    <Button>All-in</Button>
+
+                </div>
+                <div className='col-4 d-flex justify-content-center h-100 py-0 own'>
+                    {gameInfo.info && info.player.map((value,index) => {
+                        if (value.user.email == userInfo.email) {
+                            return (<Player key={value.id} options={value}></Player>)
+                        }
+                    })}
+                </div>
             </div>
         </>
     )

@@ -26,30 +26,6 @@ class Table(models.Model):
 
     def __str__(self):
         return self.name
-
-
-
-
-class Game(models.Model):
-    stages = [
-        (0, 'Preflap'),
-        (1, 'Flap'),
-        (2, 'Turn'),
-        (3, 'River'),
-    ]
-    round = models.AutoField(primary_key=True, editable=False)
-    table = models.OneToOneField(Table, on_delete=models.CASCADE, null=True)
-    stage = models.IntegerField(choices=stages,null=True, default=0)
-    turn = models.IntegerField(null=True, blank=True)
-    dealer = models.IntegerField(null=True, blank=True)
-    bet = models.IntegerField(null=True, blank=True)
-    pot = models.IntegerField(null=True, blank=True)
-    createdAt = models.DateTimeField(auto_now_add=True, null=True)
-    # ground = models.JSONField(default=[0,0,0,0,0], blank=True)
-
-    def __str__(self):
-        return self.table.name
-
 class Player(models.Model):
     state = [
         (0, ''),
@@ -60,17 +36,39 @@ class Player(models.Model):
         (5, 'Allin'),
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE,null=True)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE, null=True, blank=True)
     balance = models.IntegerField(null=True, blank=True)
-    state = models.IntegerField(null=True, choices=state, default=0, blank=True)
+    status = models.IntegerField(null=True, choices=state, default=0, blank=True)
     turn = models.BooleanField(default=False)
     dealer = models.BooleanField(default=False)
     small = models.BooleanField(default=False)
     big = models.BooleanField(default=False)
     bet = models.IntegerField(null=True, blank=True)
-    image = models.ImageField(null=True, blank=True)
-    card1 = models.IntegerField(null=True, blank=True)
-    card2 = models.IntegerField(null=True, blank=True)
+    image = models.ImageField(null=True, default="/img/avatar1.webp")
+    card1 = models.IntegerField(null=True, default=0)
+    card2 = models.IntegerField(null=True, default=0)
+    joinedAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return str(self.user.first_name)
+
+class Game(models.Model):
+    stages = [
+        (0, 'Preflap'),
+        (1, 'Flap'),
+        (2, 'Turn'),
+        (3, 'River'),
+    ]
+    player = models.ManyToManyField(Player, blank=True)
+    round = models.AutoField(primary_key=True, editable=False)
+    table = models.ForeignKey(Table, on_delete=models.CASCADE, null=True)
+    stage = models.IntegerField(choices=stages,null=True, default=0)
+    turn = models.IntegerField(null=True, blank=True)
+    dealer = models.IntegerField(null=True, blank=True)
+    bet = models.IntegerField(null=True, blank=True)
+    pot = models.IntegerField(null=True, blank=True)
+    createdAt = models.DateTimeField(auto_now_add=True, null=True)
+    # ground = models.JSONField(default=[0,0,0,0,0], blank=True)
+
+    def __str__(self):
+        return (str(self.round) + " - " + (self.table.name))
+
