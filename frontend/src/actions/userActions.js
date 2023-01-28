@@ -94,13 +94,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.access_token}`,
       },
     };
-    const { data } = await axios.get(
-      window.location.protocol +
-        "//" +
-        window.location.hostname +
-        `:8000/api/users/${id}/`,
-      config
-    );
+    const { data } = await axios.get(window.location.protocol + "//" + window.location.hostname + `:8000/api/users/${id}/`,config);
     dispatch({ type: USER_DETAIL_SUCCESS, payload: data });
   } catch (error) {
     dispatch({

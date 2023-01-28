@@ -8,16 +8,25 @@ import {
   GAME_NEXT_ROUND_FAIL,
 } from "../constants/pokerConstants";
 
-
-export const gameDetails = (id) => async (dispatch) => {
+export const gameDetails = (id) => async (dispatch, getState) => {
   try {
     dispatch({ type: GAME_DETAILS_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.access_token}`,
+      },
+    };
 
     const { data } = await axios.get(
       window.location.protocol +
         "//" +
         window.location.hostname +
-        `:8000/api/poker/${id}`
+        `:8000/api/poker/${id}`,
+        config
     );
 
     dispatch({ type: GAME_DETAILS_SUCCESS, payload: data });

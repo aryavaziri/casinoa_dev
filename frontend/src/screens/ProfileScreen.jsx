@@ -137,13 +137,12 @@ function ProfileScreen() {
                     <h1>Account</h1>
                     <div className='row'>
                         <div className='col'>Balance</div>
-                        <div className='col'>100$</div>
+                        <div className='col'>€ {user.credit}</div>
                         <FloatingLabel controlId="name" label="Amount" className="mb-3" >
                             <Form.Control
                                 type="number"
                                 placeholder="Amount"
                                 value={name}
-                                onChange={(e) => setName(e.target.value)}
                             />
                         </FloatingLabel>
 

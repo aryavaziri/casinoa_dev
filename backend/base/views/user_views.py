@@ -62,6 +62,10 @@ def updateUserProfile(request):
 @permission_classes([IsAuthenticated])
 def getUserProfile(request):
     user = request.user
+
+    # player = Player.objects.filter(table=pk).last()
+    # serializer2 = GameSerializer(game, many=False)
+
     serializer = UserSerializer(user, many=False)
     return Response(serializer.data)
 

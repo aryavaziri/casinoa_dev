@@ -1,12 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 
 # Create your models here.
 
 
 class Table(models.Model):
     types = [
-        (0, 'Homldem'),
+        (0, 'Holdem-Texas'),
         (1, 'Omaha'),
     ]
     maxs = [
@@ -20,8 +20,10 @@ class Table(models.Model):
     img = models.ImageField(null=True, blank=True)
     type = models.IntegerField(choices=types,null=True, default=0)
     max = models.IntegerField(choices=maxs, default=1)
+    min = models.IntegerField(default=0)
     small = models.IntegerField(null=True, blank=True)
-    online = models.IntegerField(null=True, blank=True)
+    isAvailable = models.BooleanField(default=True)
+    online = models.IntegerField(default=0, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -38,6 +40,7 @@ class Player(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,null=True)
     balance = models.IntegerField(null=True, blank=True)
     status = models.IntegerField(null=True, choices=state, default=0, blank=True)
+    credit_total = models.IntegerField(default=0, null=True)
     turn = models.BooleanField(default=False)
     dealer = models.BooleanField(default=False)
     small = models.BooleanField(default=False)
@@ -46,7 +49,8 @@ class Player(models.Model):
     image = models.ImageField(null=True, default="/img/avatar1.webp")
     card1 = models.IntegerField(null=True, default=0)
     card2 = models.IntegerField(null=True, default=0)
-    joinedAt = models.DateTimeField(auto_now=True)
+    joinedAt = models.DateTimeField(null=True)
+    leftAt = models.DateTimeField(null=True)
 
     def __str__(self):
         return str(self.user.first_name)

@@ -8,7 +8,7 @@ import Loader from '../components/Loader'
 import Message from '../components/Message'
 import Player from '../components/Player'
 import FormContainer from '../components/FormContainer'
-import { login } from '../actions/userActions'
+import { getUserDetails } from '../actions/userActions'
 import { gameDetails } from '../actions/pokerActions'
 import Image from 'react-bootstrap/Image'
 import loginIMG from '../media/images/login.jpg'
@@ -16,10 +16,6 @@ import Logo from '../media/images/logo.png'
 import Card2 from '../components/Card2'
 
 function PokerScreen() {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-
-    // const [raise, setRaise] = useState(false)
     let { id } = useParams();
 
     const location = useLocation()
@@ -34,17 +30,11 @@ function PokerScreen() {
     const { info } = gameInfo
 
     useEffect(() => {
-        if (!userInfo) {
-            navigate('/login')
-        }
-    }, [navigate, userInfo])
-    useEffect(() => {
         dispatch(gameDetails(id))
     }, [id])
 
     const submitHandler = (e) => {
         e.preventDefault()
-        dispatch(login(email, password))
     }
 
     // const player2 = {
@@ -143,7 +133,7 @@ function PokerScreen() {
 
                 </div>
                 <div className='col-4 d-flex justify-content-center h-100 py-0 own'>
-                    {gameInfo.info && info.player.map((value,index) => {
+                    {gameInfo.info && info.player.map((value, index) => {
                         if (value.user.email == userInfo.email) {
                             return (<Player key={value.id} options={value}></Player>)
                         }
