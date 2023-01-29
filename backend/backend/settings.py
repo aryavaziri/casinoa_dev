@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'base.apps.BaseConfig',
     'rest_framework',
+    "debug_toolbar",
     "corsheaders",
 ]
 
@@ -83,6 +84,7 @@ SIMPLE_JWT = {
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -124,6 +126,11 @@ DATABASES = {
     }
 }
 
+INTERNAL_IPS = [
+    "127.0.0.1",
+    "127.0.0.1:3000",
+
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -159,7 +166,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 MEDIA_URL = 'img/'
 
 STATICFILES_DIRS = [

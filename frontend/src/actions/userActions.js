@@ -129,9 +129,9 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
       user,
       config
     );
-    console.log(data)
+    // console.log(data)
     data.access_token = userInfo.access_token
-    console.log(data)
+    // console.log(data)
     dispatch({ type: USER_UPDATE_PROFILE_SUCCESS, payload: data });
     dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
 

@@ -9,7 +9,7 @@ import Message from '../components/Message'
 import Player from '../components/Player'
 import FormContainer from '../components/FormContainer'
 import { getUserDetails } from '../actions/userActions'
-import { gameDetails } from '../actions/pokerActions'
+import { gameDetails, gameEnter, gameLeave } from '../actions/pokerActions'
 import Image from 'react-bootstrap/Image'
 import loginIMG from '../media/images/login.jpg'
 import Logo from '../media/images/logo.png'
@@ -29,13 +29,30 @@ function PokerScreen() {
     const gameInfo = useSelector(state => state.gameDetails)
     const { info } = gameInfo
 
+    const gameEnter = useSelector(state => state.gameEnter)
+
     useEffect(() => {
         dispatch(gameDetails(id))
     }, [id])
 
+    useEffect(() => {
+        let count = 0
+        if(gameInfo.info && !(gameEnter.loading)){
+            info.player.map(i=>{
+                if(i.id == userInfo._id ){count++}
+            })
+            console.log(gameEnter.loading)
+            if(!count){navigate("/")}
+        }
+    }, [userInfo, info,dispatch])
+
     const submitHandler = (e) => {
         e.preventDefault()
     }
+    const leave = () => {
+        dispatch(gameLeave(id))
+    }
+
 
     // const player2 = {
     //     dealer: true,
@@ -124,7 +141,7 @@ function PokerScreen() {
             <div className='row m-0 bg-dark ' style={{ height: "25vh" }}>
 
                 <div className='col-6 d-flex justify-content-evenly h-25 py-0'>
-                    <Button>Leave</Button>
+                    <Button onClick={()=>leave()}>Home</Button>
                     <Button>Fold</Button>
                     <Button>Check</Button>
                     <Button>Call</Button>

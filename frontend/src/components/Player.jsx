@@ -18,7 +18,7 @@ function Player({ options }) {
     // const [width, setWidth] = useState((options.turn)?(document.querySelectorAll(".width")[0].clientWidth):"100px")
     const [status, setStatus] = useState('')
     useEffect(() => {
-        console.log(options.image)
+        // console.log(options.image)
         switch (options.status) {
             case 1:
                 setStatus('fold');

@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField(read_only=True)
     _id = serializers.SerializerMethodField(read_only=True)
     isAdmin = serializers.SerializerMethodField(read_only=True)
-    credit = serializers.SerializerMethodField(read_only=True)
+    credit = serializers.SerializerMethodField(read_only=False)
     # player = PlayerSerializer(many=True, read_only=True)
     class Meta:
         model = User

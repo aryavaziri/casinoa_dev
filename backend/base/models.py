@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser
 
-# Create your models here.
-
+def data():
+    return {"ground":[0,0,0,0,0], "orders":[]}
+def ground():
+    return {"ground":[0,0,0,0,0], "orders":[]}
 
 class Table(models.Model):
     types = [
@@ -17,13 +19,13 @@ class Table(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     _id = models.AutoField(primary_key=True, editable=False)
     name = models.CharField(max_length=200, null=True, blank=True)
-    img = models.ImageField(null=True, blank=True)
-    type = models.IntegerField(choices=types,null=True, default=0)
+    img = models.ImageField(null=True)
+    type = models.IntegerField(choices=types, default=0)
     max = models.IntegerField(choices=maxs, default=1)
     min = models.IntegerField(default=0)
-    small = models.IntegerField(null=True, blank=True)
+    small = models.IntegerField(null=True, default=1)
     isAvailable = models.BooleanField(default=True)
-    online = models.IntegerField(default=0, blank=True)
+    online = models.IntegerField(default=0)
     createdAt = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -38,19 +40,19 @@ class Player(models.Model):
         (5, 'Allin'),
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE,null=True)
-    balance = models.IntegerField(null=True, blank=True)
+    balance = models.IntegerField(null=True, default=0)
     status = models.IntegerField(null=True, choices=state, default=0, blank=True)
     credit_total = models.IntegerField(default=0, null=True)
     turn = models.BooleanField(default=False)
     dealer = models.BooleanField(default=False)
     small = models.BooleanField(default=False)
     big = models.BooleanField(default=False)
-    bet = models.IntegerField(null=True, blank=True)
-    image = models.ImageField(null=True, default="/img/avatar1.webp")
-    card1 = models.IntegerField(null=True, default=0)
-    card2 = models.IntegerField(null=True, default=0)
-    joinedAt = models.DateTimeField(null=True)
-    leftAt = models.DateTimeField(null=True)
+    bet = models.IntegerField(default=0)
+    image = models.ImageField(default="/img/avatar1.webp")
+    card1 = models.IntegerField(default=0)
+    card2 = models.IntegerField(default=0)
+    joined_at = models.DateTimeField(null=True)
+    left_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return str(self.user.first_name)
@@ -65,13 +67,18 @@ class Game(models.Model):
     player = models.ManyToManyField(Player, blank=True)
     round = models.AutoField(primary_key=True, editable=False)
     table = models.ForeignKey(Table, on_delete=models.CASCADE, null=True)
-    stage = models.IntegerField(choices=stages,null=True, default=0)
-    turn = models.IntegerField(null=True, blank=True)
-    dealer = models.IntegerField(null=True, blank=True)
-    bet = models.IntegerField(null=True, blank=True)
-    pot = models.IntegerField(null=True, blank=True)
-    createdAt = models.DateTimeField(auto_now_add=True, null=True)
-    # ground = models.JSONField(default=[0,0,0,0,0], blank=True)
+    stage = models.IntegerField(choices=stages, default=0)
+    turn = models.IntegerField(null=True, default=0)
+    small_blind = models.IntegerField(null=True, default=0)
+    bet = models.IntegerField(null=True, default=0)
+    pot = models.IntegerField(null=True, default=0)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    JSON_data = models.JSONField(default=data)
+    # card1 = models.IntegerField(null=True, default=0)
+    # card2 = models.IntegerField(null=True, default=0)
+    # card3 = models.IntegerField(null=True, default=0)
+    # card4 = models.IntegerField(null=True, default=0)
+    # card5 = models.IntegerField(null=True, default=0)
 
     def __str__(self):
         return (str(self.round) + " - " + (self.table.name))

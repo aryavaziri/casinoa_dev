@@ -24,7 +24,7 @@ urlpatterns = [
     path('api/tables/', include('base.urls.table_urls')),
     path('api/users/', include('base.urls.user_urls')),
     path('api/poker/', include('base.urls.poker_urls')),
-
+    path('__debug__/', include('debug_toolbar.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

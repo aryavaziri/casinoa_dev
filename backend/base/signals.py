@@ -6,6 +6,11 @@ def updateUser(sender, instance, **kwargs):
     if user.email != '':
         user.username = user.email
 
+# def leaveGame(sender, instance, **kwargs):
+#     player = instance
+#     if(player.balance>0):
+#         player.credit_total += player.balance
+#         player.balance = 0
 
 
 pre_save.connect(updateUser, sender=User )

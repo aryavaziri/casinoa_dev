@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import Ratio from 'react-bootstrap/Ratio';
 import Modal from 'react-bootstrap/Modal';
-import { gameDetails } from '../actions/pokerActions'
+import { gameDetails, gameEnter } from '../actions/pokerActions'
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserDetails } from '../actions/userActions'
 // import { payOrder } from '../actions/orderActions'
@@ -26,16 +26,12 @@ function Buyin({ table }) {
 
     const [deposite, setDeposite] = useState(0);
     const dispatch = useDispatch()
-
-    useEffect(() => {
-        dispatch(gameDetails(table._id))
-        dispatch(gameDetails(table._id))
-    }, [])
-
+    
     useEffect(() => {
         if (!userInfo) {
             navigate("/login")
         } else {
+            dispatch(gameDetails(table._id))
             if (!user || !user.name ) {
                 dispatch(getUserDetails('profile'))
             }
@@ -44,11 +40,10 @@ function Buyin({ table }) {
 
 
 
-
-
     const submitHandler = (e) => {
-        console.log(table._id)
+        // console.log(table._id)
         e.preventDefault()
+        dispatch(gameEnter(table._id, deposite))
         navigate(`/poker/${table._id}`)
 
     }
@@ -62,42 +57,6 @@ function Buyin({ table }) {
         (1, 6),
         (2, 9),
     ]
-
-
-    // const orderPay = useSelector(state => state.orderPay)
-    // const { loading: loadingPay, success: successPay } = orderPay
-
-    // const [isPaid, setIsPaid] = useState(false)
-
-    // useEffect(() => {
-    //     if (successPay || !isPaid) {
-    //         if (!window.paypal) {
-    //             addPaypallScript()
-    //         }
-    //         else {
-    //             setSdkReady(true)
-    //         }
-    //     }
-    // }, [successPay, isPaid,])
-
-    // const [sdkReady, setSdkReady] = useState(false)
-    // const addPaypallScript = () => {
-    //     const script = document.createElement('script')
-    //     script.type = 'text/javascript'
-    //     script.src = "https://www.paypal.com/sdk/js?client-id=AeaTWLwqoRcM4oRbFgbHvshCwI_OFIntUgwCr2J7UWMGaf2C79w9Tmja1McyZStZFCXtXMvbbE3CKNCT"
-    //     // MY_PAYPAL_CLIENT_ID = "AeaTWLwqoRcM4oRbFgbHvshCwI_OFIntUgwCr2J7UWMGaf2C79w9Tmja1McyZStZFCXtXMvbbE3CKNCT"
-    //     script.async = true;
-    //     script.onload = () => {
-    //         setSdkReady(true)
-    //     }
-    //     document.body.appendChild(script)
-    // }
-
-    // const successPaymentHandler = (paymentResult) => {
-    //     dispatch(payOrder(orderID, paymentResult))
-    // }
-
-
 
 
 
@@ -146,7 +105,6 @@ function Buyin({ table }) {
                 <Button type='submit' form='deposite' disabled={((deposite >= table.min)&&(deposite <= user.credit) && (table.isAvailable)) ? false : true} className='col-3 ' variant="dark" onClick={() => submitHandler}>
                     Join table
                 </Button>
-                {/* <Test2></Test2> */}
 
             </Modal.Footer>
         </Card >
