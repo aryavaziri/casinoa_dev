@@ -37,14 +37,13 @@ function PokerScreen() {
 
     useEffect(() => {
         let count = 0
-        if(gameInfo.info && !(gameEnter.loading)){
-            info.player.map(i=>{
-                if(i.id == userInfo._id ){count++}
+        if (gameInfo.info && !(gameEnter.loading)) {
+            info.player.map(i => {
+                if (i.id == userInfo._id) { count++ }
             })
-            console.log(gameEnter.loading)
-            if(!count){navigate("/")}
+            if (!count) { navigate("/") }
         }
-    }, [userInfo, info,dispatch])
+    }, [userInfo, info, dispatch])
 
     const submitHandler = (e) => {
         e.preventDefault()
@@ -52,74 +51,53 @@ function PokerScreen() {
     const leave = () => {
         dispatch(gameLeave(id))
     }
-
-
-    // const player2 = {
-    //     dealer: true,
-    //     turn: true,
-    //     balance: 240,
-    //     status: "",
-    //     card1: 24,
-    //     card2: 25,
-    //     bet: 0,
-    //     name: "Arya",
-    //     img: playerIMG1,
-    // }
-    // const player3 = {
-    //     balance: 200,
-    //     status: "call",
-    //     card: [40, 42],
-    //     bet: 50,
-    //     name: "Lilibi",
-    //     blind: true,
-    //     img: playerIMG3,
-    // }
-    // const player4 = {
-    //     balance: 120,
-    //     status: "",
-    //     card1: 33,
-    //     card2: 30,
-    //     bet: 50,
-    //     name: "Nina",
-    //     img: playerIMG4,
-    // }
-    // const player5 = {
-    //     balance: 0,
-    //     status: "check",
-    //     card: [34, 3],
-    //     bet: 250,
-    //     name: "Sara",
-    //     img: playerIMG1,
-    // }
-
+    const ground = []
+    if (gameInfo.info) {
+        for (let i = 0; i < 5; i++) {
+            ground[i] = info.JSON_data.ground[i]
+        }
+    }
+    const order = []
+    let temp
+    if (gameInfo.info) {
+        for (let i = 0; i < info.JSON_data.orders.length; i++) {
+            order[i] = info.JSON_data.orders[i]
+        }
+        if (order.includes(userInfo._id)) {
+            while (order[0] != userInfo._id) {
+                temp = order.shift()
+                order.push(temp)
+            }
+        }
+    }
 
     return (
         <>
             <div className='fluid  m-0 bg-success pt-4 position-relative ' style={{ height: "75vh" }}>
                 <div className='position-absolute w-100 ground row'>
-                    <div className='row mx-auto'>
-                        <div className='col m-0'><Card2 num={20} /></div>
-                        <div className='col m-0'><Card2 num={30} /></div>
-                        <div className='col m-0'><Card2 num={39} /></div>
-                        <div className='col m-0'><Card2 num={0} /></div>
-                        <div className='col m-0'><Card2 num={0} /></div>
-                    </div>
+                    {gameInfo.info &&
+                        <div className='row mx-auto'>
+                            <div className='col m-0'><Card2 num={ground[0]} /></div>
+                            <div className='col m-0'><Card2 num={ground[1]} /></div>
+                            <div className='col m-0'><Card2 num={ground[2]} /></div>
+                            <div className='col m-0'><Card2 num={ground[3]} /></div>
+                            <div className='col m-0'><Card2 num={ground[4]} /></div>
+                        </div>
+                    }
                 </div>
                 <div className='row m-1 justify-content-center align-content-start h-25'>
-                    {gameInfo.info && info.player.map(i => {
+                    {gameInfo.info && order.map((val) => {
                         return (
-                            <Player key={i.id} options={i}></Player>
+                            info.player.map(v => {
+                                if ((v.id == val) && (v.id != userInfo._id)) {
+                                    return (
+                                        <Player key={v.id} options={v} />
+                                    )
+                                }
+                            })
                         )
-                        // console.log(i)
-                    })}
-                    {/* {gameInfo && <Player options={player1}></Player>}
-                {gameInfo && <Player options={player1}></Player>}
-                {gameInfo && <Player options={player1}></Player>}
-                {gameInfo && <Player options={player1}></Player>}
-                {gameInfo && <Player options={player1}></Player>}
-                {gameInfo && <Player options={player1}></Player>}
-                {gameInfo && <Player options={player1}></Player>} */}
-
+                    })
+                    }
                 </div>
                 {/* <div className='row m-1 justify-content-center align-content-center h-25'>
                     <div className='h-100 d-flex justify-content-center col-3 mx-3 t'><Player options={player1}></Player></div>
@@ -141,7 +119,7 @@ function PokerScreen() {
             <div className='row m-0 bg-dark ' style={{ height: "25vh" }}>
 
                 <div className='col-6 d-flex justify-content-evenly h-25 py-0'>
-                    <Button onClick={()=>leave()}>Home</Button>
+                    <Button onClick={() => leave()}>Home</Button>
                     <Button>Fold</Button>
                     <Button>Check</Button>
                     <Button>Call</Button>
@@ -151,7 +129,7 @@ function PokerScreen() {
                 </div>
                 <div className='col-4 d-flex justify-content-center h-100 py-0 own'>
                     {gameInfo.info && info.player.map((value, index) => {
-                        if (value.user.email == userInfo.email) {
+                        if (value.id == userInfo._id) {
                             return (<Player key={value.id} options={value}></Player>)
                         }
                     })}

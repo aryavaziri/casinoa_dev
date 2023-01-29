@@ -40,7 +40,7 @@ const userInfoFromStorage = localStorage.getItem("userInfo")
 
 const intialState = {
   userLogin: { userInfo: userInfoFromStorage },
-  gameDetails: { player:{} },
+  gameDetails: {  },
 };
 
 const middleware = [thunk];

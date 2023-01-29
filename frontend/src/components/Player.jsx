@@ -44,13 +44,13 @@ function Player({ options }) {
 
     return (
         <>
-            <div className={' p-0 m-2 poker-player ' + status } >
+            <div className={' p-0 m-2 poker-player ' + status} >
                 <div className=' rounded-pill '>
                     {/* <img src={require("../media/images" + options.image)} /> */}
-                    <img src={ window.location.protocol +
-        "//" +
-        window.location.hostname +
-        `:8000/${options.image}`} />
+                    <img src={window.location.protocol +
+                        "//" +
+                        window.location.hostname +
+                        `:8000/${options.image}`} />
                     <div>
                         <div></div>
                         <div>
