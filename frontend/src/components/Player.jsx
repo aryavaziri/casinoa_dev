@@ -7,6 +7,7 @@ import cardIMG from '../media/images/p.webp'
 import Card2 from './Card2'
 import './../player.css'
 import './../poker-actions.css'
+import { gameDetails } from '../actions/pokerActions';
 function Player({ options }) {
     // console.log(document.getElementsByClassName(".width"))
     // useEffect(() => {
@@ -39,7 +40,7 @@ function Player({ options }) {
                 setStatus('nothing');
                 break
         }
-    }, [status])
+    }, [status, gameDetails, options.status])
 
 
     return (
@@ -83,25 +84,14 @@ function Player({ options }) {
                 <div className={((options.small) ? ' blind' : ' d-none')} ><span>S</span></div>
                 <div className={((options.big) ? ' blind' : ' d-none')} ><span>B</span></div>
             </div>
-            {!options.turn &&
+            {/* {!options.turn &&
                 <section className='row poker-actions '>
                     <div className='col-7'> </div>
                     <div className={'col-3 d-flex flex-column justify-content-between p-1 action-btn' + ((options.turn) ? ' ' : ' ')}>
-                        {/* <Button className={'my-1  fs-5 ' + ((options.turn) ? ' btn-success' : ' btn-disabled')}>Fold/Check</Button>
-                        <Button className={'my-1  fs-5 ' + ((options.turn) ? ' btn-success' : ' btn-disabled')}>Call 100€</Button>
-                        <Button className={'my-1  fs-5 ' + ((options.turn) ? ' btn-success' : ' btn-disabled')}>Call 100€</Button>
-                        <Button onClick={() => raise ? setRaise(false) : setRaise(true)} className={'my-1  fs-5 ' + ((options.turn) ? ' btn-success' : ' btn-disabled')}>Raise</Button>
-                        {raise && <div className='col'>
-                            <Button>POT</Button>
-                            <Button>X2</Button>
-                            <Button>X4</Button>
-                            <Button>ALLIN</Button>
-                        </div>
-                        } */}
                     </div>
+                </section>} */}
 
-                </section>
-            }
+
         </>
     )
 }

@@ -2,15 +2,22 @@ import {
   GAME_DETAILS_REQUEST,
   GAME_DETAILS_SUCCESS,
   GAME_DETAILS_FAIL,
+
   GAME_ENTER_REQUEST,
   GAME_ENTER_SUCCESS,
   GAME_ENTER_FAIL,
+
   GAME_NEXT_ROUND_REQUEST,
   GAME_NEXT_ROUND_SUCCESS,
   GAME_NEXT_ROUND_FAIL,
+
   GAME_LEAVE_REQUEST,
   GAME_LEAVE_SUCCESS,
   GAME_LEAVE_FAIL,
+
+  GAME_ACTION_REQUEST,
+  GAME_ACTION_SUCCESS,
+  GAME_ACTION_FAIL,
 } from "../constants/pokerConstants";
 
 export const gameDetailsReducer = (state = {}, action) => {
@@ -53,6 +60,22 @@ export const gameLeaveReducer = (state = {}, action) => {
       return { loading: false, info: action.payload };
 
     case GAME_LEAVE_FAIL:
+      return { loading: false, error: action.payload };
+
+    default:
+      return state;
+  }
+};
+
+export const gameActionReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GAME_ACTION_REQUEST:
+      return { ...state, loading: true };
+
+    case GAME_ACTION_SUCCESS:
+      return { loading: false, info: action.payload };
+
+    case GAME_ACTION_FAIL:
       return { loading: false, error: action.payload };
 
     default:

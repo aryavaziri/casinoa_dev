@@ -9,15 +9,17 @@ import Message from '../components/Message'
 import Player from '../components/Player'
 import FormContainer from '../components/FormContainer'
 import { getUserDetails } from '../actions/userActions'
-import { gameDetails, gameEnter, gameLeave } from '../actions/pokerActions'
+import { gameDetails, gameEnter, gameLeave, gameAction } from '../actions/pokerActions'
 import Image from 'react-bootstrap/Image'
 import loginIMG from '../media/images/login.jpg'
 import Logo from '../media/images/logo.png'
 import Card2 from '../components/Card2'
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 function PokerScreen() {
     let { id } = useParams();
 
+    const [bet, setBet] = useState(0)
     const location = useLocation()
     const navigate = useNavigate()
 
@@ -33,7 +35,8 @@ function PokerScreen() {
 
     useEffect(() => {
         dispatch(gameDetails(id))
-    }, [id])
+    }, [id, gameDetails])
+
 
     useEffect(() => {
         let count = 0
@@ -50,6 +53,21 @@ function PokerScreen() {
     }
     const leave = () => {
         dispatch(gameLeave(id))
+    }
+    const fold = () => {
+        dispatch(gameAction(id, bet, "fold"))
+    }
+    const check = () => {
+        dispatch(gameAction(id, bet, "check"))
+    }
+    const call = () => {
+        dispatch(gameAction(id, bet, "call"))
+    }
+    const raise = () => {
+        dispatch(gameAction(id, bet, "raise"))
+    }
+    const allin = () => {
+        dispatch(gameAction(id, bet, "allin"))
     }
     const ground = []
     if (gameInfo.info) {
@@ -71,61 +89,114 @@ function PokerScreen() {
         }
     }
 
+    const orderL = []
+    const orderR = []
+    const orderT = []
+
+    if (order.length == 2) {
+        orderL.push(order[1]);
+    } else {
+        if ((order.length % 2) != 0) { orderT.push(order[((order.length) - 1) / 2]); orderT.push(order[((order.length) + 1) / 2]) }
+        else { orderT.push(order[((order.length)) / 2]) }
+        orderL.push(order[1]);
+        orderR.push(order[order.length - 1]);
+        if (order.length > 5) {
+            orderL.push(order[2]);
+            orderR.push(order[order.length - 2]);
+        }
+        if (order.length > 7) {
+            orderL.push(order[3]);
+            orderR.push(order[order.length - 3]);
+        }
+    }
+
+
     return (
         <>
             <div className='fluid  m-0 bg-success pt-4 position-relative ' style={{ height: "75vh" }}>
                 <div className='position-absolute w-100 ground row'>
                     {gameInfo.info &&
                         <div className='row mx-auto'>
-                            <div className='col m-0'><Card2 num={ground[0]} /></div>
-                            <div className='col m-0'><Card2 num={ground[1]} /></div>
-                            <div className='col m-0'><Card2 num={ground[2]} /></div>
-                            <div className='col m-0'><Card2 num={ground[3]} /></div>
-                            <div className='col m-0'><Card2 num={ground[4]} /></div>
+                            <div className='col m-0 p-1'><Card2 num={ground[0]} /></div>
+                            <div className='col m-0 p-1'><Card2 num={ground[1]} /></div>
+                            <div className='col m-0 p-1'><Card2 num={ground[2]} /></div>
+                            <div className='col m-0 p-1'><Card2 num={ground[3]} /></div>
+                            <div className='col m-0 p-1'><Card2 num={ground[4]} /></div>
                         </div>
                     }
                 </div>
-                <div className='row m-1 justify-content-center align-content-start h-25'>
-                    {gameInfo.info && order.map((val) => {
-                        return (
-                            info.player.map(v => {
-                                if ((v.id == val) && (v.id != userInfo._id)) {
-                                    return (
-                                        <Player key={v.id} options={v} />
-                                    )
-                                }
+                <div className='p-0 m-0 arrange d-flex'>
+                    <div className='l d-flex align-items-center flex-column-reverse justify-content-around'>
+                        {gameInfo.info &&
+                            orderL.map((val) => {
+                                return (
+                                    info.player.map(v => {
+                                        if ((v.id == val) && (v.id != userInfo._id)) {
+                                            return (
+                                                <Player key={v.id} options={v} />
+                                            )
+                                        }
+                                    })
+                                )
                             })
-                        )
-                    })
-                    }
+                        }
+                    </div>
+                    <div className='t d-flex justify-content-around'>
+                        {gameInfo.info &&
+
+                            orderT.map((val) => {
+                                return (
+                                    info.player.map(v => {
+                                        if ((v.id == val) && (v.id != userInfo._id)) {
+                                            return (
+                                                <Player key={v.id} options={v} />
+                                            )
+                                        }
+                                    })
+                                )
+                            })
+                        }
+
+                    </div>
+                    <div className='r d-flex align-items-center flex-column-reverse justify-content-around'>
+                        {gameInfo.info &&
+
+                            orderR.map((val) => {
+                                return (
+                                    info.player.map(v => {
+                                        if ((v.id == val) && (v.id != userInfo._id)) {
+                                            return (
+                                                <Player key={v.id} options={v} />
+                                            )
+                                        }
+                                    })
+                                )
+                            })
+                        }
+
+
+                    </div>
                 </div>
-                {/* <div className='row m-1 justify-content-center align-content-center h-25'>
-                    <div className='h-100 d-flex justify-content-center col-3 mx-3 t'><Player options={player1}></Player></div>
-                    <div className='h-100 d-flex justify-content-center col-3 mx-3 t'><Player options={player1}></Player></div>
-                </div>
-                <div className='row m-1 justify-content-between align-content-center h-25'>
-                    <div className='h-100 col-3 ms-3 l'><Player options={player4}></Player></div>
-                    <div className='h-100 d-flex justify-content-end col-3 me-3 r'><Player options={player1}></Player></div>
-                </div>
-                <div className='row m-1 justify-content-between align-content-center h-25'>
-                    <div className='h-100 col-3 ms-0 l'><Player options={player1}></Player></div>
-                    <div className='h-100 d-flex justify-content-end col-3 me-0 r'><Player options={player3}></Player></div>
-                </div>
-                <div className='row m-1 justify-content-between align-content-center h-25'>
-                    <div className='h-100 col-3 ms-3 l'><Player options={player2}></Player></div>
-                    <div className='h-100 d-flex justify-content-center col-3 me-3 r'><Player options={player5}></Player></div>
-                </div> */}
             </div>
             <div className='row m-0 bg-dark ' style={{ height: "25vh" }}>
 
-                <div className='col-6 d-flex justify-content-evenly h-25 py-0'>
-                    <Button onClick={() => leave()}>Home</Button>
-                    <Button>Fold</Button>
-                    <Button>Check</Button>
-                    <Button>Call</Button>
-                    <Button>Raise</Button>
-                    <Button>All-in</Button>
-
+                <div className='col-5 d-flex justify-content-evenly h-25 py-0 flex-wrap'>
+                    <Button className='mx-2 mt-2' onClick={() => leave()}>Home</Button>
+                    <Button className='mx-2 mt-2' onClick={() => fold()}>Fold</Button>
+                    <Button className='mx-2 mt-2' onClick={() => check()}>Check</Button>
+                    <Button className='mx-2 mt-2' onClick={() => call()}>Call</Button>
+                    <Button className='mx-2 mt-2' onClick={() => raise()}>Raise</Button>
+                    <Button className='mx-2 mt-2' onClick={() => allin()}>All-in</Button>
+                    <FloatingLabel controlId="bet" label="Bet" className="m-3" >
+                        <Form.Control
+                            className='bg-light'
+                            type="number"
+                            placeholder="Enter your Email"
+                            value={bet}
+                            onChange={(e) => setBet(e.target.value)}
+                            autoFocus
+                        />
+                    </FloatingLabel>
                 </div>
                 <div className='col-4 d-flex justify-content-center h-100 py-0 own'>
                     {gameInfo.info && info.player.map((value, index) => {

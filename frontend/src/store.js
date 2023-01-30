@@ -15,7 +15,7 @@ import {
   UserDetailsReducers,
   UserUpdateProfileReducers,
 } from "./reducers/userReducers";
-import { gameDetailsReducer, gameEnterReducer, gameLeaveReducer } from "./reducers/pokerReducers";
+import { gameDetailsReducer, gameEnterReducer, gameLeaveReducer, gameActionReducer } from "./reducers/pokerReducers";
 // import { orderPaymentReducers } from './reducers/paymentReducers'
 // import { usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
@@ -31,6 +31,7 @@ const reducer = combineReducers({
   gameDetails: gameDetailsReducer,
   gameEnter: gameEnterReducer,
   gameLeave: gameLeaveReducer,
+  gameAction: gameActionReducer,
   // paypal: usePayPalScriptReducer
 });
 

@@ -12,6 +12,9 @@ import {
   GAME_LEAVE_REQUEST,
   GAME_LEAVE_SUCCESS,
   GAME_LEAVE_FAIL,
+  GAME_ACTION_REQUEST,
+  GAME_ACTION_SUCCESS,
+  GAME_ACTION_FAIL,
 } from "../constants/pokerConstants";
 
 export const gameDetails = (id) => async (dispatch, getState) => {
@@ -50,7 +53,9 @@ export const gameDetails = (id) => async (dispatch, getState) => {
 export const gameEnter = (id, deposite) => async (dispatch, getState) => {
   try {
     dispatch({ type: GAME_ENTER_REQUEST });
-    const {userLogin: { userInfo }} = getState();
+    const {
+      userLogin: { userInfo },
+    } = getState();
     const config = {
       headers: {
         "Content-type": "application/json",
@@ -58,9 +63,16 @@ export const gameEnter = (id, deposite) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.put(window.location.protocol + "//" + window.location.hostname + `:8000/api/poker/${id}/enter/`, deposite, config);
+    const { data } = await axios.put(
+      window.location.protocol +
+        "//" +
+        window.location.hostname +
+        `:8000/api/poker/${id}/enter/`,
+      deposite,
+      config
+    );
     dispatch({ type: GAME_DETAILS_SUCCESS, payload: data });
-    dispatch({ type: GAME_ENTER_SUCCESS});
+    dispatch({ type: GAME_ENTER_SUCCESS });
   } catch (error) {
     dispatch({
       type: GAME_ENTER_FAIL,
@@ -75,7 +87,9 @@ export const gameEnter = (id, deposite) => async (dispatch, getState) => {
 export const gameLeave = (id) => async (dispatch, getState) => {
   try {
     dispatch({ type: GAME_LEAVE_REQUEST });
-    const {userLogin: { userInfo }} = getState();
+    const {
+      userLogin: { userInfo },
+    } = getState();
     const config = {
       headers: {
         "Content-type": "application/json",
@@ -83,13 +97,70 @@ export const gameLeave = (id) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(window.location.protocol + "//" + window.location.hostname + `:8000/api/poker/${id}/leave/`, config);
+    const { data } = await axios.get(
+      window.location.protocol +
+        "//" +
+        window.location.hostname +
+        `:8000/api/poker/${id}/leave/`,
+      config
+    );
     dispatch({ type: GAME_DETAILS_SUCCESS, payload: data });
-    dispatch({ type: GAME_LEAVE_SUCCESS});
+    dispatch({ type: GAME_LEAVE_SUCCESS });
     // dispatch({ type: GAME_LEAVE_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
       type: GAME_LEAVE_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+export const gameAction = (id, bet, actionType) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: GAME_ACTION_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.access_token}`,
+      },
+    };
+    let act
+    switch (actionType) {
+      case "fold":
+        act = "fold";
+        break;
+        case "check":
+        act = "check";
+        break;
+        case "call":
+        act = "call";
+        break;
+        case "raise":
+        act = bet;
+        break;
+        case "allin":
+        act = "allin";
+        break;
+      }
+      const {data} = await axios.put(
+        window.location.protocol +
+          "//" +
+          window.location.hostname +
+          `:8000/api/poker/${id}/action/`,
+        act,
+        config
+      );
+    dispatch({ type: GAME_DETAILS_SUCCESS, payload: data });
+    dispatch({ type: GAME_ACTION_SUCCESS});
+  } catch (error) {
+    dispatch({
+      type: GAME_ACTION_FAIL,
       payload:
         error.response && error.response.data.detail
           ? error.response.data.detail

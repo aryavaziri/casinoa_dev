@@ -69,16 +69,12 @@ class Game(models.Model):
     table = models.ForeignKey(Table, on_delete=models.CASCADE, null=True)
     stage = models.IntegerField(choices=stages, default=0)
     turn = models.IntegerField(null=True, default=0)
+    changer = models.IntegerField(null=True, default=0)
     small_blind = models.IntegerField(null=True, default=0)
     bet = models.IntegerField(null=True, default=0)
     pot = models.IntegerField(null=True, default=0)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     JSON_data = models.JSONField(default=data)
-    # card1 = models.IntegerField(null=True, default=0)
-    # card2 = models.IntegerField(null=True, default=0)
-    # card3 = models.IntegerField(null=True, default=0)
-    # card4 = models.IntegerField(null=True, default=0)
-    # card5 = models.IntegerField(null=True, default=0)
 
     def __str__(self):
         return (str(self.round) + " - " + (self.table.name))
