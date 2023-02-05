@@ -72,7 +72,7 @@ function PokerScreen() {
     const ground = []
     if (gameInfo.info) {
         for (let i = 0; i < 5; i++) {
-            ground[i] = info.JSON_data.ground[i]
+            ground[i] = info.JSON_ground.ground[i]
         }
     }
     const order = []
@@ -187,6 +187,7 @@ function PokerScreen() {
                     <Button className='mx-2 mt-2' onClick={() => call()}>Call</Button>
                     <Button className='mx-2 mt-2' onClick={() => raise()}>Raise</Button>
                     <Button className='mx-2 mt-2' onClick={() => allin()}>All-in</Button>
+                    {gameInfo.info && <span className='text-light'>POT:{gameInfo.info.pot}/ BET:{gameInfo.info.bet}/ STAGE:{gameInfo.info.stage}</span>}
                     <FloatingLabel controlId="bet" label="Bet" className="m-3" >
                         <Form.Control
                             className='bg-light'

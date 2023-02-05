@@ -2,9 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User, AbstractUser
 
 def data():
-    return {"ground":[0,0,0,0,0], "orders":[]}
+    return {"ground":[0,0,0,0,0], "orders":[], "bets":[]}
 def ground():
-    return {"ground":[0,0,0,0,0], "orders":[]}
+    return {"ground":[0,0,0,0,0]}
 
 class Table(models.Model):
     types = [
@@ -75,6 +75,7 @@ class Game(models.Model):
     pot = models.IntegerField(null=True, default=0)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     JSON_data = models.JSONField(default=data)
+    JSON_ground = models.JSONField(default=ground)
 
     def __str__(self):
         return (str(self.round) + " - " + (self.table.name))

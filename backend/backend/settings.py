@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['127.0.0.1', '127.0.0.1:3000', '78.135.110.231', 'www.casinoa.n
 # Application definition
 
 INSTALLED_APPS = [
+    # 'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +44,8 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "corsheaders",
 ]
+
+# ASGI_APPLICATION = 'backend.asgi.application'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

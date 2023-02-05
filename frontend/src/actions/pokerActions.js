@@ -130,30 +130,34 @@ export const gameAction = (id, bet, actionType) => async (dispatch, getState) =>
         Authorization: `Bearer ${userInfo.access_token}`,
       },
     };
-    let act
+    let actSwitch
+    let act = ""
+    let act2 = {act , bet}
     switch (actionType) {
       case "fold":
-        act = "fold";
+        actSwitch = "fold";
         break;
         case "check":
-        act = "check";
+        actSwitch = "check";
         break;
         case "call":
-        act = "call";
+        actSwitch = "call";
         break;
         case "raise":
-        act = bet;
+        actSwitch = "raise";
         break;
         case "allin":
-        act = "allin";
+        actSwitch = "allin";
         break;
       }
+      act2.act = actSwitch
+      act2.bet = bet
       const {data} = await axios.put(
         window.location.protocol +
           "//" +
           window.location.hostname +
           `:8000/api/poker/${id}/action/`,
-        act,
+        act2,
         config
       );
     dispatch({ type: GAME_DETAILS_SUCCESS, payload: data });

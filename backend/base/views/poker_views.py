@@ -96,9 +96,9 @@ def newGame(request, pk):
     game.pot = table.small*3
     # game.turn = (small+2) % len(new_order)
     game.turn = new_order[(new_order.index(small) + 2) % len(new_order)]
-    # game.JSON_data['ground'][0]= poker.ground[0]
-    # game.JSON_data['ground'][1]= poker.ground[1]
-    # game.JSON_data['ground'][2]= poker.ground[2]
+    game.JSON_data['ground']= poker.ground
+    game.JSON_data['bets']= [0] * len(new_order)
+    game.JSON_data['playerCards']= poker.playerCards
     game.JSON_data['orders']= new_order
     print(Player.objects.get(id=new_order[1]).card1)
     for p in range(len(new_order)):
@@ -109,6 +109,7 @@ def newGame(request, pk):
         player.dealer = False
         player.bet = 0
         player.status = 0
+        # print(player.id)
         if(p==0):
             player.small = True
             player.bet = table.small
@@ -120,8 +121,8 @@ def newGame(request, pk):
         if(p==2%len(new_order)):
             player.turn = True
         player.balance -= player.bet
-        player.card1=poker.playerCards[p][0]
-        player.card2=poker.playerCards[p][1]
+        player.card1=game.JSON_data['playerCards'][(p + new_order.index(small))% len(new_order)][0]
+        player.card2=game.JSON_data['playerCards'][(p + new_order.index(small))% len(new_order)][1]
         player.save()
     
     game.save()
