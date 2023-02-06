@@ -17,6 +17,12 @@ import Card2 from '../components/Card2'
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 function PokerScreen() {
+
+    let url = window.location.protocol + "//" + window.location.hostname + `:8000/ws/socket-server/`
+    const pokerSocket = new WebSocket(url)
+
+
+
     let { id } = useParams();
 
     const [bet, setBet] = useState(0)

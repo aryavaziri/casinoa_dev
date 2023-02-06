@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEST</title>
+</head>
+<body>
+    <h1>Test is ok</h1>
+    <script>
+        let url = `ws://${window.location.host}/ws/socket-server/`
+        const pokerSocket = new WebSocket(url)
+        pokerSocket.onmessage = function(e){
+            let data5 = JSON.parse(e.data)
+            console.log("Data:", data5)
+        }
+        console.log("url:", url)
+    
+    </script>
+</body>
+</html>

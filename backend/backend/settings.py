@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 from datetime import timedelta
 
@@ -32,7 +32,8 @@ ALLOWED_HOSTS = ['127.0.0.1', '127.0.0.1:3000', '78.135.110.231', 'www.casinoa.n
 # Application definition
 
 INSTALLED_APPS = [
-    # 'channels',
+    'daphne',
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,7 +46,8 @@ INSTALLED_APPS = [
     "corsheaders",
 ]
 
-# ASGI_APPLICATION = 'backend.asgi.application'
+ASGI_APPLICATION = 'backend.asgi.application'
+WSGI_APPLICATION = 'backend.wsgi.application'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -103,7 +105,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -116,7 +118,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend.wsgi.application'
 
 
 # Database
@@ -132,6 +133,10 @@ DATABASES = {
 INTERNAL_IPS = [
     "127.0.0.1",
     "127.0.0.1:3000",
+    "127.0.0.1:8000",
+    "localhost",
+    "localhost:3000",
+    "localhost:8000",
 
 ]
 
