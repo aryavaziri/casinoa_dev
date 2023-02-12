@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from base.models import Game, Player, Table
 from base.serializers import GameSerializer, PlayerSerializer
+from .poker_views import newGame
 
 def myfunc(a):
     # print("MYFUNC")
@@ -147,6 +148,8 @@ def action(request, pk):
                 game.JSON_ground['ground'][4]= game.JSON_data['ground'][4]
             if(game.stage == 4):
                 print("NEXT GAME")
+                newGame(request,pk)
+
 
         print(game.JSON_data['bets'])
 

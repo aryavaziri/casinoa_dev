@@ -1,5 +1,50 @@
 from django.db import models
-from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.models import AbstractBaseUser, AbstractUser, PermissionsMixin
+from django.contrib.auth.models import BaseUserManager, UserManager
+
+class CustomUserManager(UserManager):
+    def _create_user(self, email, password=None,name=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        extra_fields.setdefault('is_active', True)
+        if password is not None:
+            user.set_password(password)
+        else:
+            print("Password not provided")
+        user.save()
+        p = Player(user=user)
+        p.nick_name = name
+        p.save()
+        return user
+
+    def create_user(self, email=None, password=None, name=None, **extra_fields):
+        extra_fields.setdefault('is_superuser', False)
+        extra_fields.setdefault('is_staff', False)
+        return self._create_user(email, password, name, **extra_fields)
+
+    def create_superuser(self, email=None, password=None, **extra_fields):
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_staff', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+        return self._create_user(email, password, **extra_fields)
+
+class User(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField("email address",unique=True)
+    is_superuser = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+    objects = CustomUserManager()
+
+    def __str__(self):
+        return self.email
 
 def data():
     return {"ground":[0,0,0,0,0], "orders":[], "bets":[]}
@@ -30,6 +75,10 @@ class Table(models.Model):
 
     def __str__(self):
         return self.name
+
+def upload_path(instance,filename):
+    return '/'.join(['Profile picture',str(instance.user),filename])
+
 class Player(models.Model):
     state = [
         (0, ''),
@@ -39,23 +88,27 @@ class Player(models.Model):
         (4, 'Raise'),
         (5, 'Allin'),
     ]
-    user = models.OneToOneField(User, on_delete=models.CASCADE,null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE,primary_key=True)
+    nick_name = models.CharField(max_length=200, null=True, blank=True)
     balance = models.IntegerField(null=True, default=0)
     status = models.IntegerField(null=True, choices=state, default=0, blank=True)
-    credit_total = models.IntegerField(default=0, null=True)
+    credit_total = models.IntegerField(default=1000, null=True)
     turn = models.BooleanField(default=False)
     dealer = models.BooleanField(default=False)
     small = models.BooleanField(default=False)
     big = models.BooleanField(default=False)
     bet = models.IntegerField(default=0)
-    image = models.ImageField(default="/img/avatar1.webp")
+    image = models.ImageField(default="/avatar1.webp", upload_to=upload_path)
     card1 = models.IntegerField(default=0)
     card2 = models.IntegerField(default=0)
-    joined_at = models.DateTimeField(null=True)
+    joined_at = models.DateTimeField(null=True, blank=True)
     left_at = models.DateTimeField(null=True, blank=True)
 
+    # def ini(self):
+    #     Game.objects.create(table=self).save()
+
     def __str__(self):
-        return str(self.user.first_name)
+        return str(self.user.id) + " - " + str(self.user.email)
 
 class Game(models.Model):
     stages = [
@@ -66,7 +119,7 @@ class Game(models.Model):
     ]
     player = models.ManyToManyField(Player, blank=True)
     round = models.AutoField(primary_key=True, editable=False)
-    table = models.ForeignKey(Table, on_delete=models.CASCADE, null=True)
+    table = models.ForeignKey(Table, on_delete=models.CASCADE)
     stage = models.IntegerField(choices=stages, default=0)
     turn = models.IntegerField(null=True, default=0)
     changer = models.IntegerField(null=True, default=0)

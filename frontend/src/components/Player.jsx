@@ -51,12 +51,12 @@ function Player({ options }) {
                     <img src={window.location.protocol +
                         "//" +
                         window.location.hostname +
-                        `:8000/${options.image}`} />
+                        `:8000${options.image}`} />
                     <div>
                         <div></div>
                         <div>
                             <div><span><i className="fa-solid fa-coins"></i></span> <span>{options.balance}€</span></div>
-                            <div>{options.id} - {options.name}</div>
+                            <div>{options.user} - {options.nick_name}</div>
                             <div>
                                 {(options.turn) ? "" : status}
                                 {/* <div className={((options.turn) ? ' turn' : ' d-none')} >

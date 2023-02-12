@@ -26,7 +26,7 @@ export const gameDetails = (id) => async (dispatch, getState) => {
     const config = {
       headers: {
         "Content-type": "application/json",
-        Authorization: `Bearer ${userInfo.access_token}`,
+        Authorization: `Bearer ${userInfo.access}`,
       },
     };
 
@@ -53,13 +53,11 @@ export const gameDetails = (id) => async (dispatch, getState) => {
 export const gameEnter = (id, deposite) => async (dispatch, getState) => {
   try {
     dispatch({ type: GAME_ENTER_REQUEST });
-    const {
-      userLogin: { userInfo },
-    } = getState();
+    const {userLogin: { userInfo }} = getState();
     const config = {
       headers: {
         "Content-type": "application/json",
-        Authorization: `Bearer ${userInfo.access_token}`,
+        Authorization: `Bearer ${userInfo.access}`,
       },
     };
 
@@ -93,7 +91,7 @@ export const gameLeave = (id) => async (dispatch, getState) => {
     const config = {
       headers: {
         "Content-type": "application/json",
-        Authorization: `Bearer ${userInfo.access_token}`,
+        Authorization: `Bearer ${userInfo.access}`,
       },
     };
 
@@ -101,7 +99,7 @@ export const gameLeave = (id) => async (dispatch, getState) => {
       window.location.protocol +
         "//" +
         window.location.hostname +
-        `:8000/api/poker/${id}/leave/`,
+        `:8000/api/poker/${id}/leave/`, 
       config
     );
     dispatch({ type: GAME_DETAILS_SUCCESS, payload: data });
@@ -127,7 +125,7 @@ export const gameAction = (id, bet, actionType) => async (dispatch, getState) =>
     const config = {
       headers: {
         "Content-type": "application/json",
-        Authorization: `Bearer ${userInfo.access_token}`,
+        Authorization: `Bearer ${userInfo.access}`,
       },
     };
     let actSwitch

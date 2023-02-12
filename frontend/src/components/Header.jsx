@@ -11,16 +11,13 @@ import Form from 'react-bootstrap/Form';
 import { NavDropdown } from 'react-bootstrap';
 import { logout } from '../actions/userActions';
 
-
-
-
-
-
-
 function Header() {
 
   const userLogin = useSelector(state => state.userLogin)
   const { userInfo } = userLogin
+
+  const userDetails = useSelector(state => state.userDetails)
+  const { loading, error, user } = userDetails
 
   const location = useLocation()
   const dispatch = useDispatch()
@@ -28,7 +25,7 @@ function Header() {
 
   return (
     < header >
-      <Navbar className={((location.pathname == "/login")||(location.pathname.includes("/poker"))) ? "d-none" : "d-block"} bg="dark" variant="dark">
+      <Navbar className={((location.pathname == "/login") || (location.pathname.includes("/poker"))) ? "d-none" : "d-block"} bg="dark" variant="dark">
         {/* <Navbar bg="dark" variant="dark"> */}
         <Container>
           <LinkContainer to="/" className=''>
@@ -38,27 +35,32 @@ function Header() {
           <Nav className="basic-navbar-nav ms-auto" bg="dark" variant="dark">
             {userInfo ? (
               <>
-                  <Nav.Link>
-                <LinkContainer to='/profile'>
-                  <i className="fas fa-user"></i>
-                </LinkContainer>
-                  </Nav.Link>
-                <Nav.Link onClick={logoutHandler}>
-                    <i className="fa-solid fa-arrow-right-from-bracket"></i>
+                <Nav.Link>
+                  <LinkContainer to='/profile'>
+                    <div className='justify-content-center d-flex'>
+                      {user[1] &&
+                        <div className='border overflow-hidden rounded-circle' style={{ aspectRatio: "1/1", height: "30px" }}>
+                          <img className='h-100 w-100 border' style={{ objectFit: "cover" }} src={window.location.protocol + "//" + window.location.hostname + ":8000/static" + user[1].image} alt={user[1].nick_name} />
+                        </div>}
+                    </div>
+                  </LinkContainer>
                 </Nav.Link>
 
-                <NavDropdown className='' align="end" title={userInfo.name} id='username'>
+                <NavDropdown className='' align="end" title={userInfo.nick_name ? userInfo.nick_name : userInfo.email} id='username'>
                   <LinkContainer to='/profile'>
                     <NavDropdown.Item>
                       <i className='fas fa-user px-2'></i>
-                       Profile
+                      Profile
                     </NavDropdown.Item>
                   </LinkContainer>
                   <NavDropdown.Item onClick={logoutHandler}>
                     <i className="fa-solid fa-arrow-right-from-bracket px-2"></i>
-                     Log Out
+                    Log Out
                   </NavDropdown.Item>
                 </NavDropdown>
+                <Nav.Link onClick={logoutHandler}>
+                  <i className="fa-solid fa-arrow-right-from-bracket"></i>
+                </Nav.Link>
               </>
             ) :
               <Nav.Link href="/login">Login <i className="fa-solid fa-right-to-bracket"></i></Nav.Link>

@@ -12,12 +12,12 @@ import Buyin from '../components/Buyin'
 import { useState } from 'react'
 
 function HomeScreen() {
-    let url = `ws://${window.location.hostname}:8000/ws/socket-server/`
-    const pokerSocket = new WebSocket(url)
-    pokerSocket.onmessage = (e)=>{
-        let data = JSON.parse(e.data)
-        console.log("Data:", data)
-    }
+    // let url = `ws://${window.location.hostname}:8000/ws/socket-server/`
+    // const pokerSocket = new WebSocket(url)
+    // pokerSocket.onmessage = (e)=>{
+    //     let data = JSON.parse(e.data)
+    //     console.log("Data:", data)
+    // }
     
     
     

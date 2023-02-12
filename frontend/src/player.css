@@ -39,7 +39,7 @@
     font-weight: bolder;
   }
 .poker-player .blind{
-    height: 22%;
+    height: 18%;
     aspect-ratio: 1/1;
     background: rgb(201, 201, 201);
     color: rgb(0, 0, 0);
@@ -48,15 +48,15 @@
     left: -5%;
     z-index: 5;
     border-radius: 50%;
-    border: 4px solid rgba(7, 141, 0, 0.5);
+    border: 3px solid rgba(7, 141, 0, 0.5);
     box-shadow: 0 0 5px 1px;
     display: flex;
     justify-content: center;
   }
   .poker-player .blind>span{
     align-self: center;
-    font-size: 16px;
-    line-height: 16px;
+    font-size: 13px;
+    line-height: 13px;
     vertical-align: middle ;
     font-weight: bolder;
   }
@@ -175,7 +175,7 @@
 .poker-player>div>img {
   border-radius: 50%;
   aspect-ratio: 1 / 1;
-  object-fit: fill;
+  object-fit: cover;
   left: 0;
   top: 0;
   height: 100%;

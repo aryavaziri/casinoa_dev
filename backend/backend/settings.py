@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-a&*y%opuyl69rf^jen0r4+90e$#=#la*#e%_!=pazj1q@)it#s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '127.0.0.1:3000', '78.135.110.231', 'www.casinoa.nl', 'localhost', 'localhost:3000']
+ALLOWED_HOSTS = ['127.0.0.1', '127.0.0.1:3000', '78.135.110.231',
+                 'www.casinoa.nl', 'localhost', 'localhost:3000']
 
 
 # Application definition
@@ -42,17 +43,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'base.apps.BaseConfig',
     'rest_framework',
+    'rest_framework_simplejwt',
     "debug_toolbar",
     "corsheaders",
 ]
 
+AUTH_USER_MODEL = "base.User"
 ASGI_APPLICATION = 'backend.asgi.application'
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-)}
+    )}
 
 
 SIMPLE_JWT = {
@@ -87,6 +90,17 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+        # "BACKEND": "channels_redis.core.RedisChannelLayer",
+        # "CONFIG": {
+        #     "hosts": [("localhost", 6379)],
+        # },
+    },
+}
+
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
@@ -105,7 +119,10 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [
+            BASE_DIR / 'templates',
+            # os.path.join(BASE_DIR, 'build')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -117,7 +134,6 @@ TEMPLATES = [
         },
     },
 ]
-
 
 
 # Database
@@ -174,14 +190,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
-MEDIA_URL = 'img/'
+STATIC_URL = '/static/'
+MEDIA_URL = '/img/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'static'
+    BASE_DIR / 'static',
+    # BASE_DIR / 'build/static',
+
 ]
 
-MEDIA_ROOT = 'static/img'
+MEDIA_ROOT = 'backend/static/img'
 
 CORS_ALLOW_ALL_ORIGINS = True
 

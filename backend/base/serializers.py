@@ -1,61 +1,41 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from .models import Table, Game, Player
 from django.db import models
+
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 
-
+User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
 
-    name = serializers.SerializerMethodField(read_only=True)
-    _id = serializers.SerializerMethodField(read_only=True)
-    isAdmin = serializers.SerializerMethodField(read_only=True)
-    credit = serializers.SerializerMethodField(read_only=False)
-    # player = PlayerSerializer(many=True, read_only=True)
     class Meta:
         model = User
-        fields = ['_id', 'username', 'email', 'name', 'isAdmin','credit']
-
-    def get_name(self, obj):
-        name = obj.first_name
-        if name == '':
-            name = obj.email
-        return name
-
-    def get__id(self, obj):
-        return obj.id
-
-    def get_isAdmin(self, obj):
-        return obj.is_staff
-
-    def get_credit(self, obj):
-        serializer = PlayerSerializer(Player.objects.get(user=obj), many=False)
-        # print(serializer.data['credit_total'])
-        return serializer.data['credit_total']
-        # return PlayerSerializer(Player.objects.get(obj), many=False).data['credit']
-
-
-class UserSerializerWithToken(UserSerializer):
-    refresh_token = serializers.SerializerMethodField(read_only=True)
-    access_token = serializers.SerializerMethodField(read_only=True)
-    class Meta:
-        model = User
-        fields = ['_id', 'username', 'email', 'name', 'isAdmin', 'access_token', 'refresh_token']
-    def get_refresh_token(self, obj):
-        refresh_token = RefreshToken.for_user(obj)
-        return str(refresh_token)
-
-    def get_access_token(self, obj):
-        access_token = AccessToken.for_user(obj)
-        return str(access_token)
+        fields = ['email', 'id']
 
 class PlayerSerializer(serializers.ModelSerializer):
-    name = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Player
         fields = '__all__'
-    def get_name(self, obj):
-        return obj.user.first_name
+
+class UserSerializerWithToken(UserSerializer):
+    nick_name = serializers.SerializerMethodField(read_only=True)
+    access = serializers.SerializerMethodField(read_only=True)
+    refresh = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['email', 'id', 'nick_name','access','refresh']
+
+    def get_nick_name(self, obj):
+        serializer = PlayerSerializer(Player.objects.get(user_id=obj.id), many=False)
+        return serializer.data['nick_name']
+    def get_access(self, obj):
+        access_token = AccessToken.for_user(obj)
+        return str(access_token)
+    def get_refresh(self, obj):
+        refresh_token = RefreshToken.for_user(obj)
+        return str(refresh_token)
+
 
 class GameSerializer(serializers.ModelSerializer):
     player = PlayerSerializer(many=True, read_only=True)

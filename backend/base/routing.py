@@ -2,5 +2,5 @@ from django.urls import re_path
 from . import consumers
 
 websocket_urlpattern = [
-    re_path(r'ws/socket-server/', consumers.PokerConsumer.as_asgi())
+    re_path(r'ws/poker/(?P<pk>\w+)/$', consumers.PokerConsumer.as_asgi())
 ]

@@ -30,7 +30,7 @@ export const login = (email, password) => async (dispatch) => {
         "//" +
         window.location.hostname +
         ":8000/api/users/login/",
-      { username: email, password: password },
+      { email: email, password: password },
       config
     );
     dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
@@ -91,10 +91,11 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
     const config = {
       headers: {
         "Content-type": "application/json",
-        Authorization: `Bearer ${userInfo.access_token}`,
+        Authorization: `Bearer ${userInfo.access}`,
       },
     };
-    const { data } = await axios.get(window.location.protocol + "//" + window.location.hostname + `:8000/api/users/${id}/`,config);
+    // const { data } = await axios.get(window.location.protocol + "//" + window.location.hostname + `:8000/api/users/${id}/`,config);
+    const { data } = await axios.get(window.location.protocol + "//" + window.location.hostname + `:8000/api/users/profile/`,config);
     dispatch({ type: USER_DETAIL_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -117,25 +118,32 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
     const config = {
       headers: {
         "Content-type": "application/json",
-        Authorization: `Bearer ${userInfo.access_token}`,
+        Authorization: `Bearer ${userInfo.access}`,
       },
     };
 
-    const { data } = await axios.put(
+    const config2 = {
+      headers: {
+        "Content-type": "multipart/form-data",
+        Authorization: `Bearer ${userInfo.access}`,
+      },
+    };
+
+    const {data} = await axios.put(
       window.location.protocol +
         "//" +
         window.location.hostname +
         `:8000/api/users/profile/update/`,
       user,
-      config
+      config2
     );
     // console.log(data)
-    data.access_token = userInfo.access_token
+    // data[0].access = userInfo.access
     // console.log(data)
     dispatch({ type: USER_UPDATE_PROFILE_SUCCESS, payload: data });
-    dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
+    dispatch({ type: USER_LOGIN_SUCCESS, payload: data[0] });
 
-    localStorage.setItem("userInfo", JSON.stringify(data));
+    localStorage.setItem("userInfo", JSON.stringify(data[0]));
 
   } catch (error) {
     dispatch({

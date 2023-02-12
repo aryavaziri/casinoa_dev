@@ -32,7 +32,7 @@ function Buyin({ table }) {
             navigate("/login")
         } else {
             dispatch(gameDetails(table._id))
-            if (!user || !user.name ) {
+            if (!user ) {
                 dispatch(getUserDetails('profile'))
             }
         }
@@ -58,17 +58,29 @@ function Buyin({ table }) {
         (2, 9),
     ]
 
+    useEffect(() => {
+        if (!userInfo) {
+            navigate("/login")
+        } else {
+            if (!user[1]) {
+                dispatch(getUserDetails('profile'))
+            }
+        }
+        // if (success) { setFlag(true) }
+    }, [userInfo, dispatch, user, navigate])
+
+
 
 
     return (
         <Card className='shadow m-0 p-0 rounded overflow-hidden border-none'>
-            <img className='' style={{ height: "260px", objectFit: "cover" }} src={require("../media/images" + table.img)} alt={table.img} />
+            <img className='' style={{ height: "260px", objectFit: "cover" }} src={window.location.protocol + "//" + window.location.hostname + ":8000/static" + table.img} alt={table.img} />
             <Card.Body className='row pt-3'>
                 <div className='col-6 d-flex flex-column'>
                     <Card.Text className='text-start col-12 my-0 p-2'><strong>Type: </strong>{types[table.type]}</Card.Text>
                     <Card.Text className='text-start col-12 my-0 p-2'><strong>S/B blinds: </strong>{table.small}/{table.small * 2} €</Card.Text>
                     <Card.Text className='text-start col-12 my-0 p-2'><strong>Minimum Buy-in: </strong>{table.min}</Card.Text>
-                    <Card.Text className='text-start col-12 mt-auto p-2'><strong>Your balance: </strong> €{user.credit}</Card.Text>
+                    <Card.Text className='text-start col-12 mt-auto p-2'><strong>Credit: </strong> € {user[1]? user[1].credit_total:null}</Card.Text>
                 </div>
                 <div className='col-6'> 
                     <Card.Subtitle className='text-start col-12 my-0 p-2 d-flex flex-column justify-content-center'>
@@ -76,8 +88,8 @@ function Buyin({ table }) {
                         <ul className='list-group px-4 list-group-flush'>
                             {gameInfo.info && info.player.map(i => {
                                 return (
-                                    <li className='list-group-item d-flex justify-content-between' key={i.id}>
-                                        <span>{i.name}</span>
+                                    <li className='list-group-item d-flex justify-content-between' key={i.user}>
+                                        <span>{i.nick_name}</span>
                                         <span>€{i.balance}</span>
                                     </li>
                                 )
@@ -102,7 +114,7 @@ function Buyin({ table }) {
                         />
                     </Form.Group>
                 </Form>
-                <Button type='submit' form='deposite' disabled={((deposite >= table.min)&&(deposite <= user.credit) && (table.isAvailable)) ? false : true} className='col-3 ' variant="dark" onClick={() => submitHandler}>
+                <Button type='submit' form='deposite' disabled={((deposite > table.min)&&(deposite <= user[1].credit_total) && (table.isAvailable)) ? false : true} className='col-3 ' variant="dark" onClick={() => submitHandler}>
                     Join table
                 </Button>
 
