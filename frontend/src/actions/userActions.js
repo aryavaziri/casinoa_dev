@@ -141,7 +141,6 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
     // data[0].access = userInfo.access
     // console.log(data)
     dispatch({ type: USER_UPDATE_PROFILE_SUCCESS, payload: data });
-    dispatch({ type: USER_LOGIN_SUCCESS, payload: data[0] });
 
     localStorage.setItem("userInfo", JSON.stringify(data[0]));
 

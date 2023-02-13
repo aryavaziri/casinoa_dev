@@ -20,12 +20,13 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 // let url = `ws://${window.location.hostname}:8000/ws/poker`
 // const pokerSocket = new WebSocket(url)
 
-const useSocket = (id) => {
+const useSocket = (id,access_token) => {
     const [socket, setSocket] = useState()
     useEffect(() => {
         if (!id) return
         // create socket
-        setSocket(new WebSocket(`ws://${window.location.hostname}:8000/ws/poker/${id}/`))
+        setSocket(new WebSocket(`ws://${window.location.hostname}:8000/ws/poker/${id}/?token=${access_token}`))
+        // setSocket(new WebSocket(`ws://${window.location.hostname}:8000/ws/poker/${id}/`,access_token))
     }, [id])
     return socket
 }
@@ -34,7 +35,6 @@ function PokerScreen() {
     const { id } = useParams();
     const [message, setMessage] = useState('')
     const [bet, setBet] = useState(0)
-    const socket = useSocket(id)
     const location = useLocation()
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -42,6 +42,8 @@ function PokerScreen() {
     const gameEnter = useSelector(state => state.gameEnter)
     const userLogin = useSelector(state => state.userLogin)
     const { error, loading, userInfo } = userLogin
+    const socket = useSocket(id,userInfo.access)
+    // const socket = useSocket(id)
     const { info } = gameInfo
     const ground = []
     const orderL = []
@@ -59,9 +61,9 @@ function PokerScreen() {
         socket.onmessage = (e) => {
             let data = JSON.parse(e.data)
             console.log("Data:", data)
-            document.getElementById("log").innerHTML += "Data: " + data.test + "\n"
+            if (data.type == "chat") {document.getElementById("log").innerHTML += '<br>Data: ' + data.message} 
             // console.log("message:", data.message)
-            if (data.message) { (document.querySelector('#chat-box').value += (data.sender + ": " + data.message + "\n")); document.querySelector('#message-box').value = "" }
+            if (data.message) { (document.querySelector('#chat-box').value += (data.time + " " + data.sender+"> "+data.message + "\n")); document.querySelector('#message-box').value = "" }
         }
     }, [socket])
 
@@ -191,9 +193,9 @@ function PokerScreen() {
                     </div>
                 </div>
                 : <div className='fluid p-5 m-0 bg-success position-relative ' style={{ height: "75vh" }}>Waiting for another players...
-                    <p id='log'>
+                    <div id='log'>
 
-                    </p>
+                    </div>
                     <ul>
                         {
                             order.map((v,i)=>{
@@ -232,7 +234,7 @@ function PokerScreen() {
                     })}
                 </div>
                 <div className='col-4 row d-flex p-2 py-1 m-0 pb-3'>
-                    <Form.Control readOnly className='h-75 my-1 text-light' as="textarea" id='chat-box' />
+                    <Form.Control readOnly className='h-75 my-1 text-light' style={{fontSize:"12px"}} as="textarea" id='chat-box' />
                     <div className='row m-0 p-0 d-flex'>
                         <Form.Control
                             id='message-box'

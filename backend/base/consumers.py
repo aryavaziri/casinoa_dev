@@ -1,40 +1,55 @@
 import json
 from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
-from asgiref.sync import async_to_sync, sync_to_async
-from django.contrib.auth.models import User
+from asgiref.sync import async_to_sync
+from channels.db import database_sync_to_async
+from base.serializers import UserSerializer, UserSerializerWithToken
+from django.contrib.auth import get_user_model
+from datetime import datetime
+
+User = get_user_model()
+
+
 
 class PokerConsumer(AsyncWebsocketConsumer):
 
+    @database_sync_to_async
+    def get_user(self):
+        return UserSerializerWithToken(self.scope['user']).data
+
     async def connect(self):
-        sender = self.scope['user']
-        print(self.scope['user'])
+        # self.user = (self.scope['user'])
+        self.user = await self.get_user()
         self.groupname = self.scope['url_route']['kwargs']['pk']
-        # other_user =await sync_to_async(User.objects.get)(username=self.scope['url_route']['kwargs']['username'])
         await self.channel_layer.group_add(
             self.groupname,
             self.channel_name
         )
         await self.accept()
 
+
+    async def receive(self, text_data):
+        text_data_json = json.loads(text_data) 
+        message = text_data_json['message']
+        sender = self.user
+
         await self.channel_layer.group_send(
-            self.groupname,
-            {
-                'type': 'tester_arya',
-                'test': str(sender.id)+' connected!',
+            self.groupname,{
+                'type': 'chat_message',
+                'message': message,
+                'time': datetime.now().strftime("%H:%M"),
+                'sender': sender['nick_name'],
             })
 
-    async def tester_arya(self, event):
-        test = event['test']
-        await self.send(text_data=json.dumps({
-            'test': test,
-            'message': '',
-        }))
-
-    async def chat(self, event):
+    async def chat_message(self, event):
         pm = event['message']
+        sender = event['sender']
+        time = event['time']
+
         await self.send(text_data=json.dumps({
+            'type': 'chat',
+            'sender': sender,
+            'time': time,
             'message': pm,
-            # 'sender': sender,
         }))
 
     async def disconnect(self, close_code):
@@ -42,21 +57,3 @@ class PokerConsumer(AsyncWebsocketConsumer):
             self.groupname,
             self.channel_name
         )
-
-    async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        # other_user =await sync_to_async(User.objects.get)(username=self.scope['url_route']['kwargs']['username'])
-        # print(sender)
-        # print(other_user)
-        print(self.scope['user'])
-
-        await self.channel_layer.group_send(
-            self.groupname,
-            {
-                'type': 'chat',
-                'message': message,
-                # 'sender': sender,
-            })
-
-    pass

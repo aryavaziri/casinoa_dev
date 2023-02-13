@@ -14,16 +14,19 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 import base.routing
 from channels.security.websocket import AllowedHostsOriginValidator
+from base.middleware import JwtAuthMiddlewareStack
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
+
+
+
 
 application = ProtocolTypeRouter({
     'http': get_asgi_application(),
     'websocket': AllowedHostsOriginValidator(
-        AuthMiddlewareStack(
+        JwtAuthMiddlewareStack(
             URLRouter(
                 base.routing.websocket_urlpattern
             )
         )
     )
 })
-# application = get_asgi_application()
