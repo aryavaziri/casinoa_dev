@@ -40,8 +40,9 @@ const userInfoFromStorage = localStorage.getItem("userInfo")
   : null;
 
 const intialState = {
+  tableDetails: {table:{JSON_table:{online:[]}}},
   userLogin: { userInfo: userInfoFromStorage },
-  gameDetails: {  },
+  gameDetails: { },
 };
 
 const middleware = [thunk];

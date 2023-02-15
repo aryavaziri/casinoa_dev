@@ -44,34 +44,38 @@ class GameSerializer(serializers.ModelSerializer):
         model = Game
         fields = '__all__'
     def get_online(self, obj):
-        return obj.player.count()
+        try:
+            return obj.player.count()
+        except:
+            return 0
 
 
-maxs = [
-    (0, '3'),
-    (1, '6'),
-    (2, '9'),
-]
 
 
 
 class TableSerializer(serializers.ModelSerializer):
-    online = serializers.SerializerMethodField(read_only=True)
     isAvailable = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Table
         fields = '__all__'
-    def get_online(self, obj):
-        serializer = GameSerializer(Game.objects.filter(table=obj).last(), many=False)
-        # print(serializer2.data['online'])
-        return (serializer.data['online'])
+
     def get_isAvailable(self, obj):
-        # print(GameSerializer(Game.objects.filter(table=obj).last(), many=False).data['online'])
-        # print(maxs[obj.max][1])
-        if((GameSerializer(Game.objects.filter(table=obj).last(), many=False).data['online'])<  int(maxs[obj.max][1])):
+        maxs = [
+            3,
+            6,
+            9,
+        ]
+        # print(obj)
+        # mx = maxs[obj.max]
+        try:
+            serializer = GameSerializer(Game.objects.filter(table=obj).last(), many=False)
+            if( serializer.data['online']< 10):
+                return True
+            else:
+                return False
+        except ValueError:
             return True
-        else:
-            return False
-        # return False
+        
+
     
 

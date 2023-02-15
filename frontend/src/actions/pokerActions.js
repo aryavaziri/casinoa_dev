@@ -53,7 +53,9 @@ export const gameDetails = (id) => async (dispatch, getState) => {
 export const gameEnter = (id, deposite) => async (dispatch, getState) => {
   try {
     dispatch({ type: GAME_ENTER_REQUEST });
-    const {userLogin: { userInfo }} = getState();
+    const {
+      userLogin: { userInfo },
+    } = getState();
     const config = {
       headers: {
         "Content-type": "application/json",
@@ -99,7 +101,7 @@ export const gameLeave = (id) => async (dispatch, getState) => {
       window.location.protocol +
         "//" +
         window.location.hostname +
-        `:8000/api/poker/${id}/leave/`, 
+        `:8000/api/poker/${id}/leave/`,
       config
     );
     dispatch({ type: GAME_DETAILS_SUCCESS, payload: data });
@@ -116,41 +118,42 @@ export const gameLeave = (id) => async (dispatch, getState) => {
   }
 };
 
-export const gameAction = (id, bet, actionType) => async (dispatch, getState) => {
-  try {
-    dispatch({ type: GAME_ACTION_REQUEST });
-    const {
-      userLogin: { userInfo },
-    } = getState();
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${userInfo.access}`,
-      },
-    };
-    let actSwitch
-    let act = ""
-    let act2 = {act , bet}
-    switch (actionType) {
-      case "fold":
-        actSwitch = "fold";
-        break;
+export const gameAction =
+  (id, bet, actionType) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: GAME_ACTION_REQUEST });
+      const {
+        userLogin: { userInfo },
+      } = getState();
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${userInfo.access}`,
+        },
+      };
+      let actSwitch;
+      let act = "";
+      let act2 = { act, bet };
+      switch (actionType) {
+        case "fold":
+          actSwitch = "fold";
+          break;
         case "check":
-        actSwitch = "check";
-        break;
+          actSwitch = "check";
+          break;
         case "call":
-        actSwitch = "call";
-        break;
+          actSwitch = "call";
+          break;
         case "raise":
-        actSwitch = "raise";
-        break;
+          actSwitch = "raise";
+          break;
         case "allin":
-        actSwitch = "allin";
-        break;
+          actSwitch = "allin";
+          break;
       }
-      act2.act = actSwitch
-      act2.bet = bet
-      const {data} = await axios.put(
+      act2.act = actSwitch;
+      act2.bet = bet;
+      const { data } = await axios.put(
         window.location.protocol +
           "//" +
           window.location.hostname +
@@ -158,15 +161,15 @@ export const gameAction = (id, bet, actionType) => async (dispatch, getState) =>
         act2,
         config
       );
-    dispatch({ type: GAME_DETAILS_SUCCESS, payload: data });
-    dispatch({ type: GAME_ACTION_SUCCESS});
-  } catch (error) {
-    dispatch({
-      type: GAME_ACTION_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
-    });
-  }
-};
+      dispatch({ type: GAME_DETAILS_SUCCESS, payload: data });
+      dispatch({ type: GAME_ACTION_SUCCESS });
+    } catch (error) {
+      dispatch({
+        type: GAME_ACTION_FAIL,
+        payload:
+          error.response && error.response.data.detail
+            ? error.response.data.detail
+            : error.message,
+      });
+    }
+  };

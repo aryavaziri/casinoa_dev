@@ -40,12 +40,12 @@ export const listTableDetails = (id) => async (dispatch) => {
         window.location.hostname +
         `:8000/api/tables/${id}`
     );
-    const { data2 } = await axios.get(
-      window.location.protocol +
-        "//" +
-        window.location.hostname +
-        `:8000/api/poker/${id}`
-    );
+    // const { data2 } = await axios.get(
+    //   window.location.protocol +
+    //     "//" +
+    //     window.location.hostname +
+    //     `:8000/api/poker/${id}`
+    // );
     
 
 

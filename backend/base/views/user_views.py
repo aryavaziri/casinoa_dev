@@ -56,7 +56,7 @@ def registerUser(request):
 @permission_classes([IsAuthenticated])
 def updateUserProfile(request):
     user = request.user
-    serializer = UserSerializer(user, many=False)
+    serializer = UserSerializerWithToken(user, many=False)
     data = request.data
     user.email = data['email']
     if data['password'] != '':

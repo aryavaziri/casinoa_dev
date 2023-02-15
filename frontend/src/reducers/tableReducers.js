@@ -26,7 +26,7 @@ export const tableListReducers = (state = { tables: [] }, action) => {
 }
 
 
-export const tableDetailsReducers = (state = { table: { name: [] } }, action) => {
+export const tableDetailsReducers = (state = { table: { name: [],JSON_table:{online:[]} } }, action) => {
     switch (action.type) {
         case TABLE_DETAILS_REQUEST:
             return { loading: true, ...state }

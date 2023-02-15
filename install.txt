@@ -11,3 +11,13 @@ WINDOWS:
 
 
 
+
+
+Redis:
+    pip install virtualenv ; virtualenv myenv ; Set-ExecutionPolicy Unrestricted -Scope Process;.\myenv\Scripts\activate
+
+    pip install -r requirements.txt
+
+    python data_loader.py --dir data/books --redis redis://default:st9JbKIVx3I2pzXyr0zAQNOBuwM3Zrxe@redis-16850.c253.us-central1-1.gce.cloud.redislabs.com:16850/
+
+    r = redis.Redis(host='redis://default:st9JbKIVx3I2pzXyr0zAQNOBuwM3Zrxe@redis-16850.c253.us-central1-1.gce.cloud.redislabs.com', port=16850, db=0)

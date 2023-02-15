@@ -86,7 +86,7 @@ function Buyin({ table }) {
                     <Card.Subtitle className='text-start col-12 my-0 p-2 d-flex flex-column justify-content-center'>
                         <strong className='w-100 text-center'>Players <span className='text-muted fw-light'>({table.online}/{maxs[table.max]})</span> </strong>
                         <ul className='list-group px-4 list-group-flush'>
-                            {gameInfo.info && info.player.map(i => {
+                            {(gameInfo.info) && info.player.map(i => {
                                 return (
                                     <li className='list-group-item d-flex justify-content-between' key={i.user}>
                                         <span>{i.nick_name}</span>

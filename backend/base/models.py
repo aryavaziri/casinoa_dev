@@ -50,6 +50,8 @@ def data():
     return {"ground":[0,0,0,0,0], "orders":[], "bets":[]}
 def ground():
     return {"ground":[0,0,0,0,0]}
+def table():
+    return {"online":[]}
 
 class Table(models.Model):
     types = [
@@ -69,9 +71,10 @@ class Table(models.Model):
     max = models.IntegerField(choices=maxs, default=1)
     min = models.IntegerField(default=0)
     small = models.IntegerField(null=True, default=1)
-    isAvailable = models.BooleanField(default=True)
-    online = models.IntegerField(default=0)
     createdAt = models.DateTimeField(auto_now_add=True)
+    JSON_table = models.JSONField(default=table)
+    # isAvailable = models.BooleanField(default=True)
+    # is_playing = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -117,7 +120,6 @@ class Game(models.Model):
         (2, 'Turn'),
         (3, 'River'),
     ]
-    player = models.ManyToManyField(Player, blank=True)
     round = models.AutoField(primary_key=True, editable=False)
     table = models.ForeignKey(Table, on_delete=models.CASCADE)
     stage = models.IntegerField(choices=stages, default=0)
@@ -129,7 +131,9 @@ class Game(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     JSON_data = models.JSONField(default=data)
     JSON_ground = models.JSONField(default=ground)
+    player = models.ManyToManyField(Player, blank=True)
 
     def __str__(self):
         return (str(self.round) + " - " + (self.table.name))
+        # return ( " - " + (self.table.name))
 

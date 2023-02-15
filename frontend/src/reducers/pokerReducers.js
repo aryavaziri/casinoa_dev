@@ -23,13 +23,13 @@ import {
 export const gameDetailsReducer = (state = {}, action) => {
   switch (action.type) {
     case GAME_DETAILS_REQUEST:
-      return { ...state, loading: true };
+      return { ...state, infoLoading: true };
 
     case GAME_DETAILS_SUCCESS:
-      return { loading: false, info: action.payload };
+      return { infoLoading: false, info: action.payload };
 
     case GAME_DETAILS_FAIL:
-      return { loading: false, error: action.payload };
+      return { infoLoading: false, error: action.payload };
 
     default:
       return state;
@@ -39,13 +39,13 @@ export const gameDetailsReducer = (state = {}, action) => {
 export const gameEnterReducer = (state = {}, action) => {
   switch (action.type) {
     case GAME_ENTER_REQUEST:
-      return { state, loading: true };
+      return { state, infoLoading: true };
 
     case GAME_ENTER_SUCCESS:
-      return { loading: false, info: action.payload };
+      return { infoLoading: false, info: action.payload };
 
     case GAME_ENTER_FAIL:
-      return { loading: false, error: action.payload };
+      return { infoLoading: false, error: action.payload };
 
     default:
       return state;
@@ -54,13 +54,13 @@ export const gameEnterReducer = (state = {}, action) => {
 export const gameLeaveReducer = (state = {}, action) => {
   switch (action.type) {
     case GAME_LEAVE_REQUEST:
-      return { ...state, loading: true };
+      return { ...state, infoLoading: true };
 
     case GAME_LEAVE_SUCCESS:
-      return { loading: false, info: action.payload };
+      return { infoLoading: false, info: action.payload };
 
     case GAME_LEAVE_FAIL:
-      return { loading: false, error: action.payload };
+      return { infoLoading: false, error: action.payload };
 
     default:
       return state;
@@ -70,13 +70,13 @@ export const gameLeaveReducer = (state = {}, action) => {
 export const gameActionReducer = (state = {}, action) => {
   switch (action.type) {
     case GAME_ACTION_REQUEST:
-      return { ...state, loading: true };
+      return { ...state, infoLoading: true };
 
     case GAME_ACTION_SUCCESS:
-      return { loading: false, info: action.payload };
+      return { infoLoading: false, info: action.payload };
 
     case GAME_ACTION_FAIL:
-      return { loading: false, error: action.payload };
+      return { infoLoading: false, error: action.payload };
 
     default:
       return state;
