@@ -4,7 +4,7 @@ import Tabs from 'react-bootstrap/Tabs';
 
 // import Sonnet from '../../components/Sonnet';
 import { useLocation, useNavigate } from 'react-router'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col, Form, Button } from 'react-bootstrap'
@@ -21,19 +21,20 @@ import Logo from '../media/images/logo.png'
 import Card2 from '../components/Card2'
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Modal from 'react-bootstrap/Modal';
+import {DepositeContext} from "../App.js"
 
 // let url = `ws://${window.location.hostname}:8000/ws/poker/${id}/`
 // let url = `ws://${window.location.hostname}:8000/ws/poker`
 // const pokerSocket = new WebSocket(url)
 
-const useSocket = (id, access_token) => {
+const useSocket = (id, access_token, depo) => {
     const [socket, setSocket] = useState()
     useEffect(() => {
         if (!id || !access_token) return
         // create socket
         try{
             
-            setSocket(new WebSocket(`ws://${window.location.hostname}:8000/ws/poker/${id}/?token=${access_token}`))
+            setSocket(new WebSocket(`ws://${window.location.hostname}:8000/ws/poker/${id}/?token=${access_token}&deposite=${depo}`))
         }
         catch {return} 
         
@@ -61,8 +62,10 @@ function PokerScreen() {
     const gameEnter = useSelector(state => state.gameEnter)
     const userLogin = useSelector(state => state.userLogin)
     const { error, loading, userInfo } = userLogin
+    const depo = useContext(DepositeContext)
+    // console.log(depo[0])
     const socketHeader = userInfo?userInfo.access:""
-    const socket = useSocket(id, socketHeader)
+    const socket = useSocket(id, socketHeader, depo[0])
         
     const { info, infoLoading } = gameInfo
     const ground = []
@@ -74,7 +77,7 @@ function PokerScreen() {
     let temp
 
     useEffect(() => {
-        console.log(socket==undefined)
+        // console.log(socket==undefined)
         if(socketHeader==""){navigate ("/")}
         if (!socket) return
         socket.onmessage = (e) => {
@@ -87,17 +90,8 @@ function PokerScreen() {
             if (data && (data.type == "chat")) { (document.querySelector('#chat-box').value += (data.time + " " + data.sender + "> " + data.message + "\n")); document.querySelector('#message-box').value = "" }
             if (data && (data.type == "chat") && document.getElementById("log")) { document.getElementById("log").innerHTML += '<br>Data: ' + data.message }
             if (data && data.type && ((data.type == "connected") || (data.type == "disconnected"))) { (document.querySelector('#chat-box').value += (data.time + " " + data.user + data.message + "\n")); document.querySelector('#message-box').value = "" }
-            // if (data && data.type && ((data.type == "connected") )) { 
-            //     gameInfo.info && info.player.map((value) => {
-            //         if (value.user == userInfo.id) {
-            //             document.querySelector('#me').innerHTML = <Player options={value} />
-            //         }
-            //     })
-            //     }
-
         }
     }, [socket, userInfo, info, dispatch, infoLoading])
-    // console.log(gameInfo.info)
 
 
     const sendMessage = () => {

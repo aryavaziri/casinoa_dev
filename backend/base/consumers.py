@@ -14,39 +14,34 @@ User = get_user_model()
 
 
 class PokerConsumer(AsyncWebsocketConsumer):
-    async def disp(self):
-        await self.channel_layer.group_send(
-                self.groupname, {
-                    'type': 'dispatch'
-                })
-
     @database_sync_to_async
     def get_user(self):
         return UserSerializerWithToken(self.scope['user']).data
-    @database_sync_to_async
-    def get_table(self):
-        return TableSerializer(self.scope['url_route']['kwargs']['pk']).data
 
     @database_sync_to_async
     def add_online(self):
         table = Table.objects.get(_id=self.scope['url_route']['kwargs']['pk'])
         if self.user['id'] in table.JSON_table['online']:
-            self.close()
+            # self.close()
             print("Adam bashhhhh")
         else:
             table.JSON_table['online'].append(self.user['id'])
             table.save()
-            self.addPlayer()
+
+
+            if(TableSerializer(self.table).data['isAvailable']):
+                self.addPlayer()
+            else:
+                print("Table is not available")
         print(table.JSON_table)
 
-    # @database_sync_to_async
     def addPlayer(self):
         player = Player.objects.get(user=self.user['id'])
         table = Table.objects.get(_id=self.scope['url_route']['kwargs']['pk'])
         game = Game.objects.filter(table=table).last()
         player.status = 1
-        # player.balance += deposite
-        # player.credit_total -= deposite
+        player.balance += int(self.deposite)
+        player.credit_total -= int(self.deposite)
         player.turn = False
         player.dealer = False
         player.big = False
@@ -58,46 +53,34 @@ class PokerConsumer(AsyncWebsocketConsumer):
         game.player.add(player)
         player.save()
 
-
-
-
-
-
-
-
-
     @database_sync_to_async
     def gameLeave(self):
-        player = Player.objects.get(user=self.user['id'])
-        game = Game.objects.filter(table=self.groupname).last()
-        if (player.balance > 0):
-            player.credit_total += player.balance
-            player.balance = 0
-        player.leftAt = datetime.now()
-        player.save()
-        game.player.remove(player)
-        game.save()
-        table = Table.objects.get(_id=self.scope['url_route']['kwargs']['pk'])
+        # player = Player.objects.get(user=self.user['id'])
+        # game = Game.objects.filter(table=self.groupname).last()
+        # if (player.balance > 0):
+        #     player.credit_total += player.balance
+        #     player.balance = 0
+        # player.leftAt = datetime.now()
+        # player.save()
+        # game.player.remove(player)
+        # game.save()
+        table = Table.objects.get(_id=self.table)
         try:
             table.JSON_table['online'].remove(self.user['id'])
         except:
             pass
         print(table.JSON_table)
         table.save()
-        
-
-
-
 
 
     async def connect(self):
         self.user = await self.get_user()
-        self.table = await self.get_table()
+        self.table = self.scope['url_route']['kwargs']['pk']
+        self.deposite = self.scope['deposite']
         if self.user is AnonymousUser() :
-            await self.send("Rejected")
             self.close()
         else:
-            self.groupname = self.scope['url_route']['kwargs']['pk']
+            self.groupname = self.table
             # available = Table.objects.get(_id=self.scope['url_route']['kwargs']['pk']).isAvailable
             # print(available)
             await asyncio.sleep(1)
@@ -114,16 +97,13 @@ class PokerConsumer(AsyncWebsocketConsumer):
                     'time': datetime.now().strftime("%H:%M"),
                     'user': self.user['nick_name'],
                 })
+            await self.sendDispatch()
+
+    async def sendDispatch(self):
             await self.channel_layer.group_send(
                 self.groupname, {
                     'type': 'disp',
                 })
-
-
-
-
-
-
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)

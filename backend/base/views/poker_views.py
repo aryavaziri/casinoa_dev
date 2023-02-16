@@ -51,24 +51,6 @@ def gameEnter(request, pk):
         # if (TableSerializer(table,many=False).data['isAvailable']):
 
 
-# def addPlayer(player, pk, deposite):
-#     table = Table.objects.get(_id=pk)
-#     game = Game.objects.filter(table=table).last()
-#     player.status = 1
-#     player.balance += deposite
-#     player.credit_total -= deposite
-#     player.turn = False
-#     player.dealer = False
-#     player.big = False
-#     player.small = False
-#     player.bet = 0
-#     player.card1 = 0
-#     player.card2 = 0
-#     player.joined_at = datetime.datetime.now()
-#     game.player.add(player)
-#     player.save()
-
-
 
 
 

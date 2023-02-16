@@ -1,4 +1,5 @@
 import React from 'react'
+import {useContext} from 'react'
 import { Button, Card, Form } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -10,6 +11,8 @@ import { getUserDetails } from '../actions/userActions'
 // import { payOrder } from '../actions/orderActions'
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import Test2 from './Test2';
+import {DepositeContext} from "../App.js"
+// import {DepositeContext} from "../App.js"
 
 function Buyin({ table }) {
 
@@ -26,8 +29,13 @@ function Buyin({ table }) {
 
     const [deposite, setDeposite] = useState(0);
     const dispatch = useDispatch()
+
+const [dd,setdd] = useContext(DepositeContext)
     
+
+
     useEffect(() => {
+        console.log(dd)
         if (!userInfo) {
             navigate("/login")
         } else {
@@ -44,6 +52,7 @@ function Buyin({ table }) {
         // console.log(table._id)
         e.preventDefault()
         dispatch(gameEnter(table._id, deposite))
+        setdd(deposite)
         navigate(`/poker/${table._id}`)
 
     }
