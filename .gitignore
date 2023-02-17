@@ -7,6 +7,7 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+
 .Python
 build/
 develop-eggs/
@@ -24,6 +25,9 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
+static/
+redis/
+manage.py
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -51,6 +55,11 @@ coverage.xml
 *.mo
 *.pot
 
+# redis
+*.redis
+redis
+redis.*
+asgi.py
 # Django stuff:
 *.log
 local_settings.py

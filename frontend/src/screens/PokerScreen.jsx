@@ -99,26 +99,21 @@ function PokerScreen() {
             'message': message,
         }))
     }
-    const groupDispatch = () => {
-        // socket.send(JSON.stringify({
-        //     'disp': true,
-        // }))
-    }
 
-    const submitHandler = (e) => {
-        e.preventDefault()
-    }
+    // const submitHandler = (e) => {
+    //     e.preventDefault()
+    // }
     const leave = () => {
         socket.close()
         dispatch(gameLeave(id))
         navigate("/")
     }
-    const fold = () => { dispatch(gameAction(id, 0, "fold")); groupDispatch() }
-    const check = () => { dispatch(gameAction(id, 0, "check")); groupDispatch() }
-    const call = () => { dispatch(gameAction(id, 0, "call")); groupDispatch() }
-    const raise = () => { dispatch(gameAction(id, bet, "raise")); groupDispatch() }
-    const allin = () => { dispatch(gameAction(id, 0, "allin")); groupDispatch() }
-    const newGame = () => { dispatch(gameAction(id, 0, "newGame")); groupDispatch() }
+    const fold = () => { dispatch(gameAction(id, 0, "fold")) }
+    const check = () => { dispatch(gameAction(id, 0, "check")) }
+    const call = () => { dispatch(gameAction(id, 0, "call")) }
+    const raise = () => { dispatch(gameAction(id, bet, "raise")) }
+    const allin = () => { dispatch(gameAction(id, 0, "allin")) }
+    const newGame = () => { dispatch(gameAction(id, 0, "newGame")) }
     if (gameInfo.info) {
         for (let i = 0; i < 5; i++) {
             ground[i] = info.JSON_ground.ground[i]
@@ -184,9 +179,6 @@ function PokerScreen() {
                                 <span>isPlayed: {JSON.stringify(info.isPlayed)}</span> 
                                 <span>isFinished: {JSON.stringify(info.isFinished)}</span> 
                             </div>
-                            {/* <div className='w-25 d-flex flex-column m-0 p-1'>
-                                <span>created: {JSON.stringify(info.created_at)}</span> 
-                            </div> */}
                         </div>
                     </div>
                 }
@@ -271,13 +263,13 @@ function PokerScreen() {
             <div className='row m-0 bg-dark p-0' style={{ height: "25vh" }}>
                 <div className='col-5 d-flex justify-content-evenly py-0 flex-wrap'>
                     <Button variant='danger' className=' m-1 h-25 ' onClick={() => leave()}>Sit out</Button>
-                    <Button className=' my-1 h-25 ' onClick={() => fold()}>Fold</Button>
-                    <Button className=' my-1 h-25 ' onClick={() => check()}>Check</Button>
-                    <Button className=' my-1 h-25 ' onClick={() => call()}>Call</Button>
-                    <Button className=' my-1 h-25 ' onClick={() => raise()}>Raise</Button>
-                    <Button className=' my-1 h-25 ' onClick={() => allin()}>All-in</Button>
+                    <Button disabled={gameInfo.info && (info.turn != userInfo.id)} className=' my-1 h-25 ' onClick={() => fold()}>Fold</Button>
+                    <Button disabled={gameInfo.info && (info.turn != userInfo.id)} className=' my-1 h-25 ' onClick={() => check()}>Check</Button>
+                    <Button disabled={gameInfo.info && (info.turn != userInfo.id)} className=' my-1 h-25 ' onClick={() => call()}>Call</Button>
+                    <Button disabled={gameInfo.info && (info.turn != userInfo.id)} className=' my-1 h-25 ' onClick={() => raise()}>Raise</Button>
+                    <Button disabled={gameInfo.info && (info.turn != userInfo.id)} className=' my-1 h-25 ' onClick={() => allin()}>All-in</Button>
                     <Button variant='warning' className=' m-1 h-25 ' onClick={handleShow}>LOG</Button>
-                    <Button variant='warning' className=' my-1 h-25' onClick={() => newGame()}>New-game</Button>
+                    <Button variant='warning' disabled={gameInfo.info && (!info.isFinished)} className=' my-1 h-25' onClick={() => newGame()}>New-game</Button>
                     {gameInfo.info && <span className='text-light'>POT:{gameInfo.info.pot}/ BET:{gameInfo.info.bet}/ STAGE:{gameInfo.info.stage}</span>}
                     <FloatingLabel controlId="bet" label="Bet" className="" >
                         <Form.Control

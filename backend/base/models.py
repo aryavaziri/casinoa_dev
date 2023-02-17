@@ -82,7 +82,7 @@ class Table(models.Model):
         return self.name
 
 def upload_path(instance,filename):
-    return '/'.join(['Profile picture',str(instance.user),filename])
+    return '/'.join(['Profile picture',str(instance.user) + " + " + str(filename)])
 
 class Player(models.Model):
     state = [

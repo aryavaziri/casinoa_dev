@@ -51,7 +51,7 @@
   }
 .ground .card2>div>span:nth-of-type(1){
     padding-top: 10%;
-    font-size: 4vw;
+    font-size: 6vh;
     vertical-align: middle;
 }
 .card2 span>img{width: 100%; padding: 18%;}
@@ -61,6 +61,3 @@
     line-height: 28px;
     font-size: 35px;
 }
-
-/* .ground>div .card2>*>*{
-}  */

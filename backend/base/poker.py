@@ -57,8 +57,7 @@ class Poker:
                 player.bet = bet
 
             if (action == "raise"):
-                self.game.JSON_data['bets'] = [
-                    (i if (i == 1 or i == 5) else 0) for i in self.game.JSON_data['bets']]
+                self.game.JSON_data['bets'] = [(i if (i == 1 or i == 5) else 0) for i in self.game.JSON_data['bets']]
                 for i in range(0, len(self.game.JSON_data['bets'])):
                     p = Player.objects.get(user=order[i])
                     if (self.game.JSON_data['bets'][i] != 1 and self.game.JSON_data['bets'][i] != 5):
@@ -70,8 +69,13 @@ class Poker:
                 player.bet = new_bet
                 self.game.bet = new_bet
 
-            self.game.JSON_data['bets'][(
-                order.index(self.game.turn))] = player.status
+            if (action == "allin"):
+                player.status = 5
+                player.bet = player.balance
+                self.game.pot += player.balance - player.bet
+                player.balance = 0
+
+            self.game.JSON_data['bets'][(order.index(self.game.turn))] = player.status
             player.turn = False
             player.save()
 
@@ -128,7 +132,7 @@ class Poker:
         game = self.game
         temp_fold = 0
         for player in game.player.all():
-            if (player.status == 1) or (player.status == 5):
+            if (player.status == 1):
                 temp_fold += 1
             if (temp_fold >= game.player.count()-1):
                 self.game.player.filter(turn=True).update(turn=False)
@@ -139,14 +143,13 @@ class Poker:
 
         if (game.isFinished):
             print("Next game is going to start")
-            time.sleep(5)
-            self.newGame()
+            # time.sleep(5)  #goes to the next game after 5 seconds
+            # self.newGame()
             async_to_sync(get_channel_layer().group_send)(str(self.table._id), {'type': 'disp'})
-        # self.disp()
 
     def newGame(self):
         oldGame = self.game
-        # table = Table.objects.get(_id=self.pk)
+        table = Table.objects.get(_id=self.pk)
         small = 0
         online = self.table.JSON_table['online']
         new_order = []
@@ -154,8 +157,7 @@ class Poker:
 
         # if not (oldGame.isPlayed):
         for player in oldGame.player.all().order_by('joined_at'):
-            # and (player.balance > (table.small*2)):
-            if (player.user.id in online):
+            if (player.user.id in online) and (player.balance > (table.small*2)):
                 new_order.append(player.user.id)
 
         print("<<<<<<new_order>>>>>>>>>")
