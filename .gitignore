@@ -27,7 +27,7 @@ wheels/
 MANIFEST
 static/
 redis/
-manage.py
+settings.py
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -60,11 +60,12 @@ coverage.xml
 redis
 redis.*
 asgi.py
+
 # Django stuff:
 *.log
 local_settings.py
 db.sqlite3
-
+settings.py
 # Flask stuff:
 instance/
 .webassets-cache
