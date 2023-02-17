@@ -3,12 +3,13 @@ from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync
 from channels.db import database_sync_to_async
 from channels_redis.core import RedisChannelLayer
-from base.serializers import UserSerializer, UserSerializerWithToken, TableSerializer, Table
+from base.serializers import UserSerializer, UserSerializerWithToken, TableSerializer, GameSerializer
 from django.contrib.auth import get_user_model
 from datetime import datetime
 import asyncio
 from django.contrib.auth.models import AnonymousUser
 from base.models import Game, Player, Table
+from base.poker import Poker
 
 User = get_user_model()
 
@@ -20,38 +21,36 @@ class PokerConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def add_online(self):
-        table = Table.objects.get(_id=self.scope['url_route']['kwargs']['pk'])
-        if self.user['id'] in table.JSON_table['online']:
-            # self.close()
-            print("Adam bashhhhh")
-        else:
+        table = Table.objects.get(_id=self.table)
+        if self.user['id'] not in table.JSON_table['online']:
             table.JSON_table['online'].append(self.user['id'])
             table.save()
+        if(TableSerializer(self.table).data['isAvailable']):
+            self.addPlayer()
+        else:
+            print("Table is not available")
 
-
-            if(TableSerializer(self.table).data['isAvailable']):
-                self.addPlayer()
-            else:
-                print("Table is not available")
         print(table.JSON_table)
 
-    def addPlayer(self):
+    def addPlayer(self):    #add player to the game.player
         player = Player.objects.get(user=self.user['id'])
         table = Table.objects.get(_id=self.scope['url_route']['kwargs']['pk'])
         game = Game.objects.filter(table=table).last()
-        player.status = 1
         player.balance += int(self.deposite)
         player.credit_total -= int(self.deposite)
-        player.turn = False
-        player.dealer = False
-        player.big = False
-        player.small = False
-        player.bet = 0
-        player.card1 = 0
-        player.card2 = 0
-        player.joined_at = datetime.now()
-        game.player.add(player)
+        if not (game.isPlayed):
+            player.status = 1
+            player.turn = False
+            player.dealer = False
+            player.big = False
+            player.small = False
+            player.bet = 0
+            player.card1 = 0
+            player.card2 = 0
+            player.joined_at = datetime.now()
         player.save()
+        game.player.add(player)
+        
 
     @database_sync_to_async
     def gameLeave(self):
@@ -72,6 +71,44 @@ class PokerConsumer(AsyncWebsocketConsumer):
         print(table.JSON_table)
         table.save()
 
+    @database_sync_to_async
+    def dealCkeck(self):
+        table = Table.objects.get(_id=self.table)
+        online = table.JSON_table['online']
+        game = Game.objects.filter(table=table).last()
+        
+
+        if len(online)>1:  #check if new game can start
+            if (not game.isPlayed) or (game.isPlayed and game.isFinished) :
+            # if len(online)>0 and not game.JSON_data['orders']:
+                counter=0
+                for user in online:
+                    player = Player.objects.get(user=user)
+                    if(player.balance>(table.small*2)):
+                        counter +=1
+                        
+                if(counter>1):
+                        print("NEW GAME")
+                        game.gameObject = Poker(self.table, counter)
+                        game.save()
+                        # game.gameObject.message()
+                    
+
+
+
+            # self.close()
+            # else:
+
+
+        #     table.JSON_table['online'].append(self.user['id'])
+        #     table.save()
+
+
+        #     if(TableSerializer(self.table).data['isAvailable']):
+        #         self.addPlayer()
+        #     else:
+        #         print("Table is not available")
+        print(table.JSON_table)
 
     async def connect(self):
         self.user = await self.get_user()
@@ -97,7 +134,13 @@ class PokerConsumer(AsyncWebsocketConsumer):
                     'time': datetime.now().strftime("%H:%M"),
                     'user': self.user['nick_name'],
                 })
+            await self.channel_layer.group_send(
+                self.groupname, {
+                    'type': 'disp'
+                })
+            await self.dealCkeck()
             await self.sendDispatch()
+            # print(type(self.groupname))
 
     async def sendDispatch(self):
             await self.channel_layer.group_send(
@@ -107,19 +150,28 @@ class PokerConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        try:
+            message = text_data_json['message']
+        except:
+            message = ""
+        try:
+            disp = text_data_json['disp']
+        except:
+            disp = False
 
-        await self.channel_layer.group_send(
-            self.groupname, {
-                'type': 'chat_message',
-                'message': message,
-                'time': datetime.now().strftime("%H:%M"),
-                'sender': self.user['nick_name'],
-            })
-        await self.channel_layer.group_send(
-            self.groupname, {
-                'type': 'disp',
-            })
+        if(message):
+            await self.channel_layer.group_send(
+                self.groupname, {
+                    'type': 'chat_message',
+                    'message': message,
+                    'time': datetime.now().strftime("%H:%M"),
+                    'sender': self.user['nick_name'],
+                })
+        if(disp):
+            await self.channel_layer.group_send(
+                self.groupname, {
+                    'type': 'disp',
+                })
 
     async def chat_message(self, event):
         await self.send(text_data=json.dumps({
@@ -131,7 +183,7 @@ class PokerConsumer(AsyncWebsocketConsumer):
 
     async def disp(self, event):
         await self.send(text_data=json.dumps({
-            'type': 'dispatch',
+            'type': 'disp',
             'message': 'Dispatch from socket',
         }))
 
@@ -141,6 +193,12 @@ class PokerConsumer(AsyncWebsocketConsumer):
             'user': event['user'],
             'time': event['time'],
             'message': ' connected now!',
+        }))
+  
+    async def test(self, event):
+        await self.send(text_data=json.dumps({
+            'type': 'connected',
+            'message': 'test!',
         }))
 
     async def bye_message(self, event):

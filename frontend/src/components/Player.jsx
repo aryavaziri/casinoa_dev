@@ -51,7 +51,7 @@ function Player({ options }) {
                     <img src={window.location.protocol +
                         "//" +
                         window.location.hostname +
-                        `:8000${options.image}`} />
+                        `:8000/static${options.image}`} />
                     <div>
                         <div></div>
                         <div>

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, AbstractUser, PermissionsMixin
 from django.contrib.auth.models import BaseUserManager, UserManager
+from picklefield.fields import PickledObjectField
 
 class CustomUserManager(UserManager):
     def _create_user(self, email, password=None,name=None, **extra_fields):
@@ -73,8 +74,9 @@ class Table(models.Model):
     small = models.IntegerField(null=True, default=1)
     createdAt = models.DateTimeField(auto_now_add=True)
     JSON_table = models.JSONField(default=table)
-    # isAvailable = models.BooleanField(default=True)
     # is_playing = models.BooleanField(default=False)
+    # isAvailable = models.BooleanField(default=True)
+    
 
     def __str__(self):
         return self.name
@@ -132,6 +134,9 @@ class Game(models.Model):
     JSON_data = models.JSONField(default=data)
     JSON_ground = models.JSONField(default=ground)
     player = models.ManyToManyField(Player, blank=True)
+    isPlayed = models.BooleanField(default=False)
+    isFinished = models.BooleanField(default=False)
+    gameObject = PickledObjectField(blank = True, null=True)
 
     def __str__(self):
         return (str(self.round) + " - " + (self.table.name))

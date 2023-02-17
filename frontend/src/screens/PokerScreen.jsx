@@ -21,7 +21,7 @@ import Logo from '../media/images/logo.png'
 import Card2 from '../components/Card2'
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Modal from 'react-bootstrap/Modal';
-import {DepositeContext} from "../App.js"
+import { DepositeContext } from "../App.js"
 
 // let url = `ws://${window.location.hostname}:8000/ws/poker/${id}/`
 // let url = `ws://${window.location.hostname}:8000/ws/poker`
@@ -32,13 +32,13 @@ const useSocket = (id, access_token, depo) => {
     useEffect(() => {
         if (!id || !access_token) return
         // create socket
-        try{
-            
+        try {
+
             setSocket(new WebSocket(`ws://${window.location.hostname}:8000/ws/poker/${id}/?token=${access_token}&deposite=${depo}`))
         }
-        catch {return} 
-        
-        
+        catch { return }
+
+
     }, [id])
     return socket
 }
@@ -64,9 +64,9 @@ function PokerScreen() {
     const { error, loading, userInfo } = userLogin
     const depo = useContext(DepositeContext)
     // console.log(depo[0])
-    const socketHeader = userInfo?userInfo.access:""
+    const socketHeader = userInfo ? userInfo.access : ""
     const socket = useSocket(id, socketHeader, depo[0])
-        
+
     const { info, infoLoading } = gameInfo
     const ground = []
     const orderL = []
@@ -78,12 +78,12 @@ function PokerScreen() {
 
     useEffect(() => {
         // console.log(socket==undefined)
-        if(socketHeader==""){navigate ("/")}
+        if (socketHeader == "") { navigate("/") }
         if (!socket) return
         socket.onmessage = (e) => {
             let data = JSON.parse(e.data)
             console.log("Data:", data)
-            if (data.type == "dispatch") {
+            if (data.type == "disp") {
                 dispatch(listTableDetails(id));
                 dispatch(gameDetails(id))
             }
@@ -99,6 +99,11 @@ function PokerScreen() {
             'message': message,
         }))
     }
+    const groupDispatch = () => {
+        // socket.send(JSON.stringify({
+        //     'disp': true,
+        // }))
+    }
 
     const submitHandler = (e) => {
         e.preventDefault()
@@ -108,11 +113,12 @@ function PokerScreen() {
         dispatch(gameLeave(id))
         navigate("/")
     }
-    const fold = () => { dispatch(gameAction(id, 0, "fold")) }
-    const check = () => { dispatch(gameAction(id, 0, "check")) }
-    const call = () => { dispatch(gameAction(id, 0, "call")) }
-    const raise = () => { dispatch(gameAction(id, bet, "raise")) }
-    const allin = () => { dispatch(gameAction(id, 0, "allin")) }
+    const fold = () => { dispatch(gameAction(id, 0, "fold")); groupDispatch() }
+    const check = () => { dispatch(gameAction(id, 0, "check")); groupDispatch() }
+    const call = () => { dispatch(gameAction(id, 0, "call")); groupDispatch() }
+    const raise = () => { dispatch(gameAction(id, bet, "raise")); groupDispatch() }
+    const allin = () => { dispatch(gameAction(id, 0, "allin")); groupDispatch() }
+    const newGame = () => { dispatch(gameAction(id, 0, "newGame")); groupDispatch() }
     if (gameInfo.info) {
         for (let i = 0; i < 5; i++) {
             ground[i] = info.JSON_ground.ground[i]
@@ -154,17 +160,36 @@ function PokerScreen() {
         <>
 
             <div className='fluid m-0 bg-success pt-4 position-relative ' style={{ height: "70vh" }}>
-                <div className='position-absolute w-100 ground row'>
-                    {gameInfo.info &&
-                        <div className='row mx-auto'>
-                            <div className='col m-0 p-1'><Card2 num={ground[0]} /></div>
-                            <div className='col m-0 p-1'><Card2 num={ground[1]} /></div>
-                            <div className='col m-0 p-1'><Card2 num={ground[2]} /></div>
-                            <div className='col m-0 p-1'><Card2 num={ground[3]} /></div>
-                            <div className='col m-0 p-1'><Card2 num={ground[4]} /></div>
+                {gameInfo.info &&
+                    <div className='position-absolute ground d-flex flex-column'>
+                        <div className='col-6 d-flex' style={{ height: "20vh" }}>
+                            <div className='h-100 col m-0 p-1'><Card2 num={ground[0]} /></div>
+                            <div className='h-100 col m-0 p-1'><Card2 num={ground[1]} /></div>
+                            <div className='h-100 col m-0 p-1'><Card2 num={ground[2]} /></div>
+                            <div className='h-100 col m-0 p-1'><Card2 num={ground[3]} /></div>
+                            <div className='h-100 col m-0 p-1'><Card2 num={ground[4]} /></div>
                         </div>
-                    }
-                </div>
+                        <div className='col-6 d-flex'>
+                            {/* <div className='w-50 m-0 p-1'>Players: <pre> {JSON.stringify(info.player)}</pre></div> */}
+                            <div className='w-50 d-flex flex-column m-0 p-1'>
+                                <span>Round: {JSON.stringify(info.round)}</span> 
+                                <span>Pot: {JSON.stringify(info.pot)}</span> 
+                                <span>Online: {JSON.stringify(info.online)}</span> 
+                                <span>Stage: {JSON.stringify(info.stage)}</span> 
+                                <span>Bet: {JSON.stringify(info.bet)}</span> 
+                            </div>
+                            <div className='w-50 d-flex flex-column m-0 p-1'>
+                                <span>turn: {JSON.stringify(info.turn)}</span> 
+                                <span>small_blind: {JSON.stringify(info.small_blind)}</span> 
+                                <span>isPlayed: {JSON.stringify(info.isPlayed)}</span> 
+                                <span>isFinished: {JSON.stringify(info.isFinished)}</span> 
+                            </div>
+                            {/* <div className='w-25 d-flex flex-column m-0 p-1'>
+                                <span>created: {JSON.stringify(info.created_at)}</span> 
+                            </div> */}
+                        </div>
+                    </div>
+                }
                 <div className='p-0 m-0 arrange d-flex'>
                     <div className='l d-flex align-items-center flex-column-reverse justify-content-around'>
                         {gameInfo.info &&
@@ -252,6 +277,7 @@ function PokerScreen() {
                     <Button className=' my-1 h-25 ' onClick={() => raise()}>Raise</Button>
                     <Button className=' my-1 h-25 ' onClick={() => allin()}>All-in</Button>
                     <Button variant='warning' className=' m-1 h-25 ' onClick={handleShow}>LOG</Button>
+                    <Button variant='warning' className=' my-1 h-25' onClick={() => newGame()}>New-game</Button>
                     {gameInfo.info && <span className='text-light'>POT:{gameInfo.info.pot}/ BET:{gameInfo.info.bet}/ STAGE:{gameInfo.info.stage}</span>}
                     <FloatingLabel controlId="bet" label="Bet" className="" >
                         <Form.Control

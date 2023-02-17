@@ -4,6 +4,7 @@
     border-radius: 4px;
     /* max-width: 85px; */
     overflow: hidden;
+    aspect-ratio: 1 / 1.6;
 }
 
 .ground .card2{border-radius: 6px;}
@@ -11,12 +12,16 @@
 .ground{
     height: 20vh;
     top: 42%;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;    
 }
 .ground>div{
-    min-width: 350px;
-    /* background-color: aqua; */
-    aspect-ratio: 8/2;
-    width: 40%;
+    margin: 0 auto;
+    width: 50%;
+    max-width: 400px;
+
 }
 .card2>*{
     width: 100%;
@@ -38,14 +43,24 @@
 .ground .card2>*>*{
     height: 50%;
 }
+.card2>*>*::before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+  }
+.ground .card2>div>span:nth-of-type(1){
+    padding-top: 10%;
+    font-size: 4vw;
+    vertical-align: middle;
+}
 .card2 span>img{width: 100%; padding: 18%;}
-.ground .card2 span>img{width: 100%; padding: 0 14%;}
+.ground .card2 span>img{width: 100%; max-width: 100px; padding: 0 16%}
 .own>div .card2>*>*{
+    vertical-align: middle;
     line-height: 28px;
     font-size: 35px;
 }
 
-.ground>div .card2>*>*{
-    line-height: 40px;
-    font-size: 40px;
-} 
+/* .ground>div .card2>*>*{
+}  */

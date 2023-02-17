@@ -93,7 +93,7 @@ const [dd,setdd] = useContext(DepositeContext)
                 </div>
                 <div className='col-6'> 
                     <Card.Subtitle className='text-start col-12 my-0 p-2 d-flex flex-column justify-content-center'>
-                        <strong className='w-100 text-center'>Players <span className='text-muted fw-light'>({table.online}/{maxs[table.max]})</span> </strong>
+                        <strong className='w-100 text-center'>Players <span className='text-muted fw-light'>({gameInfo.info?info.online:table.JSON_table.online.length}/{maxs[table.max]})</span> </strong>
                         <ul className='list-group px-4 list-group-flush'>
                             {(gameInfo.info) && info.player.map(i => {
                                 return (

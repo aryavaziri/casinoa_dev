@@ -17,6 +17,13 @@ def getGame(request, pk):
     serializer2 = GameSerializer(game, many=False)
     return Response(serializer2.data)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getRound(request, pk):
+    game = Game.objects.get(round=pk)
+    serializer2 = GameSerializer(game, many=False)
+    return Response(serializer2.data)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

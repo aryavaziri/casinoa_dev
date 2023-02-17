@@ -86,16 +86,6 @@ CHANNEL_LAYERS = {
     },
 }
 
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": "redis://default:st9JbKIVx3I2pzXyr0zAQNOBuwM3Zrxe@redis-16850.c253.us-central1-1.gce.cloud.redislabs.com:16850/1",
-#         "OPTIONS": {
-#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-#         }
-#     }
-# }
-
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",

@@ -150,6 +150,10 @@ export const gameAction =
         case "allin":
           actSwitch = "allin";
           break;
+          case "newGame":
+          actSwitch = "newGame";
+          break;
+
       }
       act2.act = actSwitch;
       act2.bet = bet;

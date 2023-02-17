@@ -58,7 +58,7 @@ export default function Card2({ num }) {
 
   return (
 
-      <div className='card2' style={{ height: "100%", width: "100%" }}>
+      <div className='card2' style={{ maxHeight: "100%", width: "100%" }}>
         {(num==0)?
         <img src={Front} />:
         <div>

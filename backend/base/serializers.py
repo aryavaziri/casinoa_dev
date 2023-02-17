@@ -43,6 +43,7 @@ class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
         fields = '__all__'
+        # exclude = ['gameObject']
     def get_online(self, obj):
         try:
             return obj.player.count()
@@ -55,6 +56,7 @@ class GameSerializer(serializers.ModelSerializer):
 
 class TableSerializer(serializers.ModelSerializer):
     isAvailable = serializers.SerializerMethodField(read_only=True)
+    isPlaying = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Table
         fields = '__all__'
@@ -76,6 +78,15 @@ class TableSerializer(serializers.ModelSerializer):
         except ValueError:
             return True
         
+    def get_isPlaying(self, obj):
+        try:
+            serializer = GameSerializer(Game.objects.filter(table=obj).last(), many=False)
+            if (serializer.data['isPlayed']):
+                return True
+            else:
+                return False
+        except:
+            return False
 
     
 
