@@ -27,6 +27,7 @@ wheels/
 MANIFEST
 static/
 redis/
+redis/ru204/
 settings.py
 
 # PyInstaller
