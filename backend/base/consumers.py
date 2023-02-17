@@ -91,23 +91,7 @@ class PokerConsumer(AsyncWebsocketConsumer):
                         print("NEW GAME")
                         game.gameObject = Poker(self.table, counter)
                         game.save()
-                        # game.gameObject.message()
-                    
 
-
-
-            # self.close()
-            # else:
-
-
-        #     table.JSON_table['online'].append(self.user['id'])
-        #     table.save()
-
-
-        #     if(TableSerializer(self.table).data['isAvailable']):
-        #         self.addPlayer()
-        #     else:
-        #         print("Table is not available")
         print(table.JSON_table)
 
     async def connect(self):
