@@ -26,9 +26,8 @@ wheels/
 *.egg
 MANIFEST
 static/
-redis/
-redis/ru204/
 settings.py
+/install.txt
 install.txt
 
 # PyInstaller
