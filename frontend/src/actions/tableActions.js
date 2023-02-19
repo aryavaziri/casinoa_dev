@@ -15,8 +15,8 @@ export const listTables = () => async (dispatch3) => {
     const { data } = await axios.get(
       window.location.protocol +
         "//" +
-        window.location.hostname +
-        ":8000/api/tables/"
+        window.location.host +
+        "/api/tables/"
     );
     dispatch3({ type: TABLE_LIST_SUCCESS, payload: data });
   } catch (error) {
@@ -37,8 +37,8 @@ export const listTableDetails = (id) => async (dispatch) => {
     const { data } = await axios.get(
       window.location.protocol +
         "//" +
-        window.location.hostname +
-        `:8000/api/tables/${id}`
+        window.location.host +
+        `/api/tables/${id}`
     );
     // const { data2 } = await axios.get(
     //   window.location.protocol +

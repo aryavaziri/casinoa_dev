@@ -34,7 +34,7 @@ main {
   background: linear-gradient(90deg, #2D896E, #091515);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  display: inline;
+  display: block;
 }
 
 .sign-in {

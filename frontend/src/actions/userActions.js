@@ -28,8 +28,8 @@ export const login = (email, password) => async (dispatch) => {
     const { data } = await axios.post(
       window.location.protocol +
         "//" +
-        window.location.hostname +
-        ":8000/api/users/login/",
+        window.location.host +
+        "/api/users/login/",
       { email: email, password: password },
       config
     );
@@ -63,8 +63,8 @@ export const register = (name, email, password) => async (dispatch) => {
     const { data } = await axios.post(
       window.location.protocol +
         "//" +
-        window.location.hostname +
-        ":8000/api/users/register/",
+        window.location.host +
+        "/api/users/register/",
       { name: name, email: email, password: password },
       config
     );
@@ -94,8 +94,8 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.access}`,
       },
     };
-    // const { data } = await axios.get(window.location.protocol + "//" + window.location.hostname + `:8000/api/users/${id}/`,config);
-    const { data } = await axios.get(window.location.protocol + "//" + window.location.hostname + `:8000/api/users/profile/`,config);
+    // const { data } = await axios.get(window.location.protocol + "//" + window.location.host + `/api/users/${id}/`,config);
+    const { data } = await axios.get(window.location.protocol + "//" + window.location.host + `/api/users/profile/`,config);
     dispatch({ type: USER_DETAIL_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -132,8 +132,8 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
     const {data} = await axios.put(
       window.location.protocol +
         "//" +
-        window.location.hostname +
-        `:8000/api/users/profile/update/`,
+        window.location.host +
+        `/api/users/profile/update/`,
       user,
       config2
     );

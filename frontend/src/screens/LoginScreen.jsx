@@ -7,9 +7,10 @@ import Loader from '../components/Loader'
 import Message from '../components/Message'
 import FormContainer from '../components/FormContainer'
 import { login } from '../actions/userActions'
-import Image from 'react-bootstrap/Image'
+// import Image from 'react-bootstrap/Image'
 import loginIMG from '../media/images/login.jpg'
 import Logo from '../media/images/logo.png'
+import { LinkContainer } from 'react-router-bootstrap';
 
 function LoginScreen() {
     const [email, setEmail] = useState('')
@@ -37,9 +38,14 @@ function LoginScreen() {
             <Row style={{ backgroundImage: "url(" + loginIMG + ")", backgroundSize: "auto 100%", backgroundColor: "black", backgroundRepeat: "no-repeat", minHeight: "100vh" }} className='m-0 p-0 justify-content-end'>
                 <Col style={{ backgroundColor: "white" }} className='border' xs={12} md={4} >
                     <FormContainer>
-                        <div className='mt-3 w-100 d-flex'><img className='mx-auto' alt='LOGO' style={{height:"100px",backgraoundSize:"100%"}} src={Logo}/></div>
-                        <h2 id={"logo"} className='w-auto mx-auto p-1 mb-2 text-center'>CASINOA</h2>
-                        <h6 className='p-1 mb-2 text-muted text-center'>Welcome</h6>
+                        <LinkContainer to='/'>
+                            <Link className='text-decoration-none'>
+                                <div className='mt-3 w-100 d-flex'><img className='mx-auto' alt='LOGO' style={{ height: "100px", backgraoundSize: "100%" }} src={Logo} /></div>
+                                <h2 id={"logo"} className='w-auto mx-auto p-1 mb-2 text-center'>CASINOA</h2>
+                                <h6 className='p-1 mb-2 text-muted text-center'>Welcome</h6>
+                            </Link>
+                        </LinkContainer>
+
                         <hr />
                         {error && <Message variant='danger'>{error}</Message>}
                         {loading && <Loader />}
@@ -54,7 +60,7 @@ function LoginScreen() {
                                     onChange={(e) => setEmail(e.target.value)}
                                     autoFocus
                                     size="lg"
-                                    />
+                                />
                             </Form.Group>
 
                             <Form.Group className="mb-2" controlId="password">

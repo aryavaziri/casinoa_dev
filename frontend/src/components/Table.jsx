@@ -28,7 +28,7 @@ function Table({ table }) {
         // <Link to={`/table/${table._id}`} className="text-decoration-none text-reset">
         <div className="text-decoration-none text-reset">
             <Card className='shadow my-3 p-0 rounded overflow-hidden'>
-                <img className='' style={{ height: "220px", objectFit: "cover" }} src={window.location.protocol + "//" + window.location.hostname + ":8000/static" + table.img} alt={table.img} />
+                <img className='' style={{ height: "220px", objectFit: "cover" }} src={window.location.protocol + "//" + window.location.host + "/static" + table.img} alt={table.img} />
                 <Card.Body className='row pt-3'>
                     <Card.Text className='text-end col-6 my-0 p-1'><strong>Type: </strong></Card.Text><Card.Text className='my-0 p-1 col-6'> <span>{types[table.type]}</span></Card.Text>
                     <Card.Text className='text-end col-6 my-0 p-1'><strong>S/B blinds: </strong></Card.Text><Card.Text className='my-0 p-1 col-6'> <span>{table.small}/{table.small*2} €</span></Card.Text>

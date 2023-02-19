@@ -75,7 +75,7 @@ class TableSerializer(serializers.ModelSerializer):
                 return True
             else:
                 return False
-        except ValueError:
+        except:
             return True
         
     def get_isPlaying(self, obj):

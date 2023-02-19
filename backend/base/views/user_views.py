@@ -69,7 +69,7 @@ def updateUserProfile(request):
     if data['img'] != '':
         player.image = data['img']
     # print(data)
-    # print(data['img'])
+    # print(player.image)
     player.save()
 
 

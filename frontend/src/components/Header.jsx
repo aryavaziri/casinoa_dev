@@ -35,16 +35,16 @@ function Header() {
           <Nav className="basic-navbar-nav ms-auto" bg="dark" variant="dark">
             {userInfo ? (
               <>
-                <Nav.Link>
-                  <LinkContainer to='/profile'>
+                <LinkContainer to='/profile'>
+                  <Nav.Link>
                     <div className='justify-content-center d-flex'>
                       {user[1] &&
                         <div className='border overflow-hidden rounded-circle' style={{ aspectRatio: "1/1", height: "30px" }}>
-                          <img className='h-100 w-100 border' style={{ objectFit: "cover" }} src={window.location.protocol + "//" + window.location.hostname + ":8000/static" + user[1].image} alt={user[1].nick_name} />
+                          <img className='h-100 w-100 border' style={{ objectFit: "cover" }} src={window.location.protocol + "//" + window.location.host + "/static" + user[1].image} alt={user[1].nick_name} />
                         </div>}
                     </div>
-                  </LinkContainer>
-                </Nav.Link>
+                  </Nav.Link>
+                </LinkContainer>
 
                 <NavDropdown className='' align="end" title={userInfo.nick_name ? userInfo.nick_name : userInfo.email} id='username'>
                   <LinkContainer to='/profile'>
@@ -63,7 +63,9 @@ function Header() {
                 </Nav.Link>
               </>
             ) :
-              <Nav.Link href="/login">Login <i className="fa-solid fa-right-to-bracket"></i></Nav.Link>
+            <LinkContainer to='/login'>
+              <Nav.Link >Login <i className="fa-solid fa-right-to-bracket"></i></Nav.Link>
+              </LinkContainer>
             }
           </Nav>
         </Container>

@@ -5,12 +5,18 @@ __pycache__/
 
 # C extensions
 *.so
+server/
+linux.png
+deploy.sh
+
+
 
 static/
 build/
 settings.py
 install.txt
 req.txt
+migrations/
 
 # Distribution / packaging
 .Python
