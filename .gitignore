@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+migrations/
 
 # C extensions
 *.so
@@ -16,7 +17,6 @@ build/
 settings.py
 install.txt
 req.txt
-migrations/
 
 # Distribution / packaging
 .Python

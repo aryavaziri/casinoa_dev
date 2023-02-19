@@ -96,7 +96,7 @@ function ProfileScreen() {
                                 {user[1] ?
                                     (img == "") ?
                                     <div className='border overflow-hidden rounded-circle mb-3' onClick={imgClick} style={{ aspectRatio: "1/1", height: "150px" }}>
-                                            <img className='h-100 w-100 border mb-3' style={{ objectFit: "cover" }} src={window.location.protocol + "//" + window.location.hostname + ":8000/static" + user[1].image} alt={user[1].nick_name} />
+                                            <img className='h-100 w-100 border mb-3' style={{ objectFit: "cover" }} src={window.location.protocol + "//" + window.location.host + "/static" + user[1].image} alt={user[1].nick_name} />
                                         </div>
                                         : <div className='border overflow-hidden rounded-circle mb-3' onClick={imgClick} style={{ aspectRatio: "1/1", height: "150px" }}>
                                         <img className='h-100 w-100 border mb-3' style={{ objectFit: "cover" }} src={URL.createObjectURL(img)} alt={user[1].nick_name} />

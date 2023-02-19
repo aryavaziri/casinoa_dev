@@ -33,8 +33,8 @@ export const gameDetails = (id) => async (dispatch, getState) => {
     const { data } = await axios.get(
       window.location.protocol +
         "//" +
-        window.location.hostname +
-        `:8000/api/poker/${id}`,
+        window.location.host +
+        `/api/poker/${id}`,
       config
     );
 
@@ -66,8 +66,8 @@ export const gameEnter = (id, deposite) => async (dispatch, getState) => {
     const { data } = await axios.put(
       window.location.protocol +
         "//" +
-        window.location.hostname +
-        `:8000/api/poker/${id}/enter/`,
+        window.location.host +
+        `/api/poker/${id}/enter/`,
       deposite,
       config
     );
@@ -100,8 +100,8 @@ export const gameLeave = (id) => async (dispatch, getState) => {
     const { data } = await axios.get(
       window.location.protocol +
         "//" +
-        window.location.hostname +
-        `:8000/api/poker/${id}/leave/`,
+        window.location.host +
+        `/api/poker/${id}/leave/`,
       config
     );
     dispatch({ type: GAME_DETAILS_SUCCESS, payload: data });
@@ -160,8 +160,8 @@ export const gameAction =
       const { data } = await axios.put(
         window.location.protocol +
           "//" +
-          window.location.hostname +
-          `:8000/api/poker/${id}/action/`,
+          window.location.host +
+          `/api/poker/${id}/action/`,
         act2,
         config
       );

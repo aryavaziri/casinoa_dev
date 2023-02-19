@@ -83,7 +83,7 @@ const [dd,setdd] = useContext(DepositeContext)
 
     return (
         <Card className='shadow m-0 p-0 rounded overflow-hidden border-none'>
-            <img className='' style={{ height: "260px", objectFit: "cover" }} src={window.location.protocol + "//" + window.location.hostname + ":8000/static" + table.img} alt={table.img} />
+            <img className='' style={{ height: "260px", objectFit: "cover" }} src={window.location.protocol + "//" + window.location.host + "/static" + table.img} alt={table.img} />
             <Card.Body className='row pt-3'>
                 <div className='col-6 d-flex flex-column'>
                     <Card.Text className='text-start col-12 my-0 p-2'><strong>Type: </strong>{types[table.type]}</Card.Text>

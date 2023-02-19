@@ -50,8 +50,8 @@ function Player({ options }) {
                     {/* <img src={require("../media/images" + options.image)} /> */}
                     <img src={window.location.protocol +
                         "//" +
-                        window.location.hostname +
-                        `:8000/static${options.image}`} />
+                        window.location.host +
+                        `/static${options.image}`} />
                     <div>
                         <div></div>
                         <div>
