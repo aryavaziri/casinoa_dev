@@ -1,4 +1,5 @@
 import axios from "axios";
+import { hostname } from "../constants/userConstants";
 import {
   GAME_DETAILS_REQUEST,
   GAME_DETAILS_SUCCESS,
@@ -16,8 +17,12 @@ import {
   GAME_ACTION_SUCCESS,
   GAME_ACTION_FAIL,
 } from "../constants/pokerConstants";
+// import { useContext } from 'react'
+// import { MyContext } from "../App.js"
 
 export const gameDetails = (id) => async (dispatch, getState) => {
+  // const {hostname} =useContext(MyContext)
+  const myDomain = hostname;
   try {
     dispatch({ type: GAME_DETAILS_REQUEST });
     const {
@@ -31,10 +36,7 @@ export const gameDetails = (id) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.get(
-      window.location.protocol +
-        "//" +
-        window.location.host +
-        `/api/poker/${id}`,
+      window.location.protocol + "//" + myDomain + `/api/poker/${id}`,
       config
     );
 
@@ -51,6 +53,8 @@ export const gameDetails = (id) => async (dispatch, getState) => {
 };
 
 export const gameEnter = (id, deposite) => async (dispatch, getState) => {
+  // const {hostname} =useContext(MyContext)
+  const myDomain = hostname;
   try {
     dispatch({ type: GAME_ENTER_REQUEST });
     const {
@@ -64,10 +68,7 @@ export const gameEnter = (id, deposite) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.put(
-      window.location.protocol +
-        "//" +
-        window.location.host +
-        `/api/poker/${id}/enter/`,
+      window.location.protocol + "//" + myDomain + `/api/poker/${id}/enter/`,
       deposite,
       config
     );
@@ -85,6 +86,8 @@ export const gameEnter = (id, deposite) => async (dispatch, getState) => {
 };
 
 export const gameLeave = (id) => async (dispatch, getState) => {
+  // const {hostname} =useContext(MyContext)
+  const myDomain = hostname;
   try {
     dispatch({ type: GAME_LEAVE_REQUEST });
     const {
@@ -98,10 +101,7 @@ export const gameLeave = (id) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.get(
-      window.location.protocol +
-        "//" +
-        window.location.host +
-        `/api/poker/${id}/leave/`,
+      window.location.protocol + "//" + myDomain + `/api/poker/${id}/leave/`,
       config
     );
     dispatch({ type: GAME_DETAILS_SUCCESS, payload: data });
@@ -120,6 +120,8 @@ export const gameLeave = (id) => async (dispatch, getState) => {
 
 export const gameAction =
   (id, bet, actionType) => async (dispatch, getState) => {
+    // const {hostname} =useContext(MyContext)
+    const myDomain = hostname;
     try {
       dispatch({ type: GAME_ACTION_REQUEST });
       const {
@@ -150,18 +152,14 @@ export const gameAction =
         case "allin":
           actSwitch = "allin";
           break;
-          case "newGame":
+        case "newGame":
           actSwitch = "newGame";
           break;
-
       }
       act2.act = actSwitch;
       act2.bet = bet;
       const { data } = await axios.put(
-        window.location.protocol +
-          "//" +
-          window.location.host +
-          `/api/poker/${id}/action/`,
+        window.location.protocol + "//" + myDomain + `/api/poker/${id}/action/`,
         act2,
         config
       );

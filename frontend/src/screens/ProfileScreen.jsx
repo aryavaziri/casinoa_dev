@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useLocation, useNavigate } from 'react-router'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col, Form, Button } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
@@ -9,6 +9,8 @@ import Loader from '../components/Loader'
 import Message from '../components/Message'
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants'
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import { MyContext } from "../App.js"
+import { hostname } from "../constants/userConstants";
 
 function ProfileScreen() {
 
@@ -33,6 +35,9 @@ function ProfileScreen() {
 
     const userUpdateProfile = useSelector(state => state.userUpdateProfile)
     const { success } = userUpdateProfile
+
+    // const context =useContext(MyContext)
+    const myDomain = hostname
 
 
 
@@ -96,7 +101,7 @@ function ProfileScreen() {
                                 {user[1] ?
                                     (img == "") ?
                                     <div className='border overflow-hidden rounded-circle mb-3' onClick={imgClick} style={{ aspectRatio: "1/1", height: "150px" }}>
-                                            <img className='h-100 w-100 border mb-3' style={{ objectFit: "cover" }} src={window.location.protocol + "//" + window.location.host + "/static" + user[1].image} alt={user[1].nick_name} />
+                                            <img className='h-100 w-100 border mb-3' style={{ objectFit: "cover" }} src={window.location.protocol + "//" + myDomain+ "/static" + user[1].image} alt={user[1].nick_name} />
                                         </div>
                                         : <div className='border overflow-hidden rounded-circle mb-3' onClick={imgClick} style={{ aspectRatio: "1/1", height: "150px" }}>
                                         <img className='h-100 w-100 border mb-3' style={{ objectFit: "cover" }} src={URL.createObjectURL(img)} alt={user[1].nick_name} />

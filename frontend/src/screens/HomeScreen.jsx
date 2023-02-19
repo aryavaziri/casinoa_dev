@@ -9,7 +9,10 @@ import Message from '../components/Message'
 import Test from '../components/Test'
 import Card from '../components/Card'
 import Buyin from '../components/Buyin'
-import { useState } from 'react'
+import { useState ,useContext} from 'react'
+import { MyContext } from "../App.js"
+import { hostname } from "../constants/userConstants";
+
 
 function HomeScreen() {
     // let url = `ws://${window.location.hostname}:8000/ws/socket-server/`
@@ -18,6 +21,7 @@ function HomeScreen() {
     //     let data = JSON.parse(e.data)
     //     console.log("Data:", data)
     // }
+    // const context =useContext(MyContext)
     
     
     

@@ -15,9 +15,15 @@ import {
   USER_UPDATE_PROFILE_SUCCESS,
   USER_UPDATE_PROFILE_FAIL,
   USER_UPDATE_PROFILE_RESET,
+  hostname
 } from "../constants/userConstants";
+// import { useContext } from 'react'
+// import { MyContext } from "../App.js"
+
 
 export const login = (email, password) => async (dispatch) => {
+  // const {hostname} =useContext(MyContext)
+  const myDomain = hostname
   try {
     dispatch({ type: USER_LOGIN_REQUEST });
     const config = {
@@ -28,31 +34,35 @@ export const login = (email, password) => async (dispatch) => {
     const { data } = await axios.post(
       window.location.protocol +
         "//" +
-        window.location.host +
+        myDomain+
         "/api/users/login/",
       { email: email, password: password },
       config
-    );
-    dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
-    localStorage.setItem("userInfo", JSON.stringify(data));
-  } catch (error) {
-    dispatch({
-      type: USER_LOGIN_FAIL,
-      payload:
+      );
+      dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
+      localStorage.setItem("userInfo", JSON.stringify(data));
+    } catch (error) {
+      dispatch({
+        type: USER_LOGIN_FAIL,
+        payload:
         error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+        ? error.response.data.detail
+        : error.message,
     });
   }
 };
 
 export const logout = () => (dispatch) => {
+  // const {hostname} =useContext(MyContext)
+  const myDomain = hostname
   localStorage.removeItem("userInfo");
   dispatch({ type: USER_LOGOUT });
   dispatch({ type: USER_DETAIL_RESET });
 };
 
 export const register = (name, email, password) => async (dispatch) => {
+  // const {hostname} =useContext(MyContext)
+  const myDomain = hostname
   try {
     dispatch({ type: USER_REGISTER_REQUEST });
     const config = {
@@ -62,27 +72,29 @@ export const register = (name, email, password) => async (dispatch) => {
     };
     const { data } = await axios.post(
       window.location.protocol +
-        "//" +
-        window.location.host +
-        "/api/users/register/",
+      "//" +
+      myDomain+
+      "/api/users/register/",
       { name: name, email: email, password: password },
       config
-    );
-    dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
-    dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
-    localStorage.setItem("userInfo", JSON.stringify(data));
+      );
+      dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
+      dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
+      localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: USER_REGISTER_FAIL,
       payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      error.response && error.response.data.detail
+      ? error.response.data.detail
+      : error.message,
     });
   }
 };
 
 export const getUserDetails = (id) => async (dispatch, getState) => {
+  // const {hostname} =useContext(MyContext)
+  const myDomain = hostname
   try {
     dispatch({ type: USER_DETAIL_REQUEST });
     const {
@@ -94,8 +106,8 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.access}`,
       },
     };
-    // const { data } = await axios.get(window.location.protocol + "//" + window.location.host + `/api/users/${id}/`,config);
-    const { data } = await axios.get(window.location.protocol + "//" + window.location.host + `/api/users/profile/`,config);
+    // const { data } = await axios.get(window.location.protocol + "//" + myDomain+ `/api/users/${id}/`,config);
+    const { data } = await axios.get(window.location.protocol + "//" + myDomain+ `/api/users/profile/`,config);
     dispatch({ type: USER_DETAIL_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -109,12 +121,14 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
 };
 
 export const updateUserProfile = (user) => async (dispatch, getState) => {
+  // const {hostname} =useContext(MyContext)
+  const myDomain = hostname
   try {
     dispatch({ type: USER_UPDATE_PROFILE_REQUEST });
     const {
       userLogin: { userInfo },
     } = getState();
-
+    
     const config = {
       headers: {
         "Content-type": "application/json",
@@ -132,7 +146,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
     const {data} = await axios.put(
       window.location.protocol +
         "//" +
-        window.location.host +
+        myDomain+
         `/api/users/profile/update/`,
       user,
       config2
@@ -141,16 +155,16 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
     // data[0].access = userInfo.access
     // console.log(data)
     dispatch({ type: USER_UPDATE_PROFILE_SUCCESS, payload: data });
-
+    
     localStorage.setItem("userInfo", JSON.stringify(data[0]));
 
   } catch (error) {
     dispatch({
       type: USER_UPDATE_PROFILE_FAIL,
       payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
+      error.response && error.response.data.detail
+      ? error.response.data.detail
+      : error.message,
     });
   }
 };

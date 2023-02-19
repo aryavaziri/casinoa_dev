@@ -1,5 +1,5 @@
 import React from 'react'
-import {useContext} from 'react'
+import { useContext } from 'react'
 import { Button, Card, Form } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -11,8 +11,9 @@ import { getUserDetails } from '../actions/userActions'
 // import { payOrder } from '../actions/orderActions'
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import Test2 from './Test2';
-import {DepositeContext} from "../App.js"
+import { MyContext } from "../App.js"
 // import {DepositeContext} from "../App.js"
+import { hostname } from "../constants/userConstants";
 
 function Buyin({ table }) {
 
@@ -30,8 +31,10 @@ function Buyin({ table }) {
     const [deposite, setDeposite] = useState(0);
     const dispatch = useDispatch()
 
-const [dd,setdd] = useContext(DepositeContext)
     
+    const context =useContext(MyContext)
+    const myDomain = hostname
+    const [dd, setdd] = [context.dep, context.setdep]
 
 
     useEffect(() => {
@@ -40,7 +43,7 @@ const [dd,setdd] = useContext(DepositeContext)
             navigate("/login")
         } else {
             dispatch(gameDetails(table._id))
-            if (!user ) {
+            if (!user) {
                 dispatch(getUserDetails('profile'))
             }
         }
@@ -83,17 +86,17 @@ const [dd,setdd] = useContext(DepositeContext)
 
     return (
         <Card className='shadow m-0 p-0 rounded overflow-hidden border-none'>
-            <img className='' style={{ height: "260px", objectFit: "cover" }} src={window.location.protocol + "//" + window.location.host + "/static" + table.img} alt={table.img} />
+            <img className='' style={{ height: "260px", objectFit: "cover" }} src={window.location.protocol + "//" + myDomain+ "/static" + table.img} alt={table.img} />
             <Card.Body className='row pt-3'>
                 <div className='col-6 d-flex flex-column'>
                     <Card.Text className='text-start col-12 my-0 p-2'><strong>Type: </strong>{types[table.type]}</Card.Text>
                     <Card.Text className='text-start col-12 my-0 p-2'><strong>S/B blinds: </strong>{table.small}/{table.small * 2} €</Card.Text>
                     <Card.Text className='text-start col-12 my-0 p-2'><strong>Minimum Buy-in: </strong>{table.min}</Card.Text>
-                    <Card.Text className='text-start col-12 mt-auto p-2'><strong>Credit: </strong> € {user[1]? user[1].credit_total:null}</Card.Text>
+                    <Card.Text className='text-start col-12 mt-auto p-2'><strong>Credit: </strong> € {user[1] ? user[1].credit_total : null}</Card.Text>
                 </div>
-                <div className='col-6'> 
+                <div className='col-6'>
                     <Card.Subtitle className='text-start col-12 my-0 p-2 d-flex flex-column justify-content-center'>
-                        <strong className='w-100 text-center'>Players <span className='text-muted fw-light'>({gameInfo.info?info.online:table.JSON_table.online.length}/{maxs[table.max]})</span> </strong>
+                        <strong className='w-100 text-center'>Players <span className='text-muted fw-light'>({gameInfo.info ? info.online : table.JSON_table.online.length}/{maxs[table.max]})</span> </strong>
                         <ul className='list-group px-4 list-group-flush'>
                             {(gameInfo.info) && info.player.map(i => {
                                 return (
@@ -123,7 +126,7 @@ const [dd,setdd] = useContext(DepositeContext)
                         />
                     </Form.Group>
                 </Form>
-                <Button type='submit' form='deposite' disabled={((deposite > table.min)&&(deposite <= user[1].credit_total) && (table.isAvailable)) ? false : true} className='col-3 ' variant="dark" onClick={() => submitHandler}>
+                <Button type='submit' form='deposite' disabled={((deposite > table.min) && (deposite <= user[1].credit_total) && (table.isAvailable)) ? false : true} className='col-3 ' variant="dark" onClick={() => submitHandler}>
                     Join table
                 </Button>
 

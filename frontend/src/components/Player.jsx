@@ -1,5 +1,5 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { Button, Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import Ratio from 'react-bootstrap/Ratio';
@@ -7,7 +7,13 @@ import Card2 from './Card2'
 import './../media/css/player.css'
 import './../media/css/poker-actions.css'
 import { gameDetails } from '../actions/pokerActions';
+import { MyContext } from "../App.js"
+import { hostname } from "../constants/userConstants";
+
 function Player({ options }) {
+    // const {hostname} =useContext(MyContext)
+    const myDomain = hostname
+
     // console.log(document.getElementsByClassName(".width"))
     // useEffect(() => {
     //     console.log(document.querySelectorAll(".width")[0].clientWidth)
@@ -49,7 +55,7 @@ function Player({ options }) {
                     {/* <img src={require("../media/images" + options.image)} /> */}
                     <img src={window.location.protocol +
                         "//" +
-                        window.location.host +
+                        myDomain+
                         `/static${options.image}`} />
                     <div>
                         <div></div>

@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { createContext , useState} from 'react'
+import { createContext, useState } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HomeScreen from "./screens/HomeScreen";
@@ -8,19 +8,17 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import PokerScreen from "./screens/PokerScreen";
-import Player from "./components/Player";
 
+const hostname = window.location.hostname + ":8000";
+export const MyContext = createContext({ hostname: hostname });
 
-
-export const DepositeContext = createContext(null);
 export default function App() {
-
   const [dep, setdep] = useState(0);
   return (
     <Router>
       <Header />
       <main className="">
-        <DepositeContext.Provider value={[dep, setdep]}>
+        <MyContext.Provider value={{ dep: dep, setdep: setdep }}>
           <Routes>
             <Route exact path="/" element={<HomeScreen />} />
             <Route path="/login" element={<LoginScreen />} />
@@ -29,7 +27,7 @@ export default function App() {
             <Route path="/poker/:id" element={<PokerScreen />} />
             <Route path="/table/:id" element={<TableScreen />} />
           </Routes>
-        </DepositeContext.Provider>
+        </MyContext.Provider>
       </main>
       <Footer />
     </Router>

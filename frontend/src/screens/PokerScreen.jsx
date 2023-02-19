@@ -21,7 +21,8 @@ import Logo from '../media/images/logo.png'
 import Card2 from '../components/Card2'
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Modal from 'react-bootstrap/Modal';
-import { DepositeContext } from "../App.js"
+import { MyContext } from "../App.js"
+import { hostname } from "../constants/userConstants";
 
 // let url = `ws://${window.location.hostname}:8000/ws/poker/${id}/`
 // let url = `ws://${window.location.hostname}:8000/ws/poker`
@@ -34,7 +35,7 @@ const useSocket = (id, access_token, depo) => {
         // create socket
         try {
 
-            setSocket(new WebSocket(`ws://${window.location.host}/ws/poker/${id}/?token=${access_token}&deposite=${depo}`))
+            setSocket(new WebSocket(`ws://${hostname}/ws/poker/${id}/?token=${access_token}&deposite=${depo}`))
         }
         catch { return }
 
@@ -62,10 +63,12 @@ function PokerScreen() {
     const gameEnter = useSelector(state => state.gameEnter)
     const userLogin = useSelector(state => state.userLogin)
     const { error, loading, userInfo } = userLogin
-    const depo = useContext(DepositeContext)
-    // console.log(depo[0])
+    const context = useContext(MyContext)
+    
+    // console.log(context[0])
     const socketHeader = userInfo ? userInfo.access : ""
-    const socket = useSocket(id, socketHeader, depo[0])
+    const socket = useSocket(id, socketHeader, context.dep)
+
 
     const { info, infoLoading } = gameInfo
     const ground = []

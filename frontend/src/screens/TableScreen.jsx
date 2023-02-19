@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { listTableDetails } from '../actions/tableActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
+import { hostname } from "../constants/userConstants";
 
 function TableScreen() {
     let { id } = useParams();

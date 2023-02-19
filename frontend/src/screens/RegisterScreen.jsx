@@ -7,6 +7,7 @@ import FormContainer from '../components/FormContainer'
 import { register } from '../actions/userActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
+import { hostname } from "../constants/userConstants";
 
 function RegisterScreen() {
     const [email, setEmail] = useState('')
