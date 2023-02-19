@@ -15,7 +15,7 @@ class Poker:
         self.pk = int(pk)
         self.game = Game.objects.filter(table=pk).last()
         self.table = Table.objects.get(_id=pk)
-        self.newGame()
+        # self.newGame()
 
     def shuffle(self, count):
         self.cards = list(range(1, 53))

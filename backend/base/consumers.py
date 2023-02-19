@@ -50,6 +50,7 @@ class PokerConsumer(AsyncWebsocketConsumer):
             player.joined_at = datetime.now()
         player.save()
         game.player.add(player)
+        game.save
         
 
     @database_sync_to_async
@@ -88,9 +89,11 @@ class PokerConsumer(AsyncWebsocketConsumer):
                         counter +=1
                         
                 if(counter>1):
-                        print("NEW GAME")
-                        game.gameObject = Poker(self.table, counter)
-                        game.save()
+                    print("NEW GAME")
+                    # if(game.isPlayed)
+                    game.isPlayed = True
+                    game.gameObject = Poker(self.table, counter)
+                    game.save()
 
         print(table.JSON_table)
 

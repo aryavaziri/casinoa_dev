@@ -14,7 +14,7 @@ import { MyContext } from "../App.js"
 
 function Header() {
   const context =useContext(MyContext)
-  console.log(context)
+  // console.log(context)
   const myDomain = context.hostname
 
   const userLogin = useSelector(state => state.userLogin)

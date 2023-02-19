@@ -8,8 +8,9 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import PokerScreen from "./screens/PokerScreen";
+import { hostname } from "./constants/userConstants";
 
-const hostname = window.location.hostname + ":8000";
+// const hostname = window.location.hostname + ":8000";
 export const MyContext = createContext({ hostname: hostname });
 
 export default function App() {
