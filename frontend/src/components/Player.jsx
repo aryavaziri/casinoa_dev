@@ -3,10 +3,9 @@ import { useEffect, useState } from 'react'
 import { Button, Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import Ratio from 'react-bootstrap/Ratio';
-import cardIMG from '../media/images/p.webp'
 import Card2 from './Card2'
-import './../player.css'
-import './../poker-actions.css'
+import './../media/css/player.css'
+import './../media/css/poker-actions.css'
 import { gameDetails } from '../actions/pokerActions';
 function Player({ options }) {
     // console.log(document.getElementsByClassName(".width"))

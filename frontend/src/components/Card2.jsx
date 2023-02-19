@@ -1,5 +1,5 @@
 import React from "react";
-import './../card2.css';
+import './../media/css/card2.css';
 import Front from '../media/images/p2.webp'
 import Hearts from '../media/images/hearts.svg'
 import Clubs from '../media/images/clubs.svg'

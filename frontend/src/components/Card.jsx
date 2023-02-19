@@ -1,5 +1,5 @@
 import React from "react";
-import './../card.css';
+import './../media/css/card.css';
 import Front from '../media/images/p.webp'
 import Heart from '../media/images/hearts.svg'
 import { useEffect, useState } from 'react'
