@@ -44,7 +44,7 @@ function Header() {
                     <div className='justify-content-center d-flex'>
                       {user[1] &&
                         <div className='border overflow-hidden rounded-circle' style={{ aspectRatio: "1/1", height: "30px" }}>
-                          <img className='h-100 w-100 border' style={{ objectFit: "cover" }} src={window.location.protocol + "//" + myDomain+ "/static" + user[1].image} alt={user[1].nick_name} />
+                          <img className='h-100 w-100 border' style={{ objectFit: "cover" }} src={window.location.protocol + "//" + myDomain + user[1].image} alt={user[1].nick_name} />
                         </div>}
                     </div>
                   </Nav.Link>

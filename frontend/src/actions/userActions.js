@@ -23,7 +23,6 @@ import {
 
 export const login = (email, password) => async (dispatch) => {
   // const {hostname} =useContext(MyContext)
-  const myDomain = hostname
   try {
     dispatch({ type: USER_LOGIN_REQUEST });
     const config = {
@@ -34,7 +33,7 @@ export const login = (email, password) => async (dispatch) => {
     const { data } = await axios.post(
       window.location.protocol +
         "//" +
-        myDomain+
+        hostname+
         "/api/users/login/",
       { email: email, password: password },
       config
@@ -54,7 +53,6 @@ export const login = (email, password) => async (dispatch) => {
 
 export const logout = () => (dispatch) => {
   // const {hostname} =useContext(MyContext)
-  const myDomain = hostname
   localStorage.removeItem("userInfo");
   dispatch({ type: USER_LOGOUT });
   dispatch({ type: USER_DETAIL_RESET });
@@ -62,7 +60,6 @@ export const logout = () => (dispatch) => {
 
 export const register = (name, email, password) => async (dispatch) => {
   // const {hostname} =useContext(MyContext)
-  const myDomain = hostname
   try {
     dispatch({ type: USER_REGISTER_REQUEST });
     const config = {
@@ -73,7 +70,7 @@ export const register = (name, email, password) => async (dispatch) => {
     const { data } = await axios.post(
       window.location.protocol +
       "//" +
-      myDomain+
+      hostname+
       "/api/users/register/",
       { name: name, email: email, password: password },
       config
@@ -94,7 +91,6 @@ export const register = (name, email, password) => async (dispatch) => {
 
 export const getUserDetails = (id) => async (dispatch, getState) => {
   // const {hostname} =useContext(MyContext)
-  const myDomain = hostname
   try {
     dispatch({ type: USER_DETAIL_REQUEST });
     const {
@@ -104,10 +100,9 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${userInfo.access}`,
-      },
-    };
-    // const { data } = await axios.get(window.location.protocol + "//" + myDomain+ `/api/users/${id}/`,config);
-    const { data } = await axios.get(window.location.protocol + "//" + myDomain+ `/api/users/profile/`,config);
+      },};
+    // const { data } = await axios.get(window.location.protocol + "//" + hostname+ `/api/users/${id}/`,config);
+    const { data } = await axios.get(window.location.protocol + "//" + hostname+ `/api/users/profile/`,config);
     dispatch({ type: USER_DETAIL_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -120,9 +115,8 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
   }
 };
 
-export const updateUserProfile = (user) => async (dispatch, getState) => {
+export const updateUserProfile = (user, img) => async (dispatch, getState) => {
   // const {hostname} =useContext(MyContext)
-  const myDomain = hostname
   try {
     dispatch({ type: USER_UPDATE_PROFILE_REQUEST });
     const {
@@ -143,10 +137,18 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
       },
     };
 
+    // await axios.post(
+    //   window.location.protocol +
+    //     "//" +
+    //     hostname+
+    //     `/api/users/profile/upload/`,
+    //   img,
+    //   config2
+    // );
     const {data} = await axios.put(
       window.location.protocol +
         "//" +
-        myDomain+
+        hostname+
         `/api/users/profile/update/`,
       user,
       config2

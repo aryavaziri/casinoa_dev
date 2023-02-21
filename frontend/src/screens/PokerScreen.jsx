@@ -34,7 +34,6 @@ const useSocket = (id, access_token, depo) => {
         if (!id || !access_token) return
         // create socket
         try {
-
             setSocket(new WebSocket(`ws://${hostname}/ws/poker/${id}/?token=${access_token}&deposite=${depo}`))
         }
         catch { return }

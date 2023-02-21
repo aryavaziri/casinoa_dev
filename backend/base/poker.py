@@ -15,7 +15,7 @@ class Poker:
         self.pk = int(pk)
         self.game = Game.objects.filter(table=pk).last()
         self.table = Table.objects.get(_id=pk)
-        # self.newGame()
+        self.newGame()
 
     def shuffle(self, count):
         self.cards = list(range(1, 53))
@@ -153,7 +153,8 @@ class Poker:
         small = 0
         online = self.table.JSON_table['online']
         new_order = []
-        online = [1, 3]
+        pre_small = oldGame.small_blind  # get ID of previous small blind on the table
+        # online = [1, 3]
 
         # if not (oldGame.isPlayed):
         for player in oldGame.player.all().order_by('joined_at'):
@@ -164,7 +165,6 @@ class Poker:
         print(new_order)
         self.game = Game.objects.create(table=self.table)
         game = self.game
-        pre_small = oldGame.small_blind  # get ID of previous small blind on the table
         try:
             i = 0
             while i < len(online):
@@ -186,8 +186,7 @@ class Poker:
         game.JSON_data['playerCards'] = self.playerCards
         game.JSON_data['orders'] = new_order
         for p in range(len(new_order)):
-            player = Player.objects.get(
-                user=new_order[(p + new_order.index(small)) % len(new_order)])
+            player = Player.objects.get(user=new_order[(p + new_order.index(small)) % len(new_order)])
             game.player.add(player)
             player.small = False
             player.big = False

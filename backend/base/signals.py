@@ -17,11 +17,10 @@ def balancer(sender, instance, **kwargs):
 def createGame(sender, instance, **kwargs):
     table = instance
     try:
-        if len(Game.objects.filter(table=table).last()):
-            print("shit")
+        if len(Game.objects.filter(table=table)):
             pass
     except:
-        # print("ROUND FROM SIGNAL EXCEPT------------------------------->>>>>>>>>>>>>>>>>>")
+        print("ROUND FROM SIGNAL EXCEPT------------------------------->>>>>>>>>>>>>>>>>>")
         game = Game.objects.create(table=table)
         game.save()
 

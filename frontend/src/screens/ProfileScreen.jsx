@@ -73,7 +73,7 @@ function ProfileScreen() {
         if (password && (password != confirmPassword)) {
             setMessage('Passwords do not match')
         } else {
-            dispatch(updateUserProfile({ 'id': user[0].id, 'name': name, 'email': email, 'password': password, 'img': img }))
+            dispatch(updateUserProfile({ 'id': user[0].id, 'name': name, 'email': email, 'password': password, 'img': img }, img))
         }
     }
     const ref = useRef()
@@ -101,7 +101,7 @@ function ProfileScreen() {
                                 {user[1] ?
                                     (img == "") ?
                                     <div className='border overflow-hidden rounded-circle mb-3' onClick={imgClick} style={{ aspectRatio: "1/1", height: "150px" }}>
-                                            <img className='h-100 w-100 border mb-3' style={{ objectFit: "cover" }} src={window.location.protocol + "//" + myDomain+ "/static" + user[1].image} alt={user[1].nick_name} />
+                                            <img className='h-100 w-100 border mb-3' style={{ objectFit: "cover" }} src={window.location.protocol + "//" + myDomain+ user[1].image} alt={user[1].nick_name} />
                                         </div>
                                         : <div className='border overflow-hidden rounded-circle mb-3' onClick={imgClick} style={{ aspectRatio: "1/1", height: "150px" }}>
                                         <img className='h-100 w-100 border mb-3' style={{ objectFit: "cover" }} src={URL.createObjectURL(img)} alt={user[1].nick_name} />

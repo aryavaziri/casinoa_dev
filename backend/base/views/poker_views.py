@@ -36,8 +36,9 @@ def gameLeave(request, pk):
         player.balance = 0
     player.leftAt = datetime.datetime.now()
     player.save()
-    game.player.remove(player)
-    game.save()
+    if not (game.isPlayed):
+        game.player.remove(player)
+        game.save()
     serializer = GameSerializer(game, many=False)
     return Response(serializer.data)
 
@@ -72,9 +73,3 @@ def newGame(request, pk):
     return Response(serializer.data)
 
     
-
-
-
-
-
-# def game_start(pk):

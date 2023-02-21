@@ -52,7 +52,6 @@ class PokerConsumer(AsyncWebsocketConsumer):
         game.player.add(player)
         game.save
         
-
     @database_sync_to_async
     def gameLeave(self):
         # player = Player.objects.get(user=self.user['id'])
@@ -67,17 +66,16 @@ class PokerConsumer(AsyncWebsocketConsumer):
         table = Table.objects.get(_id=self.table)
         try:
             table.JSON_table['online'].remove(self.user['id'])
+            table.save()
         except:
             pass
         print(table.JSON_table)
-        table.save()
 
     @database_sync_to_async
     def dealCkeck(self):
         table = Table.objects.get(_id=self.table)
         online = table.JSON_table['online']
         game = Game.objects.filter(table=table).last()
-        
 
         if len(online)>1:  #check if new game can start
             if (not game.isPlayed) or (game.isPlayed and game.isFinished) :
@@ -91,7 +89,6 @@ class PokerConsumer(AsyncWebsocketConsumer):
                 if(counter>1):
                     print("NEW GAME")
                     # if(game.isPlayed)
-                    game.isPlayed = True
                     game.gameObject = Poker(self.table, counter)
                     game.save()
 
