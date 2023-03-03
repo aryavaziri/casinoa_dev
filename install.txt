@@ -17,9 +17,10 @@ git clone https://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@github.com/aryavaziri
 git pull https://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@github.com/aryavaziri/casinoa_dev.git
 
 
-78.135.89.244
+ssh root@78.135.89.244
+ssh root@143.42.54.186
 
-
+daphne -b 0.0.0.0 backend.asgi:application
 
 Redis:
     pip install virtualenv ; virtualenv myenv ; Set-ExecutionPolicy Unrestricted -Scope Process;.\myenv\Scripts\activate

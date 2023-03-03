@@ -1,29 +1,23 @@
-version: "3.8"
+version: '3.8'
+
 services:
-  backend:
-    build: ./backend
+  django_daphne:
     volumes:
-      - ./backend:/app/backend
+      - static:/static
+    env_file:
+      - .env
+    build:
+      context: .
     ports:
       - "8000:8000"
-    stdin_open: true
-    tty: true
-    environment:
-      - DJANGO_SETTINGS_MODULE=backend.settings
-    command: python3 manage.py runserver 0.0.0.0:8000
-    restart: always
-
-  frontend:
-    build: ./frontend
+  nginx:
+    build: ./nginx
     volumes:
-      - ./frontend:/app
-      # One-way volume to use node_modules from inside image
-      - /app/node_modules
+      - static:/static
     ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=development
+      - "80:80"
     depends_on:
-      - backend
-    command: npm start
-    restart: always
+      - django_daphne
+
+volumes:
+  static:
