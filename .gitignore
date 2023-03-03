@@ -14,9 +14,9 @@ deploy.sh
 
 static/
 build/
-settings.py
-install.txt
-req.txt
+# settings.py
+# install.txt
+# req.txt
 
 # Distribution / packaging
 .Python
