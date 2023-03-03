@@ -6,12 +6,16 @@ from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-a&*y%opuyl69rf^jen0r4+90e$#=#la*#e%_!=pazj1q@)it#s'
+# SECRET_KEY = 'django-insecure-a&*y%opuyl69rf^jen0r4+90e$#=#la*#e%_!=pazj1q@)it#s'
+# DEBUG = True
+SECRET_KEY = os.getenv('SECRET_KEY')
+DEBUG = os.getenv('DEBUG')
 
-DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', '127.0.0.1:3000', '78.135.89.244','143.42.54.186'
-                 'www.casinoa.nl','casinoa.nl', 'localhost', 'localhost:3000']
+                 'www.casinoa.nl','casinoa.nl', 'localhost', 'localhost:3000',
+                 '*',
+                 ]
 
 
 INSTALLED_APPS = [
@@ -172,9 +176,7 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
+STATIC_ROOT = '/static/'
 STATIC_URL = '/static/'
 MEDIA_URL = '/img/'
 
