@@ -10,6 +10,7 @@ class CustomUserManager(UserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         extra_fields.setdefault('is_active', True)
+        print(password)
         if password is not None:
             user.set_password(password)
         else:
