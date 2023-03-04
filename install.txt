@@ -11,8 +11,6 @@ WINDOWS:
         cd Frontend;npm i;npm start
 
 
-7DAY git token = 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
-
 git clone https://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@github.com/aryavaziri/casinoa_dev.git
 git pull https://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@github.com/aryavaziri/casinoa_dev.git
 
@@ -22,11 +20,5 @@ ssh root@143.42.54.186
 
 daphne -b 0.0.0.0 backend.asgi:application
 
-Redis:
-    pip install virtualenv ; virtualenv myenv ; Set-ExecutionPolicy Unrestricted -Scope Process;.\myenv\Scripts\activate
-
-    pip install -r requirements.txt
-
-    python data_loader.py --dir data/books --redis redis://default:st9JbKIVx3I2pzXyr0zAQNOBuwM3Zrxe@redis-16850.c253.us-central1-1.gce.cloud.redislabs.com:16850/
-
-    r = redis.Redis(host='redis://default:st9JbKIVx3I2pzXyr0zAQNOBuwM3Zrxe@redis-16850.c253.us-central1-1.gce.cloud.redislabs.com', port=16850, db=0)
+python data_loader.py --dir data/books --redis redis://default:st9JbKIVx3I2pzXyr0zAQNOBuwM3Zrxe@redis-16850.c253.us-central1-1.gce.cloud.redislabs.com:16850/
+r = redis.Redis(host='redis://default:st9JbKIVx3I2pzXyr0zAQNOBuwM3Zrxe@redis-16850.c253.us-central1-1.gce.cloud.redislabs.com', port=16850, db=0)
