@@ -12,7 +12,7 @@ deploy.sh
 
 
 
-static/
+# static/
 # build/
 # settings.py
 # install.txt
