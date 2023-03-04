@@ -135,7 +135,7 @@ DATABASES = {
     }
 }
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost", "*",]
+CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://143.42.54.186/","https://localhost", "https://143.42.54.186/",]
 
 INTERNAL_IPS = [
     "127.0.0.1",
