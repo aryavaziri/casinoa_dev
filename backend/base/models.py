@@ -68,7 +68,7 @@ class Table(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     _id = models.AutoField(primary_key=True, editable=False)
     name = models.CharField(max_length=200, null=True, blank=True)
-    img = models.ImageField(null=True)
+    img = models.ImageField(null=True,default="/poker1.webp")
     type = models.IntegerField(choices=types, default=0)
     max = models.IntegerField(choices=maxs, default=1)
     min = models.IntegerField(default=0)

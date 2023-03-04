@@ -3,11 +3,7 @@ import os
 from pathlib import Path
 from datetime import timedelta
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# SECRET_KEY = 'django-insecure-a&*y%opuyl69rf^jen0r4+90e$#=#la*#e%_!=pazj1q@)it#s'
-# DEBUG = True
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG')
 
@@ -79,14 +75,13 @@ SIMPLE_JWT = {
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
-        # "BACKEND": "channels_redis.core.RedisChannelLayer",
-        # "CONFIG": {
-        #     "hosts": [
-        #         # ("localhost", 6379),
-        #         "redis://default:st9JbKIVx3I2pzXyr0zAQNOBuwM3Zrxe@redis-16850.c253.us-central1-1.gce.cloud.redislabs.com:16850/0",
-        #     ],
-        # },
+        # "BACKEND": "channels.layers.InMemoryChannelLayer",
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.getenv('REDIS') 
+                # ("localhost", 6379),
+            ],
+        },
     },
 }
 
