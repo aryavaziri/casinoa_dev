@@ -135,6 +135,8 @@ DATABASES = {
     }
 }
 
+CSRF_TRUSTED_ORIGINS = ["http://localhost"]
+
 INTERNAL_IPS = [
     "127.0.0.1",
     "127.0.0.1:3000",
@@ -182,11 +184,10 @@ MEDIA_URL = '/img/'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
-    # BASE_DIR / 'build/static',
+    # BASE_DIR / 'static/build/static',
 
 ]
-
-MEDIA_ROOT = 'static/img'
+MEDIA_ROOT = '/static/img/'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
