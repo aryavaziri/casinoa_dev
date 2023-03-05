@@ -7,7 +7,7 @@ RUN pip install -r requirements.txt
 
 COPY ./backend /app
 COPY ./frontend/build /app/static/build
-RUN chmod -R 755 /app/static
+RUN chmod -R 755 /app
 
 WORKDIR /app
 
