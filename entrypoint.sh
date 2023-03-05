@@ -1,7 +1,8 @@
 #!/bin/sh
 
 echo "MIGRATE"
-python manage.py migrate --no-input
+python manage.py makemigrations base
+python manage.py migrate
 echo "COLLECTSTATIC"
 python manage.py collectstatic --no-input
 echo "SUPERUSER"

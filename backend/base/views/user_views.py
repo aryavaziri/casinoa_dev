@@ -29,7 +29,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
-    print(TokenObtainPairView)
     serializer_class = MyTokenObtainPairSerializer
 
 
@@ -68,8 +67,6 @@ def updateUserProfile(request):
     player.nick_name = data['name']
     if data['img'] != '':
         player.image = data['img']
-    # print(data)
-    # print(player.image)
     player.save()
 
 

@@ -4,20 +4,19 @@ services:
   db:
     image: postgres
     env_file:
-      - .env2
+      - .env
     volumes:
-    - db:/var/lib/postgresql/data/
-    restart: always
+      - postgres_data:/var/lib/postgresql/data/
   django_daphne:
     volumes:
       - static:/static
+      - ./app/:/usr/src/app/
     env_file:
       - .env
     build:
       context: .
     ports:
       - "8000:8000"
-    restart: always
     depends_on:
       - db
   nginx:
@@ -28,8 +27,7 @@ services:
       - "80:80"
     depends_on:
       - django_daphne
-    restart: always
 
 volumes:
   static:
-  db:
+  postgres_data:

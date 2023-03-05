@@ -133,7 +133,8 @@ TEMPLATES = [
 # }
 
 DATABASES = {
-    'default': {
+    'default': 
+    {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres',
