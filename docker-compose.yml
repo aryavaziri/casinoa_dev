@@ -3,6 +3,10 @@ version: "3.7"
 services:
   db:
     image: postgres
+    env_file:
+      - .env2
+    volumes:
+    - db:/var/lib/postgresql/data/
     restart: always
   django_daphne:
     volumes:
@@ -28,3 +32,4 @@ services:
 
 volumes:
   static:
+  db:

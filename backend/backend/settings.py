@@ -135,11 +135,11 @@ TEMPLATES = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'poker',
+        'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'HJames@MDD2023',
-        'HOST': 'localhost',
-        'PORT': '8200',
+        'HOST': 'db',
+        'PORT': '5432',
     }
 }
 
