@@ -5,7 +5,8 @@ from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
-DEBUG = bool(os.getenv('DEBUG',0))
+# DEBUG = bool(os.getenv('DEBUG',0))
+DEBUG = False
 
 
 ALLOWED_HOSTS = ['127.0.0.1', '127.0.0.1:3000', '78.135.89.244','143.42.54.186'
@@ -176,13 +177,13 @@ USE_TZ = True
 
 STATIC_ROOT = '/static/'
 STATIC_URL = '/static/'
-MEDIA_ROOT = '/static/img/'
-MEDIA_URL = '/img/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
     # BASE_DIR / 'static/build/static',
 ]
+MEDIA_URL = '/img/'
 
+MEDIA_ROOT = 'static/img'
 
 
 CORS_ALLOW_ALL_ORIGINS = True

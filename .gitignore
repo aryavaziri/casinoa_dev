@@ -14,7 +14,7 @@ deploy.sh
 db.sqlite3
 # static/
 # build/
-# install.txt
+install.txt
 
 # Distribution / packaging
 .Python
