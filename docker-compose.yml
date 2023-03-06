@@ -14,8 +14,7 @@ services:
       - "6379:6379"
   django_daphne:
     volumes:
-      - static:/static
-      - ./app/:/usr/src/app/
+      - static:/app/static
     env_file:
       - .env
     build:
@@ -28,7 +27,7 @@ services:
   nginx:
     build: ./nginx
     volumes:
-      - static:/static
+      - static:/app/static
     ports:
       - "80:80"
     depends_on:

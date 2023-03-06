@@ -9,7 +9,7 @@ COPY package.json yarn.lock /app/
 RUN npm i react
 
 # Add rest of the client code
-COPY . /app/
+COPY . /app/frontend/
 
 EXPOSE 3000
 

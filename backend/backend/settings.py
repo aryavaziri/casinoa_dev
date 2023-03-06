@@ -173,12 +173,12 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-STATIC_ROOT = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-    # BASE_DIR / 'static/build/static',
+    # BASE_DIR / 'static',
+    BASE_DIR / 'static/build/static',
 ]
 MEDIA_URL = '/img/'
 
