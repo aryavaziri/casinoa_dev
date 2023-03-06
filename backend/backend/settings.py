@@ -5,7 +5,7 @@ from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
-DEBUG = bool(int(os.getenv('DEBUG',0)))
+DEBUG = bool(os.getenv('DEBUG',0))
 
 
 ALLOWED_HOSTS = ['127.0.0.1', '127.0.0.1:3000', '78.135.89.244','143.42.54.186'
@@ -126,7 +126,7 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': 'db',
+        'HOST': os.getenv('POSTGRES_HOST','db'),
         'PORT': '5432',
     }
 }
