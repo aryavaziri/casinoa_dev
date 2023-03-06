@@ -1,0 +1,52 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+  redis:
+    image: redis
+    command: redis-server
+    ports:
+      - "6379:6379"
+  django_daphne:
+    volumes:
+      - static:/static
+      - ./app/:/usr/src/app/
+    env_file:
+      - .env
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+  nginx:
+    build: ./nginx
+    volumes:
+      - static:/static
+    ports:
+      - "80:80"
+    depends_on:
+      - django_daphne
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend:/app
+      # One-way volume to use node_modules from inside image
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend
+    command: npm start
+
+volumes:
+  static:
+  postgres_data:
