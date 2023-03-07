@@ -64,9 +64,16 @@ def action(request, pk):
     user = request.user
     new_bet = int(request.data["bet"])
     
+    try:
     if game.isFinished and action=="NewGame":
-        if len(table.JSON_table['online'])>1:
-            Poker(pk)
+        try:
+            if game.isFinished:
+                if len(table.JSON_table['online'])>1:
+                    Poker(pk)
+        except:
+            if len(table.JSON_table['online'])>1:
+                Poker(pk)
+
     else:
         if game:
             Poker.userAction(game.gameObject, action, user.id, new_bet)

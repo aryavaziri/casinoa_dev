@@ -6,13 +6,13 @@ class BaseConfig(AppConfig):
 
     def ready(self):
         import base.signals
-        from .models import Table, Player
-        tables = Table.objects.all()
-        players = Player.objects.all()
-        for table in tables:
-            table.JSON_table['online']= []
-            table.save()
-        for player in players:
-            player.credit_total += player.balance
-            player.balance = 0
-            player.save()
+        # from .models import Table, Player
+        # tables = Table.objects.all()
+        # players = Player.objects.all()
+        # for table in tables:
+        #     table.JSON_table['online']= []
+        #     table.save()
+        # for player in players:
+        #     player.credit_total += player.balance
+        #     player.balance = 0
+        #     player.save()
