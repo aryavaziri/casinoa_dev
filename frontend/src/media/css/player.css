@@ -89,14 +89,14 @@
   animation: turn alternate-reverse ease-in-out 0.5s infinite;
 }
 @keyframes turn {
-  from {  box-shadow: 0 0 20px 8px white;}
+  from {  box-shadow: 0 0 20px 8px rgba(255, 255, 255, 0.643);}
   to {  box-shadow: 0 0 0px 0px gray;}
 }
 @keyframes color_change {
   0% {  background: rgba(255, 255, 255, 0.367);width:20%;}
   50% { background: rgb(190, 190, 190);}
   90% { background: rgba(255, 109, 109, 0.825);width: 90%;}
-  100% { background: rgb(255, 0, 0);width: 100%;}
+  100% { background: rgb(255, 25, 25);width: 100%;}
 }
 .poker-player>div {
   overflow: hidden;

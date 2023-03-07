@@ -156,6 +156,8 @@ function PokerScreen() {
             }
         }
     }
+    // const action_turn = gameDBExist && (info.turn != userInfo.id)
+    const action_turn = false
     // console.log(orderT)
 
     return (
@@ -270,11 +272,11 @@ function PokerScreen() {
             <div className='row m-0 bg-dark p-0' style={{ height: "25vh" }}>
                 <div className='col-5 d-flex justify-content-evenly py-0 flex-wrap'>
                     <Button variant='danger' className=' m-1 h-25 ' onClick={() => leave()}>Sit out</Button>
-                    <Button disabled={gameDBExist && (info.turn != userInfo.id)} className=' my-1 h-25 ' onClick={() => fold()}>Fold</Button>
-                    <Button disabled={gameDBExist && (info.turn != userInfo.id)} className=' my-1 h-25 ' onClick={() => check()}>Check</Button>
-                    <Button disabled={gameDBExist && (info.turn != userInfo.id)} className=' my-1 h-25 ' onClick={() => call()}>Call</Button>
-                    <Button disabled={gameDBExist && (info.turn != userInfo.id)} className=' my-1 h-25 ' onClick={() => raise()}>Raise</Button>
-                    <Button disabled={gameDBExist && (info.turn != userInfo.id)} className=' my-1 h-25 ' onClick={() => allin()}>All-in</Button>
+                    <Button disabled={action_turn} className=' my-1 h-25 ' onClick={() => fold()}>Fold</Button>
+                    <Button disabled={action_turn} className=' my-1 h-25 ' onClick={() => check()}>Check</Button>
+                    <Button disabled={action_turn} className=' my-1 h-25 ' onClick={() => call()}>Call</Button>
+                    <Button disabled={action_turn} className=' my-1 h-25 ' onClick={() => raise()}>Raise</Button>
+                    <Button disabled={action_turn} className=' my-1 h-25 ' onClick={() => allin()}>All-in</Button>
                     <Button variant='warning' className=' m-1 h-25 ' onClick={handleShow}>LOG</Button>
                     <Button variant='warning' disabled={gameDBExist && (!info.isFinished)} className=' my-1 h-25' onClick={() => newGame()}>New-game</Button>
                     {gameDBExist && <span className='text-light'>POT:{gameInfo.info.pot}/ BET:{gameInfo.info.bet}/ STAGE:{gameInfo.info.stage}</span>}

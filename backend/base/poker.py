@@ -34,14 +34,23 @@ class Poker:
     def userAction(self, action, userID, new_bet=0):
         order = self.game.JSON_data['orders']
         bet = self.game.bet
+        if (action == "leave"):
+            player = Player.objects.get(user=userID)
+            player.credit_total += player.balance
+            player.balance = 0
+            player.status = 1
+            player.save()
+            return
+
         if not (self.game.turn == userID):
-            # return
-            player = Player.objects.get(user=self.game.turn)
+            # player = Player.objects.get(user=self.game.turn)
+            return
         else:
             player = Player.objects.get(user=self.game.turn)
 
-        if ((action == "check" and bet > player.bet) or (action == "call" and bet == 0) or (action == "raise" and ((new_bet < bet*2) or ((bet == 0) and (new_bet < self.table.small * 2))))):
+        if ((action == "check" and bet > player.bet) or (action == "call" and bet == player.bet) or (action == "raise" and ((new_bet < bet*2) or ((bet == 0) and (new_bet < self.table.small * 2))))):
             print("adam bash")
+            return
         else:
             if (action == "fold"):
                 player.status = 1
@@ -78,12 +87,12 @@ class Poker:
             player.turn = False
             player.save()
 
-            if (self.game.JSON_data['bets'].count(0)):
+
+            if (not self.game.isFinished) and (self.game.JSON_data['bets'].count(0)):
                 self.game.turn = (
                     order[(order.index(self.game.turn)+1) % len(order)])
                 while (Player.objects.get(user=self.game.turn).status == 1 or Player.objects.get(user=self.game.turn) == 5):
-                    self.game.turn = (
-                        order[(order.index(self.game.turn)+1) % len(order)])
+                    self.game.turn = (order[(order.index(self.game.turn)+1) % len(order)])
                 nextPlayer = Player.objects.get(user=self.game.turn)
                 nextPlayer.turn = True
                 nextPlayer.save()
@@ -99,8 +108,7 @@ class Poker:
                         temp.bet = 0
                         temp.save()
                 print("next round")
-                self.game.JSON_data['bets'] = [
-                    (i if (i == 1 or i == 5) else 0) for i in self.game.JSON_data['bets']]
+                self.game.JSON_data['bets'] = [(i if (i == 1 or i == 5) else 0) for i in self.game.JSON_data['bets']]
                 if (self.game.stage <= 4):
                     self.game.stage += 1
                 self.game.turn = self.game.small_blind
@@ -128,23 +136,23 @@ class Poker:
         self.post_action()
 
     def post_action(self):
+        
         game = self.game
         temp_fold = 0
         for player in game.player.all():
             if (player.status == 1):
                 temp_fold += 1
-            if (temp_fold >= game.player.count()-1):
+            if (temp_fold >= game.player.count()-1): #to stop blinking turn whenever the game is finished
                 self.game.player.filter(turn=True).update(turn=False)
                 self.game.turn = 0
                 game.isFinished = True
         game.save()
-        async_to_sync(get_channel_layer().group_send)(str(self.table._id), {'type': 'disp'})
 
         if (game.isFinished):
             print("Next game is going to start")
             # time.sleep(5)  #goes to the next game after 5 seconds
             # self.newGame()
-            async_to_sync(get_channel_layer().group_send)(str(self.table._id), {'type': 'disp'})
+        async_to_sync(get_channel_layer().group_send)(str(self.table._id), {'type': 'disp'})
 
     def newGame(self, pk):
         table = Table.objects.get(_id=self.pk)
