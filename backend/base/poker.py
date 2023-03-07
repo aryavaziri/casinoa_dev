@@ -16,6 +16,85 @@ class Poker:
         self.table = Table.objects.get(_id=pk)
         self.newGame(pk)
 
+    def newGame(self, pk):
+        table = Table.objects.get(_id=self.pk)
+        oldGame = Game.objects.filter(table=pk).last()
+        small = 0
+        online = self.table.JSON_table['online']
+        new_order = []
+
+        if oldGame is not None:
+            pre_small = oldGame.small_blind  # get ID of previous small blind on the table
+            for player in oldGame.player.all().order_by('joined_at'):
+                if (player.user.id in online) and (player.balance > (table.small*2)):
+                    new_order.append(player.user.id)
+            for user in online:
+                if not new_order.count(user):
+                    new_order.append(user)
+            try:
+                i = 0
+                while i < len(online):
+                    small = online[(online.index(pre_small) + 1 + i) % len(online)]
+                    if (new_order.count(small)):
+                        break
+                    i += 1
+            except:
+                small = online[0]
+        else:
+            small = online[0]
+            for id in online:
+                player = Player.objects.get(user=id)
+                print(player)
+                print(player.balance)
+                if (player.balance > (table.small*2)):
+                    new_order.append(id)
+
+        print("<<<<<<new_order>>>>>>>>>")
+        print(new_order)
+
+        self.game = Game.objects.create(table=self.table)
+        game = self.game
+
+        self.shuffle(len(new_order))
+
+        game.small_blind = small
+        game.bet = self.table.small*2
+        game.pot = self.table.small*3
+        game.turn = new_order[(new_order.index(small) + 2) % len(new_order)]
+        game.JSON_data['ground'] = self.ground
+        game.JSON_data['bets'] = [0] * len(new_order)
+        game.JSON_data['playerCards'] = self.playerCards
+        game.JSON_data['orders'] = new_order
+        for p in range(len(new_order)):
+            player = Player.objects.get(user=new_order[(p + new_order.index(small)) % len(new_order)])
+            game.player.add(player)
+            player.small = False
+            player.big = False
+            player.turn = False
+            player.dealer = False
+            player.bet = 0
+            player.status = 0
+            if (p == 0):
+                player.small = True
+                player.bet = self.table.small
+            elif (p == 1):
+                player.big = True
+                player.bet = self.table.small * 2
+            if (p == len(new_order)-1):
+                player.dealer = True
+            if (p == 2 % len(new_order)):
+                player.turn = True
+            player.balance -= player.bet
+            player.card1 = game.JSON_data['playerCards'][(
+                p + new_order.index(small)) % len(new_order)][0]
+            player.card2 = game.JSON_data['playerCards'][(
+                p + new_order.index(small)) % len(new_order)][1]
+            player.save()
+        game.isPlayed = True
+        game.gameObject = self
+        game.save()
+        async_to_sync(get_channel_layer().group_send)(str(self.table._id), {'type': 'disp'})
+
     def shuffle(self, count):
         self.cards = list(range(1, 53))
         random.shuffle(self.cards)
@@ -152,83 +231,5 @@ class Poker:
             print("Next game is going to start")
             # time.sleep(5)  #goes to the next game after 5 seconds
             # self.newGame()
-        async_to_sync(get_channel_layer().group_send)(str(self.table._id), {'type': 'disp'})
-
-    def newGame(self, pk):
-        table = Table.objects.get(_id=self.pk)
-        oldGame = Game.objects.filter(table=pk).last()
-        small = 0
-        online = self.table.JSON_table['online']
-        new_order = []
-
-        if oldGame is not None:
-            print("oldGame is not None")
-            print(oldGame)
-            pre_small = oldGame.small_blind  # get ID of previous small blind on the table
-            for player in oldGame.player.all().order_by('joined_at'):
-                if (player.user.id in online) and (player.balance > (table.small*2)):
-                    new_order.append(player.user.id)
-            try:
-                i = 0
-                while i < len(online):
-                    small = online[(online.index(pre_small) + 1 + i) % len(online)]
-                    if (new_order.count(small)):
-                        break
-                    i += 1
-            except:
-                small = online[0]
-        else:
-            small = online[0]
-            for id in online:
-                player = Player.objects.get(user=id)
-                print(player)
-                print(player.balance)
-                if (player.balance > (table.small*2)):
-                    new_order.append(id)
-
-        print("<<<<<<new_order>>>>>>>>>")
-        print(new_order)
-
-        self.game = Game.objects.create(table=self.table)
-        game = self.game
-
-        self.shuffle(len(new_order))
-
-        game.small_blind = small
-        game.bet = self.table.small*2
-        game.pot = self.table.small*3
-        game.turn = new_order[(new_order.index(small) + 2) % len(new_order)]
-        game.JSON_data['ground'] = self.ground
-        game.JSON_data['bets'] = [0] * len(new_order)
-        game.JSON_data['playerCards'] = self.playerCards
-        game.JSON_data['orders'] = new_order
-        for p in range(len(new_order)):
-            player = Player.objects.get(user=new_order[(p + new_order.index(small)) % len(new_order)])
-            game.player.add(player)
-            player.small = False
-            player.big = False
-            player.turn = False
-            player.dealer = False
-            player.bet = 0
-            player.status = 0
-            if (p == 0):
-                player.small = True
-                player.bet = self.table.small
-            elif (p == 1):
-                player.big = True
-                player.bet = self.table.small * 2
-            if (p == len(new_order)-1):
-                player.dealer = True
-            if (p == 2 % len(new_order)):
-                player.turn = True
-            player.balance -= player.bet
-            player.card1 = game.JSON_data['playerCards'][(
-                p + new_order.index(small)) % len(new_order)][0]
-            player.card2 = game.JSON_data['playerCards'][(
-                p + new_order.index(small)) % len(new_order)][1]
-            player.save()
-        game.isPlayed = True
-        game.gameObject = self
-        game.save()
         async_to_sync(get_channel_layer().group_send)(str(self.table._id), {'type': 'disp'})
 
