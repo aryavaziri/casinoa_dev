@@ -85,40 +85,8 @@ export const gameEnter = (id, deposite) => async (dispatch, getState) => {
   }
 };
 
-export const gameLeave = (id) => async (dispatch, getState) => {
-  // const {hostname} =useContext(MyContext)
-  const myDomain = hostname;
-  try {
-    dispatch({ type: GAME_LEAVE_REQUEST });
-    const {
-      userLogin: { userInfo },
-    } = getState();
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${userInfo.access}`,
-      },
-    };
 
-    const { data } = await axios.get(
-      window.location.protocol + "//" + myDomain + `/api/poker/${id}/leave/`,
-      config
-    );
-    dispatch({ type: GAME_DETAILS_SUCCESS, payload: data });
-    dispatch({ type: GAME_LEAVE_SUCCESS });
-    // dispatch({ type: GAME_LEAVE_SUCCESS, payload: data });
-  } catch (error) {
-    dispatch({
-      type: GAME_LEAVE_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
-    });
-  }
-};
-
-export const gameAction =
+export const gameAction = 
   (id, bet, actionType) => async (dispatch, getState) => {
     // const {hostname} =useContext(MyContext)
     const myDomain = hostname;
@@ -146,6 +114,9 @@ export const gameAction =
         case "call":
           actSwitch = "call";
           break;
+        case "leave":
+          actSwitch = "leave";
+          break;
         case "raise":
           actSwitch = "raise";
           break;
@@ -153,7 +124,7 @@ export const gameAction =
           actSwitch = "allin";
           break;
         case "newGame":
-          actSwitch = "newGame";
+          actSwitch = "NewGame";
           break;
       }
       act2.act = actSwitch;

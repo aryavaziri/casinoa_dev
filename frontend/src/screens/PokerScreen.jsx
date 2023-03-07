@@ -107,7 +107,7 @@ function PokerScreen() {
     // }
     const leave = () => {
         socket.close()
-        dispatch(gameLeave(id))
+        dispatch(gameAction(id, 0, "leave"))
         navigate("/")
     }
     const fold = () => { dispatch(gameAction(id, 0, "fold")) }
@@ -116,12 +116,17 @@ function PokerScreen() {
     const raise = () => { dispatch(gameAction(id, bet, "raise")) }
     const allin = () => { dispatch(gameAction(id, 0, "allin")) }
     const newGame = () => { dispatch(gameAction(id, 0, "newGame")) }
-    if (gameInfo.info) {
+    let gameDBExist = false
+    if(gameInfo && info && info.JSON_ground){gameDBExist=true}
+    console.log(gameDBExist)
+
+
+    if (gameDBExist) {
         for (let i = 0; i < 5; i++) {
             ground[i] = info.JSON_ground.ground[i]
         }
     }
-    if (gameInfo.info) {
+    if (gameDBExist) {
         for (let i = 0; i < info.JSON_data.orders.length; i++) {
             order[i] = info.JSON_data.orders[i]
         }
@@ -157,7 +162,7 @@ function PokerScreen() {
         <>
 
             <div className='fluid m-0 bg-success pt-4 position-relative ' style={{ height: "70vh" }}>
-                {gameInfo.info &&
+                {gameDBExist &&
                     <div className='position-absolute ground d-flex flex-column'>
                         <div className='col-6 d-flex' style={{ height: "20vh" }}>
                             <div className='h-100 col m-0 p-1'><Card2 num={ground[0]} /></div>
@@ -186,7 +191,7 @@ function PokerScreen() {
                 }
                 <div className='p-0 m-0 arrange d-flex'>
                     <div className='l d-flex align-items-center flex-column-reverse justify-content-around'>
-                        {gameInfo.info &&
+                        {gameDBExist &&
                             orderL.map((val) => {
                                 return (
                                     info.player.map(v => {
@@ -201,7 +206,7 @@ function PokerScreen() {
                         }
                     </div>
                     <div className='t d-flex justify-content-around'>
-                        {gameInfo.info &&
+                        {gameDBExist &&
                             orderT.map((val) => {
                                 return (
                                     info.player.map(v => {
@@ -216,7 +221,7 @@ function PokerScreen() {
                         }
                     </div>
                     <div className='r d-flex align-items-center flex-column-reverse justify-content-around'>
-                        {gameInfo.info &&
+                        {gameDBExist &&
                             orderR.map((val) => {
                                 return (
                                     info.player.map(v => {
@@ -265,14 +270,14 @@ function PokerScreen() {
             <div className='row m-0 bg-dark p-0' style={{ height: "25vh" }}>
                 <div className='col-5 d-flex justify-content-evenly py-0 flex-wrap'>
                     <Button variant='danger' className=' m-1 h-25 ' onClick={() => leave()}>Sit out</Button>
-                    <Button disabled={gameInfo.info && (info.turn != userInfo.id)} className=' my-1 h-25 ' onClick={() => fold()}>Fold</Button>
-                    <Button disabled={gameInfo.info && (info.turn != userInfo.id)} className=' my-1 h-25 ' onClick={() => check()}>Check</Button>
-                    <Button disabled={gameInfo.info && (info.turn != userInfo.id)} className=' my-1 h-25 ' onClick={() => call()}>Call</Button>
-                    <Button disabled={gameInfo.info && (info.turn != userInfo.id)} className=' my-1 h-25 ' onClick={() => raise()}>Raise</Button>
-                    <Button disabled={gameInfo.info && (info.turn != userInfo.id)} className=' my-1 h-25 ' onClick={() => allin()}>All-in</Button>
+                    <Button disabled={gameDBExist && (info.turn != userInfo.id)} className=' my-1 h-25 ' onClick={() => fold()}>Fold</Button>
+                    <Button disabled={gameDBExist && (info.turn != userInfo.id)} className=' my-1 h-25 ' onClick={() => check()}>Check</Button>
+                    <Button disabled={gameDBExist && (info.turn != userInfo.id)} className=' my-1 h-25 ' onClick={() => call()}>Call</Button>
+                    <Button disabled={gameDBExist && (info.turn != userInfo.id)} className=' my-1 h-25 ' onClick={() => raise()}>Raise</Button>
+                    <Button disabled={gameDBExist && (info.turn != userInfo.id)} className=' my-1 h-25 ' onClick={() => allin()}>All-in</Button>
                     <Button variant='warning' className=' m-1 h-25 ' onClick={handleShow}>LOG</Button>
-                    <Button variant='warning' disabled={gameInfo.info && (!info.isFinished)} className=' my-1 h-25' onClick={() => newGame()}>New-game</Button>
-                    {gameInfo.info && <span className='text-light'>POT:{gameInfo.info.pot}/ BET:{gameInfo.info.bet}/ STAGE:{gameInfo.info.stage}</span>}
+                    <Button variant='warning' disabled={gameDBExist && (!info.isFinished)} className=' my-1 h-25' onClick={() => newGame()}>New-game</Button>
+                    {gameDBExist && <span className='text-light'>POT:{gameInfo.info.pot}/ BET:{gameInfo.info.bet}/ STAGE:{gameInfo.info.stage}</span>}
                     <FloatingLabel controlId="bet" label="Bet" className="" >
                         <Form.Control
                             className='bg-light'
@@ -284,7 +289,7 @@ function PokerScreen() {
                     </FloatingLabel>
                 </div>
                 <div id="me" className='col-4 d-flex justify-content-center h-100 py-0 own'>
-                    {gameInfo.info && info.player.map((value) => {
+                    {gameDBExist && info.player.map((value) => {
                         if (value.user == userInfo.id) {
                             return (<Player key={value.user} options={value} />)
                         }

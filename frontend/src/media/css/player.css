@@ -45,7 +45,7 @@
     color: rgb(0, 0, 0);
     position: absolute;
     top: 25%;
-    left: -5%;
+    left: 0%;
     z-index: 5;
     border-radius: 50%;
     border: 3px solid rgba(7, 141, 0, 0.5);
@@ -66,41 +66,37 @@
   aspect-ratio: 1/1 !important;
 } */
 .poker-player .turn {
-  overflow: visible;
-  /* box-shadow: 0 0 10px 3px gray; */
-  position: absolute;
-  left: 0;top: 0;height: 100%;aspect-ratio: 1/1;
-  border-radius: 50%;
-  /* width: 180%; */
-  z-index: 1;
-  animation: turn alternate-reverse ease-in-out 0.5s infinite;
+  width: 100%;
+  height: 100%;
+  /* animation: turn alternate-reverse ease-in-out 0.5s infinite; */
 }
 .poker-player .turn>div{
-  /* background: red; */
   border-bottom-right-radius: 200px ;
-  height: 25%;
-  bottom: 0;
   position: absolute;
   z-index: 1;
-  left: 50%;bottom: 0;height: 25%;width: 150%;
-  animation:  color_change forwards 12s ease-out;
+  left: 0%;bottom: 0;height: 33%;
+  box-shadow: 0 0 5px 0px rgb(92, 76, 76) inset;
+  animation:  color_change forwards 12s linear;
 }
-/* .poker-player .turn-blink{
-  background: red;
+.poker-player .turn-blink{
+  background: rgba(0, 255, 55, 0.11);
   position: absolute;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  top: 0;left: 0;
   overflow: visible;
   z-index: 5;
   animation: turn alternate-reverse ease-in-out 0.5s infinite;
-} */
+}
 @keyframes turn {
   from {  box-shadow: 0 0 20px 8px white;}
   to {  box-shadow: 0 0 0px 0px gray;}
 }
 @keyframes color_change {
-  0% {  background: rgba(255, 255, 255, 0.367);width:20%}
-  /* 50% { background: rgb(50, 0, 0);width: 220%;} */
-  50% { background: rgb(190, 190, 190)}
-  100% { background: rgba(255, 109, 109, 0.825);width: 135%;}
+  0% {  background: rgba(255, 255, 255, 0.367);width:20%;}
+  50% { background: rgb(190, 190, 190);}
+  90% { background: rgba(255, 109, 109, 0.825);width: 90%;}
+  100% { background: rgb(255, 0, 0);width: 100%;}
 }
 .poker-player>div {
   overflow: hidden;
@@ -149,14 +145,14 @@
 }
 
 .poker-player>div>div>div:nth-of-type(2)>div {
-  padding-left: 35%;
+  padding-left: 50%;
   text-align: center;
   height: 32%;
 }
 
 .poker-player>div>div>div:nth-of-type(2)>div:nth-of-type(1) {
   background-color: rgba(171, 171, 171, 0.671);
-  padding-left: 40%;
+  padding-left: 50%;
 }
 
 .poker-player>div>div>div:nth-of-type(2)>div:nth-of-type(2) {
@@ -196,14 +192,17 @@
 .allin.poker-player>div>div>div:nth-of-type(2) {background-color: var(--allin);}
 
 .poker-player .bet{
-  height: 50%;
+  height: 45%;
   aspect-ratio: 1/1;
   background: rgb(41, 121, 9);
   color: white;
   position: absolute;
   z-index: 5;
   border-radius: 50%;
-  border: 8px solid rgba(255, 255, 255, 0.5);
+  /* box-shadow: 0 0 6px 6px  rgba(41,121,9,0.8); */
+  box-shadow: 0 0 6px 6px inset rgba(255, 255, 255, 0.641);
+
+  border: 2px solid rgba(255, 255, 255, 0.642);
   display: flex;
   justify-content: center;
 }
@@ -230,16 +229,16 @@
 .own>.poker-player .bet{ 
   bottom: 80%;
   left: 20%;
-  height: 50%;
+  height: 40%;
   aspect-ratio: 1/1;
-  border-width: 12px;
+  border-width: 4px;
 }
 
 .own>.poker-player{
   transform: translateY(-10px);
 }
 .own>.poker-player>div>img{
-  border-width: 15px;
+  border-width: 10px;
 }
 .own>.poker-player>div>div>div:nth-of-type(2)>div {
   line-height: 35px;

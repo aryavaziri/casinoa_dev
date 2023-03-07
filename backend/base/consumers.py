@@ -9,8 +9,6 @@ from django.contrib.auth.models import AnonymousUser
 from base.models import Game, Player, Table
 from base.poker import Poker
 
-User = get_user_model()
-
 
 class PokerConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
@@ -20,22 +18,27 @@ class PokerConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def add_online(self):
         table = Table.objects.get(_id=self.table)
+        player = Player.objects.get(user=self.user['id'])
         if self.user['id'] not in table.JSON_table['online']:
             table.JSON_table['online'].append(self.user['id'])
             table.save()
-        if(TableSerializer(self.table).data['isAvailable']):
-            self.addPlayer()
-        else:
-            print("Table is not available")
+            player.balance += int(self.deposite)
+            player.credit_total -= int(self.deposite)
+            player.save()
+
+        # if(TableSerializer(self.table).data['isAvailable']):
+        #     self.addPlayer()
+        # else:
+        #     print("Table is not available")
 
         print(table.JSON_table)
 
     def addPlayer(self):    #add player to the game.player
         player = Player.objects.get(user=self.user['id'])
-        table = Table.objects.get(_id=self.scope['url_route']['kwargs']['pk'])
-        game = Game.objects.filter(table=table).last()
         player.balance += int(self.deposite)
         player.credit_total -= int(self.deposite)
+        table = Table.objects.get(_id=self.scope['url_route']['kwargs']['pk'])
+        game = Game.objects.filter(table=table).last()
         if not (game.isPlayed):
             player.status = 1
             player.turn = False
@@ -51,44 +54,25 @@ class PokerConsumer(AsyncWebsocketConsumer):
         game.save
         
     @database_sync_to_async
-    def gameLeave(self):
-        # player = Player.objects.get(user=self.user['id'])
-        # game = Game.objects.filter(table=self.groupname).last()
-        # if (player.balance > 0):
-        #     player.credit_total += player.balance
-        #     player.balance = 0
-        # player.leftAt = datetime.now()
-        # player.save()
-        # game.player.remove(player)
-        # game.save()
-        table = Table.objects.get(_id=self.table)
-        try:
-            table.JSON_table['online'].remove(self.user['id'])
-            table.save()
-        except:
-            pass
-        print(table.JSON_table)
-
-    @database_sync_to_async
     def dealCkeck(self):
         table = Table.objects.get(_id=self.table)
         online = table.JSON_table['online']
         game = Game.objects.filter(table=table).last()
-
-        if len(online)>1:  #check if new game can start
-            if (not game.isPlayed) or (game.isPlayed and game.isFinished) :
-            # if len(online)>0 and not game.JSON_data['orders']:
-                counter=0
-                for user in online:
-                    player = Player.objects.get(user=user)
-                    if(player.balance>(table.small*2)):
-                        counter +=1
-                        
-                if(counter>1):
-                    print("NEW GAME")
-                    # if(game.isPlayed)
-                    game.gameObject = Poker(self.table, counter)
-                    game.save()
+        if game is not None:
+            if len(online)>1:  #check if new game can start
+                if (not game.isPlayed) or (game.isPlayed and game.isFinished) :
+                # if len(online)>0 and not game.JSON_data['orders']:
+                    counter=0
+                    for user in online:
+                        player = Player.objects.get(user=user)
+                        if(player.balance>(table.small*2)):
+                            counter +=1
+                            
+                    if(counter>1):
+                        print("NEW GAME")
+                        # if(game.isPlayed)
+                        game.gameObject = Poker(self.table, counter)
+                        game.save()
 
         print(table.JSON_table)
 
@@ -102,33 +86,21 @@ class PokerConsumer(AsyncWebsocketConsumer):
             self.groupname = self.table
             # available = Table.objects.get(_id=self.scope['url_route']['kwargs']['pk']).isAvailable
             # print(available)
-            await asyncio.sleep(1)
+            # await asyncio.sleep(1)
             await self.add_online()
             await self.accept()
             await self.channel_layer.group_add(
                 self.groupname,
                 self.channel_name
             )
-
             await self.channel_layer.group_send(
                 self.groupname, {
                     'type': 'hi_message',
                     'time': datetime.now().strftime("%H:%M"),
                     'user': self.user['nick_name'],
                 })
-            await self.channel_layer.group_send(
-                self.groupname, {
-                    'type': 'disp'
-                })
-            await self.dealCkeck()
+            # await self.dealCkeck()
             await self.sendDispatch()
-            # print(type(self.groupname))
-
-    async def sendDispatch(self):
-            await self.channel_layer.group_send(
-                self.groupname, {
-                    'type': 'disp',
-                })
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
@@ -163,6 +135,12 @@ class PokerConsumer(AsyncWebsocketConsumer):
             'message': event['message'],
         }))
 
+    async def sendDispatch(self):
+            await self.channel_layer.group_send(
+                self.groupname, {
+                    'type': 'disp',
+                })
+
     async def disp(self, event):
         await self.send(text_data=json.dumps({
             'type': 'disp',
@@ -177,22 +155,8 @@ class PokerConsumer(AsyncWebsocketConsumer):
             'message': ' connected now!',
         }))
   
-    async def test(self, event):
-        await self.send(text_data=json.dumps({
-            'type': 'connected',
-            'message': 'test!',
-        }))
-
-    async def bye_message(self, event):
-        await self.send(text_data=json.dumps({
-            'type': 'disconnected',
-            'user': event['user'],
-            'time': event['time'],
-            'message': ' disconnected!',
-        }))
-
     async def disconnect(self, close_code):
-        print("On disconnect")
+        print("User disconnected")
         await self.channel_layer.group_send(
             self.groupname, {
                 'type': 'bye_message',
@@ -210,4 +174,23 @@ class PokerConsumer(AsyncWebsocketConsumer):
             })
 
         await self.gameLeave()
+
+    async def bye_message(self, event):
+        await self.send(text_data=json.dumps({
+            'type': 'disconnected',
+            'user': event['user'],
+            'time': event['time'],
+            'message': ' disconnected!',
+        }))
+
+    @database_sync_to_async
+    def gameLeave(self):
+        table = Table.objects.get(_id=self.table)
+        try:
+            table.JSON_table['online'].remove(self.user['id'])
+            table.save()
+        except:
+            pass
+        print(table.JSON_table)
+
 

@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import Table, Game, Player
 from django.db import models
-
+from django.apps import AppConfig
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 
 User = get_user_model()
@@ -89,4 +89,11 @@ class TableSerializer(serializers.ModelSerializer):
             return False
 
     
+
+class removeOnline(AppConfig):
+    def ready(self):
+        # importing model classes
+        from .models import Table  # or...
+        print(Table.objects.all())
+
 

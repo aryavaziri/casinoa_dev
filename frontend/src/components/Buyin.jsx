@@ -38,13 +38,15 @@ function Buyin({ table }) {
 
 
     useEffect(() => {
-        console.log(dd)
+        console.log(!Object.keys(user).length)
         if (!userInfo) {
             navigate("/login")
         } else {
-            dispatch(gameDetails(table._id))
-            if (!user) {
+            if (!Object.keys(user).length) {
                 dispatch(getUserDetails('profile'))
+            }
+            else {
+                dispatch(gameDetails(table._id))
             }
         }
     }, [userInfo, dispatch, user, navigate])
@@ -70,19 +72,6 @@ function Buyin({ table }) {
         (2, 9),
     ]
 
-    useEffect(() => {
-        if (!userInfo) {
-            navigate("/login")
-        } else {
-            if (!user[1]) {
-                dispatch(getUserDetails('profile'))
-            }
-        }
-        // if (success) { setFlag(true) }
-    }, [userInfo, dispatch, user, navigate])
-
-
-
 
     return (
         <Card className='shadow m-0 p-0 rounded overflow-hidden border-none'>
@@ -98,7 +87,7 @@ function Buyin({ table }) {
                     <Card.Subtitle className='text-start col-12 my-0 p-2 d-flex flex-column justify-content-center'>
                         <strong className='w-100 text-center'>Players <span className='text-muted fw-light'>({gameInfo.info ? info.online : table.JSON_table.online.length}/{maxs[table.max]})</span> </strong>
                         <ul className='list-group px-4 list-group-flush'>
-                            {(gameInfo.info) && info.player.map(i => {
+                            {(((gameInfo!= null) && (gameInfo.info)) && (gameInfo.info.table)) && info.player.map(i => {
                                 return (
                                     <li className='list-group-item d-flex justify-content-between' key={i.user}>
                                         <span>{i.nick_name}</span>

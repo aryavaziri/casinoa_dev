@@ -72,16 +72,16 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
-
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [
-                # os.getenv('REDIS') ,
-                ("redis", 6379),
-            ],
-        },
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+        # "BACKEND": "channels_redis.core.RedisChannelLayer",
+        # "CONFIG": {
+        #     "hosts": [
+        #         # os.getenv('REDIS') ,
+        #         ("redis", 6379),
+        #     ],
+        # },
     },
 }
 

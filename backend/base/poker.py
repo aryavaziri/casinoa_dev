@@ -11,11 +11,10 @@ import json
 
 
 class Poker:
-    def __init__(self, pk, count=int(2)):
+    def __init__(self, pk):
         self.pk = int(pk)
-        self.game = Game.objects.filter(table=pk).last()
         self.table = Table.objects.get(_id=pk)
-        self.newGame()
+        self.newGame(pk)
 
     def shuffle(self, count):
         self.cards = list(range(1, 53))
@@ -147,33 +146,43 @@ class Poker:
             # self.newGame()
             async_to_sync(get_channel_layer().group_send)(str(self.table._id), {'type': 'disp'})
 
-    def newGame(self):
-        oldGame = self.game
+    def newGame(self, pk):
         table = Table.objects.get(_id=self.pk)
+        oldGame = Game.objects.filter(table=pk).last()
         small = 0
         online = self.table.JSON_table['online']
         new_order = []
-        pre_small = oldGame.small_blind  # get ID of previous small blind on the table
-        # online = [1, 3]
 
-        # if not (oldGame.isPlayed):
-        for player in oldGame.player.all().order_by('joined_at'):
-            if (player.user.id in online) and (player.balance > (table.small*2)):
-                new_order.append(player.user.id)
+        if oldGame is not None:
+            print("oldGame is not None")
+            print(oldGame)
+            pre_small = oldGame.small_blind  # get ID of previous small blind on the table
+            for player in oldGame.player.all().order_by('joined_at'):
+                if (player.user.id in online) and (player.balance > (table.small*2)):
+                    new_order.append(player.user.id)
+            try:
+                i = 0
+                while i < len(online):
+                    small = online[(online.index(pre_small) + 1 + i) % len(online)]
+                    if (new_order.count(small)):
+                        break
+                    i += 1
+            except:
+                small = online[0]
+        else:
+            small = online[0]
+            for id in online:
+                player = Player.objects.get(user=id)
+                print(player)
+                print(player.balance)
+                if (player.balance > (table.small*2)):
+                    new_order.append(id)
 
         print("<<<<<<new_order>>>>>>>>>")
         print(new_order)
+
         self.game = Game.objects.create(table=self.table)
         game = self.game
-        try:
-            i = 0
-            while i < len(online):
-                small = online[(online.index(pre_small) + 1 + i) % len(online)]
-                if (new_order.count(small)):
-                    break
-                i += 1
-        except:
-            small = online[0]
 
         self.shuffle(len(new_order))
 
@@ -213,3 +222,5 @@ class Poker:
         game.isPlayed = True
         game.gameObject = self
         game.save()
+        async_to_sync(get_channel_layer().group_send)(str(self.table._id), {'type': 'disp'})
+
