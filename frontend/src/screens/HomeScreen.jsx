@@ -6,25 +6,11 @@ import { listTables } from '../actions/tableActions'
 import Table from '../components/Table'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import Test from '../components/Test'
-import Card from '../components/Card'
 import Buyin from '../components/Buyin'
 import { useState ,useContext} from 'react'
-import { MyContext } from "../App.js"
-import { hostname } from "../constants/userConstants";
 
 
 function HomeScreen() {
-    // let url = `ws://${window.location.hostname}:8000/ws/socket-server/`
-    // const pokerSocket = new WebSocket(url)
-    // pokerSocket.onmessage = (e)=>{
-    //     let data = JSON.parse(e.data)
-    //     console.log("Data:", data)
-    // }
-    // const context =useContext(MyContext)
-    
-    
-    
     const dispatch = useDispatch()
     //selecting which reducer's state you want
     const tableList = useSelector(state => state.tableList)
@@ -32,7 +18,6 @@ function HomeScreen() {
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
 
     const [selectedTable, setSelectedTable] = useState('');
     const modalHandler = (i) => {
@@ -45,16 +30,11 @@ function HomeScreen() {
 
     return (
         <Container>
-
             <Modal show={show} onHide={handleClose} className=''>
                 {tables.length != 0 ? <Buyin table={selectedTable} /> : ''}
             </Modal>
-
             <div>
                 <h1 className='my-3'>Available tables</h1>
-                {/* <Test /> */}
-                {/* <input type="text" onChange={(e) => setnumb(e.target.value)}/> */}
-                {/* <Card num={numb} /> */}
                 {loading ? <Loader />
                     : error ? <Message variant='danger'>{error}</Message>
                         :
@@ -64,16 +44,11 @@ function HomeScreen() {
                                     < Col onClick={() => modalHandler(i)} sm={12} md={6} lg={4} key={i._id} >
                                         <Table table={i} />
                                     </Col>
-                                )
-                            })}
+                                )})}
                         </Row>
                 }
-
-            </div >
-
-
+            </div>
         </Container>
-
     )
 }
 
