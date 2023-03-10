@@ -24,7 +24,7 @@ def getGame(request, pk):
 @permission_classes([IsAuthenticated])
 def gameEnter(request, pk):
     game = Game.objects.filter(table=pk).last()
-    serializer = GameSerializer2(game, many=False, context={"own":request.user.id,"is_staff":request.user.is_staff})
+    serializer = GameSerializer(game, many=False, context={"own":request.user.id,"is_staff":request.user.is_staff})
     return Response(serializer.data)
 
     
