@@ -3,8 +3,11 @@ export const USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS'
 export const USER_LOGIN_FAIL = 'USER_LOGIN_FAIL'
 
 export const USER_LOGOUT = 'USER_LOGOUT'
-export const hostname = window.location.host
-// export const hostname = window.location.hostname + ":8000"
+let x
+if(process.env.NODE_ENV == "development"){
+    x = window.location.hostname + ":8000"
+} else {x = window.location.host}
+export const hostname = x
 
 export const USER_REGISTER_REQUEST = 'USER_REGISTER_REQUEST'
 export const USER_REGISTER_SUCCESS = 'USER_REGISTER_SUCCESS'

@@ -4,7 +4,7 @@ import Tabs from 'react-bootstrap/Tabs';
 
 // import Sonnet from '../../components/Sonnet';
 import { useLocation, useNavigate } from 'react-router'
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState, useContext, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col, Form, Button } from 'react-bootstrap'
@@ -63,7 +63,7 @@ function PokerScreen() {
     const userLogin = useSelector(state => state.userLogin)
     const { error, loading, userInfo } = userLogin
     const context = useContext(MyContext)
-    
+
     // console.log(context[0])
     const socketHeader = userInfo ? userInfo.access : ""
     const socket = useSocket(id, socketHeader, context.dep)
@@ -77,14 +77,14 @@ function PokerScreen() {
     const order = []
 
     let temp
-
+    
     useEffect(() => {
-        // console.log(socket==undefined)
         if (socketHeader == "") { navigate("/") }
         if (!socket) return
         socket.onmessage = (e) => {
             let data = JSON.parse(e.data)
             console.log("Data:", data)
+            document.querySelector('#chat-box').scrollTop = document.querySelector('#chat-box').scrollHeight
             if (data.type == "disp") {
                 dispatch(listTableDetails(id));
                 dispatch(gameDetails(id))
@@ -94,17 +94,15 @@ function PokerScreen() {
             if (data && data.type && ((data.type == "connected") || (data.type == "disconnected"))) { (document.querySelector('#chat-box').value += (data.time + " " + data.user + data.message + "\n")); document.querySelector('#message-box').value = "" }
         }
     }, [socket, userInfo, info, dispatch, infoLoading])
-
-
-    const sendMessage = () => {
+    
+    
+    const sendMessage = (e) => {
+        e.preventDefault()
         socket.send(JSON.stringify({
             'message': message,
         }))
     }
 
-    // const submitHandler = (e) => {
-    //     e.preventDefault()
-    // }
     const leave = () => {
         socket.close()
         dispatch(gameAction(id, 0, "leave"))
@@ -117,16 +115,13 @@ function PokerScreen() {
     const allin = () => { dispatch(gameAction(id, 0, "allin")) }
     const newGame = () => { dispatch(gameAction(id, 0, "newGame")) }
     let gameDBExist = false
-    if(gameInfo && info && info.JSON_ground){gameDBExist=true}
-    console.log(gameDBExist)
+    if (gameInfo && info && info.JSON_ground) { gameDBExist = true }
 
 
     if (gameDBExist) {
         for (let i = 0; i < 5; i++) {
             ground[i] = info.JSON_ground.ground[i]
         }
-    }
-    if (gameDBExist) {
         for (let i = 0; i < info.JSON_data.orders.length; i++) {
             order[i] = info.JSON_data.orders[i]
         }
@@ -138,12 +133,18 @@ function PokerScreen() {
         }
     }
     if (order.length > 0) {
-
         if (order.length == 2) {
-            orderL.push(order[1]);
+            orderT.push(order[1]);
         } else {
-            if ((order.length % 2) != 0) { orderT.push(order[((order.length) - 1) / 2]); orderT.push(order[((order.length) + 1) / 2]) }
-            else { orderT.push(order[((order.length)) / 2]) }
+            if ((order.length) >= 4) {
+
+                
+                if ((order.length % 2) != 0) {
+                    orderT.push(order[((order.length) - 1) / 2]) 
+                    orderT.push(order[((order.length) + 1) / 2]) 
+                }
+                else { orderT.push(order[((order.length)) / 2]) }
+            }
             orderL.push(order[1]);
             orderR.push(order[order.length - 1]);
             if (order.length > 5) {
@@ -157,13 +158,13 @@ function PokerScreen() {
         }
     }
     // const action_turn = gameDBExist && (info.turn != userInfo.id)
-    const action_turn = false
-    // console.log(orderT)
+    const action_turn = (process.env.NODE_ENV == "development")?false:(gameDBExist && (!info.isFinished))
+    
 
     return (
         <>
 
-            <div className='fluid m-0 bg-success pt-4 position-relative ' style={{ height: "70vh" }}>
+            <div className='fluid m-0 bg-success pt-4 position-relative ' style={{ height: "75vh" }}>
                 {gameDBExist &&
                     <div className='position-absolute ground d-flex flex-column'>
                         <div className='col-6 d-flex' style={{ height: "20vh" }}>
@@ -175,18 +176,23 @@ function PokerScreen() {
                         </div>
                         <div className='col-6 d-flex'>
                             {/* <div className='w-50 m-0 p-1'>Players: <pre> {JSON.stringify(info.player)}</pre></div> */}
-                            <div className='w-50 d-flex flex-column m-0 p-1'>
-                                <span>Round: {JSON.stringify(info.round)}</span> 
-                                <span>Pot: {JSON.stringify(info.pot)}</span> 
-                                <span>Online: {JSON.stringify(info.online)}</span> 
-                                <span>Stage: {JSON.stringify(info.stage)}</span> 
-                                <span>Bet: {JSON.stringify(info.bet)}</span> 
+                            <div style={{fontSize:"13px"}} className='w-25 d-flex flex-column m-0 p-1'>
+                                <span>Round: {JSON.stringify(info.round)}</span>
+                                <span>Pot: {JSON.stringify(info.pot)}</span>
+                                <span>Online: {JSON.stringify(info.online)}</span>
+                                <span>Stage: {JSON.stringify(info.stage)}</span>
+                                <span>Bet: {JSON.stringify(info.bet)}</span>
                             </div>
-                            <div className='w-50 d-flex flex-column m-0 p-1'>
-                                <span>turn: {JSON.stringify(info.turn)}</span> 
-                                <span>small_blind: {JSON.stringify(info.small_blind)}</span> 
-                                <span>isPlayed: {JSON.stringify(info.isPlayed)}</span> 
-                                <span>isFinished: {JSON.stringify(info.isFinished)}</span> 
+                            <div style={{fontSize:"13px"}} className='w-25 d-flex flex-column m-0 p-1'>
+                                <span>turn: {JSON.stringify(info.turn)}</span>
+                                <span>small_blind: {JSON.stringify(info.small_blind)}</span>
+                                <span>isPlayed: {JSON.stringify(info.isPlayed)}</span>
+                                <span>isFinished: {JSON.stringify(info.isFinished)}</span>
+                            </div>
+                            <div style={{fontSize:"13px"}} className='w-25 d-flex flex-column m-0 p-1'>
+                                <span>bets: {JSON.stringify(info.JSON_data.bets)}</span>
+                                <span>order: {JSON.stringify(info.JSON_data.orders)}</span>
+                                <span>online: {JSON.stringify(table.JSON_table.online)}</span>
                             </div>
                         </div>
                     </div>
@@ -212,9 +218,9 @@ function PokerScreen() {
                             orderT.map((val) => {
                                 return (
                                     info.player.map(v => {
-                                        if ((v.id == val) && (v.id != userInfo.id)) {
+                                        if ((v.user == val) && (v.id != userInfo.id)) {
                                             return (
-                                                <Player key={v.id} options={v} />
+                                                <Player key={v.user} options={v} />
                                             )
                                         }
                                     })
@@ -278,8 +284,8 @@ function PokerScreen() {
                     <Button disabled={action_turn} className=' my-1 h-25 ' onClick={() => raise()}>Raise</Button>
                     <Button disabled={action_turn} className=' my-1 h-25 ' onClick={() => allin()}>All-in</Button>
                     <Button variant='warning' className=' m-1 h-25 ' onClick={handleShow}>LOG</Button>
-                    <Button variant='warning' disabled={gameDBExist && (!info.isFinished)} className=' my-1 h-25' onClick={() => newGame()}>New-game</Button>
-                    {gameDBExist && <span className='text-light'>POT:{gameInfo.info.pot}/ BET:{gameInfo.info.bet}/ STAGE:{gameInfo.info.stage}</span>}
+                    <Button variant='warning' disabled={(process.env.NODE_ENV == "development")?false:(gameDBExist && (!info.isFinished))} className=' my-1 h-25' onClick={() => newGame()}>New-game</Button>
+                    {/* {gameDBExist && <span className='text-light'>POT:{gameInfo.info.pot}/ BET:{gameInfo.info.bet}/ STAGE:{gameInfo.info.stage}</span>} */}
                     <FloatingLabel controlId="bet" label="Bet" className="" >
                         <Form.Control
                             className='bg-light'
@@ -291,26 +297,28 @@ function PokerScreen() {
                     </FloatingLabel>
                 </div>
                 <div id="me" className='col-4 d-flex justify-content-center h-100 py-0 own'>
-                    {gameDBExist && info.player.map((value) => {
+                    {gameDBExist && info.own && info.player.map((value) => {
                         if (value.user == userInfo.id) {
-                            return (<Player key={value.user} options={value} />)
+                            return (<Player key={value.user} options={info.own} />)
                         }
                     })}
                 </div>
                 <div className='col-3 row d-flex p-2 py-1 m-0 pb-3'>
                     <Form.Control readOnly className='h-75 my-1 text-light' style={{ fontSize: "12px" }} as="textarea" id='chat-box' />
-                    <div className='row m-0 p-0 d-flex'>
+                    <form className='row m-0 p-0 d-flex' onSubmit={(e) => sendMessage(e)}>
                         <Form.Control
                             id='message-box'
-                            className='bg-light w-75'
+                            className='bg-light'
                             type="text"
                             autoFocus
+                            style={{width:"73%", marginRight:"2%"}}
                             // value={chat_text}
+                            // ref={chatlog}
                             onChange={(e) => setMessage(e.target.value)}
+                            autoComplete="off"
                         />
-                        <Button className='px-2 w-25' onClick={() => sendMessage()}>Send</Button>
-                    </div>
-
+                        <Button className='px-2 col-3' onClick={(e) => sendMessage(e)}>Send</Button>
+                    </form>
                 </div>
             </div>
         </>

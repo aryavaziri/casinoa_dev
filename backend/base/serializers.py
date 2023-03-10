@@ -13,6 +13,13 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['email', 'id']
 
 class PlayerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Player
+        exclude = ['card1','card2']
+
+
+class PlayerSerializer2(serializers.ModelSerializer):
     class Meta:
         model = Player
         fields = '__all__'
@@ -38,20 +45,30 @@ class UserSerializerWithToken(UserSerializer):
 
 
 class GameSerializer(serializers.ModelSerializer):
-    player = PlayerSerializer(many=True, read_only=True)
+    player = serializers.SerializerMethodField(read_only=True)
     online = serializers.SerializerMethodField(read_only=True)
+    own = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Game
-        fields = '__all__'
-        # exclude = ['gameObject']
+        # fields = '__all__'
+        exclude = ['gameObject',]
+    def get_player(self,obj):
+        if(self.context["is_staff"]):
+            serializer = PlayerSerializer2(Player.objects.all(), many = True)
+        else:
+            serializer = PlayerSerializer(Player.objects.all(), many = True)
+        return serializer.data
     def get_online(self, obj):
         try:
             return obj.player.count()
         except:
             return 0
-
-
-
+    def get_own(self,obj):
+        try:
+            serializer = PlayerSerializer2(Player.objects.get(user_id=self.context["own"]), many = False)
+            return serializer.data
+        except:
+            pass
 
 
 class TableSerializer(serializers.ModelSerializer):
