@@ -34,11 +34,11 @@ function HomeScreen() {
                 {tables.length != 0 ? <Buyin table={selectedTable} /> : ''}
             </Modal>
             <div>
-                <h1 className='my-3'>Available tables</h1>
+                {/* <h1 className='my-3'>Available tables</h1> */}
                 {loading ? <Loader />
                     : error ? <Message variant='danger'>{error}</Message>
                         :
-                        <Row>
+                        <Row className='mt-4'>
                             {tables.map(i => {
                                 return (
                                     < Col onClick={() => modalHandler(i)} sm={12} md={6} lg={4} key={i._id} >

@@ -59,12 +59,12 @@ export default function Card2({ num }) {
   return (
 
       <div className='card2' style={{ maxHeight: "100%", width: "100%" }}>
-        {(num==0)?
-        <img src={Front} />:
+        {(num)?
         <div>
           <span style={{color:(((suit==0)||(suit==2))?'black':'red')}}>{n}</span>
           <span><img src={s} alt="" /> </span>
         </div>
+          :<img src={Front} />
         
       }
       </div>

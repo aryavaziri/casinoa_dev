@@ -77,10 +77,8 @@ CHANNEL_LAYERS = {
         # "BACKEND": os.getenv('REDIS' ,"channels.layers.InMemoryChannelLayer"),
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts":[
-                ("redis", 6379),
-                ("localhost", 6379)
-            ],
+            "hosts":
+                [(os.getenv('REDIS' ,("localhost")),6379)]
         },
     },
 }

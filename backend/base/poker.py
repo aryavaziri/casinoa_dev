@@ -20,12 +20,15 @@ class Poker:
         table = Table.objects.get(_id=self.pk)
         oldGame = Game.objects.filter(table=pk).last()
         small = 0
-        online = self.table.JSON_table['online']
+        online = Table.objects.get(_id= self.pk).JSON_table['online']
         new_order = []
 
         if oldGame is not None:
             pre_small = oldGame.small_blind  # get ID of previous small blind on the table
             for player in oldGame.player.all().order_by('joined_at'):
+                if player not in online:
+                    player.credit_total += player.balance
+                    player.balance = 0
                 if (player.user.id in online) and (player.balance > (table.small*2)):
                     new_order.append(player.user.id)
             for user in online:
@@ -110,6 +113,9 @@ class Poker:
             self.cards[(int(count) * 2) + 5],
             self.cards[(int(count) * 2) + 7]]
 
+    def winner(self):
+        pass
+
     def userAction(self, action, userID, new_bet=0):
         order = self.game.JSON_data['orders']
         bet = self.game.bet
@@ -117,7 +123,7 @@ class Poker:
             player = Player.objects.get(user=userID)
             player.credit_total += player.balance
             player.balance = 0
-            player.status = 1
+            # player.status = 1
             player.save()
             return
 
@@ -158,55 +164,67 @@ class Poker:
 
             if (action == "allin"):
                 player.status = 5
-                player.bet = player.balance
-                self.game.pot += player.balance - player.bet
+                player.bet += player.balance
+                self.game.pot += player.balance
                 player.balance = 0
 
             self.game.JSON_data['bets'][(order.index(self.game.turn))] = player.status
+            self.game.save()
             player.turn = False
             player.save()
+            self.after()
 
 
-            if (not self.game.isFinished) and (self.game.JSON_data['bets'].count(0)):
-                self.game.turn = (
-                    order[(order.index(self.game.turn)+1) % len(order)])
-                while (Player.objects.get(user=self.game.turn).status == 1 or Player.objects.get(user=self.game.turn) == 5):
-                    self.game.turn = (order[(order.index(self.game.turn)+1) % len(order)])
-                nextPlayer = Player.objects.get(user=self.game.turn)
-                nextPlayer.turn = True
-                nextPlayer.save()
-                print("next player")
-            else:
-                for i in range(len(self.game.JSON_data['bets'])):
-                    if (self.game.JSON_data['bets'][i] != 1 and self.game.JSON_data['bets'][i] != 5):
-                        # print(order[i])
-                        temp = Player.objects.get(user=order[i])
-                        temp.status = 0
-                        if (order[i] == self.game.small_blind):
-                            temp.turn = True
-                        temp.bet = 0
-                        temp.save()
-                print("next round")
-                self.game.JSON_data['bets'] = [(i if (i == 1 or i == 5) else 0) for i in self.game.JSON_data['bets']]
-                if (self.game.stage <= 4):
-                    self.game.stage += 1
-                self.game.turn = self.game.small_blind
-                self.game.bet = 0
+    def after(self):
+        order = self.game.JSON_data['orders']
+        if self.game.JSON_data['bets'].count(0):
+            self.game.turn = (order[(order.index(self.game.turn)+1) % len(order)])
+            self.game.save()
+            #If person is not online, then fold him
+            print(Player.objects.get(user=self.game.turn).user.id)
+            print(self.table.JSON_table['online'])
+            print(Table.objects.get(_id= self.pk).JSON_table['online'])
 
-            if (self.game.stage == 1):
-                self.game.JSON_ground['ground'][0] = self.game.JSON_data['ground'][0]
-                self.game.JSON_ground['ground'][1] = self.game.JSON_data['ground'][1]
-                self.game.JSON_ground['ground'][2] = self.game.JSON_data['ground'][2]
-            if (self.game.stage == 2):
-                self.game.JSON_ground['ground'][3] = self.game.JSON_data['ground'][3]
-            if (self.game.stage == 3):
-                self.game.JSON_ground['ground'][4] = self.game.JSON_data['ground'][4]
-            if (self.game.stage == 4):
-                print("NEXT GAME")
-                # Here we should add code to see who is the winner and how the pot will devide
-                self.game.isFinished = True
-                self.game.player.filter(turn=True).update(turn=False)
-                self.game.turn = 0
+            if (Player.objects.get(user=self.game.turn).user.id not in Table.objects.get(_id= self.pk).JSON_table['online']):
+
+                print("------------------------------OK--------------------------------------------------------------------------")
+                # Player.objects.filter(user=self.game.turn).update(status=1)
+                # self.game.JSON_data['bets'][(order.index(self.game.turn))]=1
+                Poker.userAction(self, "fold", self.game.turn)
+            #If person is fold or allin, go to next person
+            while (Player.objects.get(user=self.game.turn).status == 1 or Player.objects.get(user=self.game.turn) == 5):
+                self.game.turn = (order[(order.index(self.game.turn)+1) % len(order)]) 
+            nextPlayer = Player.objects.get(user=self.game.turn)
+            nextPlayer.turn = True
+            nextPlayer.save()
+            print("next player")
+        if not self.game.JSON_data['bets'].count(0):
+            for i in range(len(self.game.JSON_data['bets'])):
+                if (self.game.JSON_data['bets'][i] != 1 and self.game.JSON_data['bets'][i] != 5):
+                    # print(order[i])
+                    temp = Player.objects.get(user=order[i])
+                    temp.status = 0
+                    if (order[i] == self.game.small_blind):
+                        temp.turn = True
+                    temp.bet = 0
+                    temp.save()
+            print("next round")
+            self.game.JSON_data['bets'] = [(i if (i == 1 or i == 5) else 0) for i in self.game.JSON_data['bets']]
+            self.game.stage += 1
+            self.game.turn = self.game.small_blind
+            self.game.bet = 0
+
+        if (self.game.stage == 1):
+            self.game.JSON_ground['ground'][0] = self.game.JSON_data['ground'][0]
+            self.game.JSON_ground['ground'][1] = self.game.JSON_data['ground'][1]
+            self.game.JSON_ground['ground'][2] = self.game.JSON_data['ground'][2]
+        if (self.game.stage == 2):
+            self.game.JSON_ground['ground'][3] = self.game.JSON_data['ground'][3]
+        if (self.game.stage == 3):
+            self.game.JSON_ground['ground'][4] = self.game.JSON_data['ground'][4]
+        if (self.game.stage == 4):
+            print("NEXT GAME")
+            self.game.isFinished = True
 
 
         print(self.game.JSON_data['bets'])
@@ -214,22 +232,24 @@ class Poker:
         self.game.save()
         self.post_action()
 
+
     def post_action(self):
-        
         game = self.game
         temp_fold = 0
         for player in game.player.all():
-            if (player.status == 1):
+            if (player.status == 1) or (player.status == 5):
                 temp_fold += 1
-            if (temp_fold >= game.player.count()-1): #to stop blinking turn whenever the game is finished
-                self.game.player.filter(turn=True).update(turn=False)
-                self.game.turn = 0
+            if (temp_fold >= game.player.count()-1):
                 game.isFinished = True
-        game.save()
 
         if (game.isFinished):
+            game.player.filter(turn=True).update(turn=False)
+            game.turn = 0
             print("Next game is going to start")
-            # time.sleep(5)  #goes to the next game after 5 seconds
+            game.JSON_ground['ground'] = game.JSON_data['ground']
+            print((game.JSON_ground)['ground'])
+            game.save()
             # self.newGame()
+            # time.sleep(5)  #goes to the next game after 5 seconds
         async_to_sync(get_channel_layer().group_send)(str(self.table._id), {'type': 'disp'})
 

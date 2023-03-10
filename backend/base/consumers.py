@@ -25,12 +25,6 @@ class PokerConsumer(AsyncWebsocketConsumer):
             player.balance += int(self.deposite)
             player.credit_total -= int(self.deposite)
             player.save()
-
-        # if(TableSerializer(self.table).data['isAvailable']):
-        #     self.addPlayer()
-        # else:
-        #     print("Table is not available")
-
         print(table.JSON_table)
 
     def addPlayer(self):    #add player to the game.player
@@ -86,7 +80,7 @@ class PokerConsumer(AsyncWebsocketConsumer):
             self.groupname = self.table
             # available = Table.objects.get(_id=self.scope['url_route']['kwargs']['pk']).isAvailable
             # print(available)
-            # await asyncio.sleep(1)
+            await asyncio.sleep(1)
             await self.add_online()
             await self.accept()
             await self.channel_layer.group_add(
@@ -190,7 +184,8 @@ class PokerConsumer(AsyncWebsocketConsumer):
             table.JSON_table['online'].remove(self.user['id'])
             table.save()
         except:
-            pass
+            print("BEGAYI INJAST")
+            # pass
         print(table.JSON_table)
 
 

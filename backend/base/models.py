@@ -36,6 +36,8 @@ class CustomUserManager(UserManager):
         return self._create_user(email, password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
+    class Meta:
+        ordering = ["id"]
     email = models.EmailField("email address",unique=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)

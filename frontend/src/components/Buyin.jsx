@@ -56,7 +56,7 @@ function Buyin({ table }) {
     const submitHandler = (e) => {
         // console.log(table._id)
         e.preventDefault()
-        dispatch(gameEnter(table._id, deposite))
+        dispatch(gameDetails(table._id))
         setdd(deposite)
         navigate(`/poker/${table._id}`)
 

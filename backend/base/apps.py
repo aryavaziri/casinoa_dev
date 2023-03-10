@@ -12,7 +12,7 @@ class BaseConfig(AppConfig):
         for table in tables:
             table.JSON_table['online']= []
             table.save()
-        for player in players:
-            player.credit_total += player.balance
-            player.balance = 0
-            player.save()
+        # for player in players:
+        #     player.credit_total += player.balance
+        #     player.balance = 0
+        #     player.save()
