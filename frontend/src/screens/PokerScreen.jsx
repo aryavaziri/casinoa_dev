@@ -158,7 +158,7 @@ function PokerScreen() {
         }
     }
     // const action_turn = gameDBExist && (info.turn != userInfo.id)
-    const action_turn = (process.env.NODE_ENV == "development")?false:(gameDBExist && (!info.isFinished))
+    const action_turn = (process.env.NODE_ENV == "development")?false:(gameDBExist&& (info.turn != userInfo.id))
     
 
     return (
