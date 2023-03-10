@@ -24,7 +24,7 @@ def getGame(request, pk):
 @permission_classes([IsAuthenticated])
 def gameEnter(request, pk):
     game = Game.objects.filter(table=pk).last()
-    serializer = GameSerializer2(game, many=False)
+    serializer = GameSerializer2(game, many=False, context={"own":request.user.id,"is_staff":request.user.is_staff})
     return Response(serializer.data)
 
     
@@ -34,7 +34,7 @@ def newGame(request, pk):
     Poker(pk)
     async_to_sync(get_channel_layer().group_send)(str(pk), {'type': 'disp'})
     game = Game.objects.filter(table=pk).last()
-    serializer = GameSerializer(game, many=False)
+    serializer = GameSerializer(game, many=False, context={"own":request.user.id,"is_staff":request.user.is_staff})
     return Response(serializer.data)
 
     
@@ -59,5 +59,5 @@ def action(request, pk):
     else:
         if game is not None:
             Poker.userAction(game.gameObject, action, user.id, new_bet)
-    serializer = GameSerializer(game, many=False)
+    serializer = GameSerializer(game, many=False, context={"own":request.user.id,"is_staff":request.user.is_staff})
     return Response(serializer.data)
