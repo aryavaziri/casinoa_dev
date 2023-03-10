@@ -59,7 +59,7 @@ function PokerScreen() {
     const dispatch = useDispatch()
     const { table } = useSelector(state => state.tableDetails)
     const gameInfo = useSelector(state => state.gameDetails)
-    const gameEnter = useSelector(state => state.gameEnter)
+    // const gameEnter = useSelector(state => state.gameEnter)
     const userLogin = useSelector(state => state.userLogin)
     const { error, loading, userInfo } = userLogin
     const context = useContext(MyContext)
