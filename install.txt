@@ -11,8 +11,8 @@ WINDOWS:
         cd Frontend;npm i;npm start
 
 
-git clone https://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@github.com/aryavaziri/casinoa_dev.git
-git pull https://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@github.com/aryavaziri/casinoa_dev.git
+git clone https://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@github.com/aryavaziri/casinoa_dev.git
+git pull https://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@github.com/aryavaziri/casinoa_dev.git
 
 
 ssh root@78.135.89.244
