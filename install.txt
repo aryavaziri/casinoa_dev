@@ -16,9 +16,9 @@ git pull https://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@github.com/aryavaziri/
 
 
 ssh root@78.135.89.244
-ssh root@143.42.54.186
+ssh root@143.42.54.186.
 
 daphne -b 0.0.0.0 backend.asgi:application
 
 python data_loader.py --dir data/books --redis redis://default:st9JbKIVx3I2pzXyr0zAQNOBuwM3Zrxe@redis-16850.c253.us-central1-1.gce.cloud.redislabs.com:16850/
-r = redis.Redis(host='redis://default:st9JbKIVx3I2pzXyr0zAQNOBuwM3Zrxe@redis-16850.c253.us-central1-1.gce.cloud.redislabs.com', port=16850, db=0)
+r = redis.Redis(host='redis://default:st9JbKIVx3I2pzXyr0zAQNOBuwM3Zrxe@redis-16850.c253.us-central1-1.gce.cloud.redislabs.com', port=16850, db=0)`
