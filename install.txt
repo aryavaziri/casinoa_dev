@@ -18,7 +18,6 @@ From LLB
 ssh root@172.104.226.97
 
 ssh root@78.135.89.244
-ssh root@143.42.54.186.
 
 daphne -b 0.0.0.0 backend.asgi:application
 
