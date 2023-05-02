@@ -15,6 +15,7 @@ git clone https://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@github.com/aryavaziri
 git pull https://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@github.com/aryavaziri/casinoa_dev.git
 From LLB
 
+ssh root@172.104.226.97
 
 ssh root@78.135.89.244
 ssh root@143.42.54.186.
